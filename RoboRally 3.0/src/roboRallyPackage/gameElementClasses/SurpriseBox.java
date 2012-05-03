@@ -6,10 +6,14 @@ import java.util.Random;
 import roboRallyPackage.Board;
 import roboRallyPackage.Orientation;
 import roboRallyPackage.Position;
+import roboRallyPackage.Terminatable;
 import roboRallyPackage.exceptionClasses.IllegalPositionException;
 
 /**
- * @author Nele
+ * A class of SurpriseBoxes. Extends Item.
+ * 
+ * @version 3 mei 2012
+ * @author Nele & Jonas
  *
  */
 public class SurpriseBox extends Item {
@@ -31,6 +35,21 @@ public class SurpriseBox extends Item {
 	 * 3. The SurpriseBox contained another Item (either a battery, a repairkit or 	 new surprisebox),
 	 * 		which will be added to the list of items carried by the robot
 	 * 
+	 * @effect	...
+	 * 			| for one random integer i in 0..2:
+	 * 			|	if(i == 0)
+	 * 			|		than this.takeHit();
+	 * 			|	if(i == 1)
+	 * 			|		than new Teleporter(robot)
+	 * 			|	if(i == 2)
+	 * 			|		than for one random integer j in 0..2:
+	 * 			|			if( j == 0) than  robot.getPossessions().add(new Battery(2500,5))
+	 * 			|			if( j == 1) than  robot.getPossessions().add(new RepairKit(500,5))
+	 * 			|			if( j == 1) than  robot.getPossessions().add(new SurpriseBox(5))
+	 * @effect	...
+	 * 			| this.terminate()
+	 * 						
+	 * 
 	 * @throws	IllegalStateException
 	 * 			...
 	 * 			| this.isTerminated() || robot.isTerminates()
@@ -38,6 +57,7 @@ public class SurpriseBox extends Item {
 	@Override
 	public void use(Robot robot) {
 		
+		Robot tempRobot = robot;
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated battery can not be altered.");
@@ -58,8 +78,32 @@ public class SurpriseBox extends Item {
 		}
 		//the robot is teleported.
 		if(randomInt == 1){
-			Teleporter tele = new Teleporter(robot);
-			tele.teleport();
+			//			Teleporter tele = new Teleporter(robot);
+			//			tele.teleport();
+			new Terminatable(){
+				public void teleport(){
+					Random generator =  new Random();
+					//long maxCoordX = board.getWidth();
+					//long maxCoordY = board.getHeight();
+
+					long maxCoordX = tempRobot.getBoard().getWidth();
+					long maxCoordY = tempRobot.getBoard().getHeight();
+
+
+
+					int randomIntCoordX = generator.nextInt(((int) maxCoordX));
+					int randomIntCoordY = generator.nextInt(((int) maxCoordY));
+					Position teleLocation = new Position(randomIntCoordX, randomIntCoordY);
+					try{
+						robot.setPosition(teleLocation);
+					} catch(IllegalPositionException exc){
+						robot.terminate();
+						System.out.println("Uw robot is nu dood. Hoe jammer!");
+					}
+
+				}
+			};
+
 		}
 		// a new random item is created
 		if(randomInt == 2){
@@ -68,10 +112,10 @@ public class SurpriseBox extends Item {
 				Battery bat = new Battery(2500, 5);
 				robot.getPossessions().add(bat);
 			}
-	
-		
+
+
 			if(randomIntTwo == 1){
-				RepairKit kit = new RepairKit();
+				RepairKit kit = new RepairKit(500,5);
 				robot.getPossessions().add(kit);
 			}
 			if(randomIntTwo == 2){
@@ -82,6 +126,7 @@ public class SurpriseBox extends Item {
 
 		this.terminate();
 	}
+
 
 	
 	/**
@@ -101,6 +146,7 @@ public class SurpriseBox extends Item {
 	 * 			When this surprise box is terminated.
 	 * 			| this.isTerminated()
 	 */
+
 	@Override
 	public void takeHit() throws IllegalStateException
 	{
@@ -135,33 +181,42 @@ public class SurpriseBox extends Item {
 // teleporteer, ander item (bat, repair, surprise)
 // voeg dat ander item toe aan de lijst van items van de robot
 
-class Teleporter
-{
-
-	private Board board;
-	private Robot robot;
-
-	public Teleporter(Robot robot){
-		this.robot = robot;
-		this.board = robot.getBoard();
-	}
-
-	public void teleport(){
-		Random generator =  new Random();
-		long maxCoordX = board.getWidth();
-		long maxCoordY = board.getHeight();
-
-		int randomIntCoordX = generator.nextInt(((int) maxCoordX));
-		int randomIntCoordY = generator.nextInt(((int) maxCoordY));
-		Position teleLocation = new Position(randomIntCoordX, randomIntCoordY);
-		try{
-			robot.setPosition(teleLocation);
-		} catch(IllegalPositionException exc){
-			robot.terminate();
-			System.out.println("Uw robot is nu dood. Hoe jammer!");
-		}
-		
-	}
-
-}
-
+//class Teleporter
+//{
+//
+//	//private Board board;
+//	//private Robot robot;
+//
+//	//public Teleporter(Robot robot){
+//	//	this.robot = robot;
+//	//	this.board = robot.getBoard();
+//	//}
+//	
+//	public Teleporter(Robot robot){
+//		this.teleport(robot);
+//	}
+//
+//	public void teleport(Robot robot){
+//		Random generator =  new Random();
+//		//long maxCoordX = board.getWidth();
+//		//long maxCoordY = board.getHeight();
+//
+//		long maxCoordX = robot.getBoard().getWidth();
+//		long maxCoordY = robot.getBoard().getHeight();
+//		
+//		
+//		
+//		int randomIntCoordX = generator.nextInt(((int) maxCoordX));
+//		int randomIntCoordY = generator.nextInt(((int) maxCoordY));
+//		Position teleLocation = new Position(randomIntCoordX, randomIntCoordY);
+//		try{
+//			robot.setPosition(teleLocation);
+//		} catch(IllegalPositionException exc){
+//			robot.terminate();
+//			System.out.println("Uw robot is nu dood. Hoe jammer!");
+//		}
+//		
+//	}
+//
+//}
+//

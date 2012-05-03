@@ -5,6 +5,11 @@ package roboRallyPackage.gameElementClasses;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
+ *A class of repair kits. Extends Item.
+ *
+ * @invar	The current energy level of each RepairKit must be a valid energy level.
+ * 			| this.canHaveAsEnergy(this.getCurrentEnergy())
+ * 
  * @author Nele
  *
  */
