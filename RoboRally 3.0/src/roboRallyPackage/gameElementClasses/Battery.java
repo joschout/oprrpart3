@@ -1,0 +1,245 @@
+
+package roboRallyPackage.gameElementClasses;
+import be.kuleuven.cs.som.annotate.*;
+
+/**
+ * A class of batteries. Extends Item and implements IEnergyHolder
+ * 
+ * @invar	The current energy level of each battery must be a valid energy level.
+ * 			| this.canHaveAsEnergy(this.getCurrentEnergy())
+ * 
+ * @version 26 april 2012
+ * @author Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			 Bachelor Ingenieurswetenschappen, KULeuven
+ */
+public class Battery extends Item implements IEnergyHolder
+{
+	/**
+	 * Initialize this new battery with given the given amount of energy and the given weight.
+	 * 
+	 * @param 	energyAmount
+	 * 			The amount of energy for this new battery in watt-seconds (Ws).
+	 * @param 	weight
+	 * 			The weight for this new battery in grams.
+	 * @pre		The given initial amount of energy must be a valid amount of energy.
+	 * 			| this.canHaveAsEnergy(energyAmount)
+	 * @effect	...
+	 * 			| this.setEnergy(energyAmount)
+	 *
+	 */
+	public Battery(double energyAmount, int weight)
+	{
+		super(weight);
+		this.setEnergy(energyAmount);
+	}
+	
+	/**
+	 * Initialize this new battery with a weight of 0 kg and an amount of energy of 0 watt-seconds.
+	 */
+	public Battery()
+	{
+		this(0,0);
+	}
+
+	/**
+	 * Returns the variable representing the current amount if energy of this battery.
+	 */
+	@Basic
+	public double getEnergy()
+	{
+		return energyAmount;
+	}
+
+	
+	/**
+	 * Sets the amount of energy of this battery to the given amount of energy.
+	 * 
+	 * @param 	energyAmount
+	 * 			The new energy amount for this battery.
+	 * @pre		The given amount of energy is a valid amount of energy for this battery.
+	 * 			| this.canHaveAsEnergy(energyAmount)
+	 * @post	The new amount of energy is equal to the given amount of energy.
+	 * 			| (new this).getEnergy() == energyAmount
+	 * @post	IllegalStateException
+	 * 			...
+	 * 			| this.isTerminated()
+	 */
+	public void setEnergy(double energyAmount) throws IllegalStateException
+	{
+		assert canHaveAsEnergy(energyAmount): "Precondition for setEnergy(double) must be statisfied.";
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated battery can not be altered.");
+		}
+		this.energyAmount = energyAmount;
+	}
+	
+	/**
+	 * Checks whether the given amount of energy (expressed in watt-seconds) is a valid amount of energy for this battery.
+	 * 
+	 * @param	energy
+	 * 			The amount of energy to be checked in watt-seconds.
+	 * @return 	True if and only if the given energy is nonnegative and less than or equal to the maximal amount of energy a battery can have.
+	 * 			| result == (energy >= 0) && (energy <= this.getMaxEnergy())
+	 */
+	public boolean canHaveAsEnergy(double energy)
+	{
+		if ((energy >= 0) && (energy <= this.getMaxEnergy()))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Variable representing the current amount if energy for this battery, expressed in watt-seconds (Ws).
+	 */
+	private double energyAmount = 0;
+
+	/**
+	 * Returns the variable representing the maximum amount of energy this battery can have, expressed in watt-seconds (Ws).
+	 */
+	@Basic @Immutable
+	public double getMaxEnergy()
+	{
+		return maxBatteryEnergyAmount;
+	}
+
+	/**
+	 * Variable representing the maximum amount of energy this battery can have, expressed in watt-seconds (Ws).
+	 */
+	private final double maxBatteryEnergyAmount = 5000;
+
+	/**
+	 * Returns a percentage of the current energy level relative to the maximum amount of energy this battery can have.
+	 * 
+	 * @return	A percentage of the current energy level relative to the maximum amount of energy this battery can have.
+	 * 			| result == (this.getEnergy() / this.getMaxEnergy()) * 100
+	 */
+	public double getEnergyFraction()
+	{
+		return (this.getEnergy() / this.getMaxEnergy()) * 100;
+	}
+
+	/**
+	 * Recharges this battery with the given amount of energy.
+	 * 
+	 * @param	amount
+	 * 			The amount of energy to be added to this battery.
+	 * @pre		This battery can be recharged with the given amount of energy.
+	 * 			| this.canAcceptForRecharge(amount)
+	 * @effect	The given amount of energy is added to the current amount of energy this battery has.
+	 * 			| this.setEnergy(this.getEnergy() + amount)
+	 * @throws	IllegalStateException
+	 * 			...
+	 * 			| this.isTerminated()
+	 */
+	public void recharge(double amount) throws IllegalStateException
+	{
+		assert this.canAcceptForRecharge(amount): "Pecondition for recharge(double) must be statisfied.";
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated battery can not be altered.");
+		}
+		this.setEnergy(this.getEnergy() + amount);
+	}
+
+	/**
+	 * Checks whether the given amount of energy can be added to the current energy level of this battery.
+	 * 
+	 * @param 	amount
+	 * 			The amount to be checked.
+	 * @return	True if and only if the given amount of energy is greater than zero 
+	 *			 			 and if this battery can have a total energy level equal to its the given amount of energy added to its current energy level.
+	 *			| result == ((amount > 0) && this.canHaveAsEnergy(this.getEnergy() + amount))
+	 */
+	public boolean canAcceptForRecharge(double amount)
+	{
+		return ((amount > 0) && this.canHaveAsEnergy(this.getEnergy() + amount));
+	}
+
+	/**
+	 * Energy is transferred from this battery to another IEnergyHolder.
+	 * 
+	 * @param	other
+	 * 			The IEnergyHolder to be given energy.
+	 * @param	amount
+	 * 			The amount of energy to be transferred.
+	 * @pre		The IEnergyHolder must be able to accept the amount of energy to be transferred.
+	 * 			| other.canAcceptForRecharge(amount)
+	 * @pre		The amount to be transferred can not be greater than the amount of energy this battery has.
+	 * 			| amount <= this.getEnergy()
+	 * @effect	The IEnergyHolder is recharged with amount of energy to be transferred.
+	 * 			| other.recharge(amount)
+	 * @effect	The transferred amount of energy is subtracted from the amount of energy of this battery.
+	 * 			| this.setEnergy(this.getEnergy() - amount)
+	 * @throws	IllegalStateException
+	 * 			...
+	 * 			| this.isTerminated()
+	 */
+	public void transferEnergy(IEnergyHolder other, double amount) throws IllegalStateException
+	{
+		assert(other.canAcceptForRecharge(amount) && amount <= this.getEnergy()): "The preconditions of transferEnergy(IEnergyHolder, double) must be satisfied.";
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated battery can not be altered.");
+		}
+		other.recharge(amount);
+		this.setEnergy(this.getEnergy() - amount);
+	}
+
+	/**
+	 * A robot uses this battery. As much energy as possible is transferred from this battery to the robot.
+	 * 
+	 * @param	robot
+	 * 			The robot that uses this battery.
+	 * @effect	...
+	 * 			| if(robot.canAcceptForRecharge(this.getEnergy())
+	 * 			|	then this.transferEnergy(robot, this.getEnergy())
+	 * 			| else this.transferEnergy(robot, robot.getMaxEnergy() - robot.getEnergy())
+	 * @throws	IllegalStateException
+	 * 			...
+	 * 			| this.isTerminated() || robot.isTerminates()
+	 */
+	@Override
+	public void use(Robot robot) throws IllegalStateException
+	{
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated battery can not be altered.");
+		}
+		if(robot.isTerminated())
+		{
+			throw new IllegalStateException("A terminated robot can not be altered.");
+		}
+		// the robot has enough 'room' to store the total amount of energy this battery holds.
+		if(robot.canAcceptForRecharge(this.getEnergy()))
+		{
+			this.transferEnergy(robot, this.getEnergy());
+			robot.getPossessions().remove(this);
+			this.terminate();
+		}
+		// the robot can only store part of the energy this battery holds.
+		else
+		{
+			this.transferEnergy(robot, robot.getMaxEnergy() - robot.getEnergy());
+		}
+	}
+	
+	/**
+	 * Returns a string representation of this battery.
+	 * 
+	 * @return	...
+	 * 			| result == "Battery with:" + "\n"
+	 *			| 			+ super.toString() + "\n" 
+	 *			| 			+ " energy level: " + this.getEnergy() + "(" + getEnergyFraction() + "%)"
+	 */
+	@Override
+	public java.lang.String toString()
+	{
+		return "Battery with:" + "\n"
+				+ super.toString() +  ";  " + "\n"
+				+ "Energy level: " + this.getEnergy() + " (" + getEnergyFraction() + "%)";
+	}
+
+}
