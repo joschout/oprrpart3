@@ -304,7 +304,7 @@ public class Board extends Terminatable
 					// Variable representing a new element of the class random
 					Random generator = new Random();
 					// Variable containing a random number between 0 and the number of elements on the checked position
-					int randomInt = generator.nextInt(nbOfElements);
+					int randomInt = generator.nextInt(nbOfElements+1);
 					// Auxiliary integer for picking a random element
 					int j = 0;
 					// Loop resulting in picking an element on the checked position as randomly as possible

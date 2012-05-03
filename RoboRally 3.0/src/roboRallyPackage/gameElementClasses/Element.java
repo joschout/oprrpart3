@@ -279,4 +279,6 @@ public abstract class Element extends Terminatable
 		}
 		return resultString;
 	}
+	
+	public abstract void takeHit();
 }
