@@ -72,13 +72,13 @@ public class Robot extends Element implements IEnergyHolder
 		this.setOrientation(orientation);
 		this.setEnergy(currentEnergy);
 		
-		if(canHaveAsMaxEnergy(maxEnergy))
+		if(this.canHaveAsMaxEnergy(maxEnergy))
 		{
-			this.maxEnergy = maxEnergy;
+			this.setMaxEnergy(maxEnergy);
 		}
 		else
 		{
-			this.maxEnergy = 20000;
+			this.setMaxEnergy(20000);
 		}
 	}
 
@@ -172,23 +172,22 @@ public class Robot extends Element implements IEnergyHolder
 	}
 	
 	/**
-	 * Sets the current energy level to the given energy level.
+	 * Sets the amount of energy of this robot to the given amount of energy, expressed in watt-seconds (Ws).
 	 * 
-	 * @pre		This robot can accept the given current energy level.
-	 * 			| canHaveAsEnergy(currentEnergy)
-	 * @param 	currentEnergy
-	 * 			The new current energy level of this robot.
-	 * @throws	IllegalStateException
-	 * 			When this robot is terminated
-	 * 			| this.isTerminated()
+	 * @param 	energyAmount
+	 * 			The new energy amount for this robot in watt-seconds (Ws).
+	 * @see		Interface IEnergyHolder
+	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#setEnergy(double)
 	 */
 	public void setEnergy(double currentEnergy) throws IllegalStateException
 	{
 		assert (canHaveAsEnergy(currentEnergy)): "Preconditions for setEnergy(double) must be satisfied.";
+		
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated robot can not be altered.");
 		}
+		
 		this.currentEnergy = currentEnergy;
 	}
 	
@@ -196,10 +195,8 @@ public class Robot extends Element implements IEnergyHolder
 	 * Checks whether the given currentEnergy is a valid currentEnergy.
 	 * @param 	currentEnergy
 	 * 			The amount of energy to be checked.
-	 * @return	True if the given currentEnergy equals or is positive.
-	 * 			| result == (currentEnergy >= 0)
-	 * @return	True if the given currentEnergy equals or is smaller than the maximum energy level of this robot.
-	 * 			| result == (currentEnergy <= this.getMaxEnergy())
+	 * @see		Interface IEnergyHolder
+	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#canHaveAsEnergy(double)
 	 */
 	public boolean canHaveAsEnergy(double currentEnergy)
 	{
@@ -226,25 +223,48 @@ public class Robot extends Element implements IEnergyHolder
 	}
 	
 	/**
-	 * Check whether the given maximum energy is a valid maximum energy.
+	 * Sets the maximum energy level of this Robot to the given maximum energy level, expressed in watt-seconds (Ws).
+	 * 
+ 	 * @param 	maxEnergyAmount
+	 * 			The new maximum energy level for this Robot in watt-seconds (Ws).
+	 * @see		Interface IEnergyHolder
+	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#setMaxEnergy(double)
+	 */
+	public void setMaxEnergy(double maxEnergyAmount) throws IllegalStateException,
+															UnsupportedOperationException
+	{
+		assert this.canHaveAsMaxEnergy(maxEnergyAmount): "The given maximum energy level is not a valid maximum energy level for this robot.";
+		
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated battery can not be altered.");
+		}
+		
+		this.maxEnergy = maxEnergyAmount;
+	}
+	
+	/**
+	 * Check whether the given maximum energy is a valid maximum energy for this robot.
 	 * 
 	 * @param 	maxEnergy
-	 * 			The maximum energy level this robot can have.
-	 * @return	True if the given maximum energy level equals or is strictly postitive
-	 * 			| result == (maxEnergy >= 0)
+	 * 			The maximum energy level to be checked.
+	 * @see		Interface IEnergyHolder
+	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#canHaveAsMaxEnergy(double)
 	 * @return	True if the given maximum energy level equals or is greater than the most expensive cost for an action
 	 * 			(otherwise, this robot will f.e. never be able to shoot)
 	 * 			| result == (maxEnergy >= java.util.Collections.max(getListCosts()))
+	 * @return	False if the given energy is greater than 20000 Ws.
+	 * 			| result != (energy > Double.MAX_VALUE)
 	 */
 	public boolean canHaveAsMaxEnergy(double maxEnergy)
 	{
-		return (maxEnergy >= 0 && maxEnergy >= java.util.Collections.max(getListCosts()));
+		return (maxEnergy >= 0 && maxEnergy >= java.util.Collections.max(getListCosts()) && maxEnergy <= 20000);
 	}
 	
 	/**
 	 * Variable representing the maximum amount of energy this robot can have.
 	 */
-	private final double maxEnergy;
+	private double maxEnergy;
 	
 
 	/**
@@ -894,24 +914,15 @@ public class Robot extends Element implements IEnergyHolder
 	 * 			The IEnergyHolder to be given energy.
 	 * @param	amount
 	 * 			The amount of energy to be transferred.
-	 * @pre		The IEnergyHolder must be able to accept the amount of energy to be transferred.
-	 * 			| other.canAcceptForRecharge(amount)
-	 * @pre		The amount to be transferred can not be greater than the amount of energy this robot has.
-	 * 			| amount <= this.getEnergy()
-	 * @effect	The IEnergyHolder is recharged with amount of energy to be transferred.
-	 * 			| other.recharge(amount)
-	 * @effect	The transferred amount of energy is subtracted from the amount of energy of this robot.
-	 * 			| this.setEnergy(this.getEnergy() - amount);
-	 * @throws	IllegalStateException
-	 * 			When this robot is terminated
-	 * 			| this.isTerminated()
+	 * @see		Interface IEnergyHolder
+	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#transferEnergy(double)
+	 * @throws	UnsupportedOperationException
+	 * 			Always throw this exception when invoked on a robot.
+	 * 			| this instance of Robot
 	 */
-	public void transferEnergy(IEnergyHolder other, double amount)
+	public void transferEnergy(IEnergyHolder other, double amount) throws IllegalStateException, UnsupportedOperationException
 	{
-		assert(other.canAcceptForRecharge(amount) && amount <= this.getEnergy()): "The preconditions of transferEnergy(IEnergyHolder, double) must be satisfied.";
-
-		other.recharge(amount);
-		this.setEnergy(this.getEnergy() - amount);
+		throw new UnsupportedOperationException();
 	}
 	
 	/**

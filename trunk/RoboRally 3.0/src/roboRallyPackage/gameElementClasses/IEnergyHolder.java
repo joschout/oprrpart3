@@ -39,8 +39,10 @@ public interface IEnergyHolder
 	 * 
 	 * @param	energy
 	 * 			The amount of energy to be checked.
-	 * @return 	True if and only if the given energy is nonnegative and not greater than the maximum amount of energy of this IEnergyHolder.
-	 * 			| result == (energy >= 0) && (energy <= this.getMaxEnergy())
+	 * @return 	False if the given energy is negative
+	 * 			| result != (energy < 0)
+	 * @return	False if the given energy is greater than or equal to the maximal amount of energy an IEnergyHolder can have.
+	 * 			| result != (energy > this.getMaxEnergy())
 	 */
 	public abstract boolean canHaveAsEnergy(double energy);
 
@@ -48,6 +50,36 @@ public interface IEnergyHolder
 	 * Returns the variable representing the maximum amount of energy this IEnergyHolder can have.
 	 */
 	public abstract double getMaxEnergy();
+	
+	/**
+	 * Sets the maximum energy level of this IEnergyHolder to the given maximum energy level, expressed in watt-seconds (Ws).
+	 * 
+ 	 * @param 	maxEnergyAmount
+	 * 			The new maximum energy level for this IEnergyHolder in watt-seconds (Ws).
+	 * @pre		The given maximum energy level (in watt-seconds (Ws)) is a valid maximum energy level for this IEnergyHolder.
+	 * 			| this.canHaveAsMaxEnergy(energyAmount)
+	 * @post	The new maximum energy level is equal to the given amount of energy.
+	 * 			| (new this).getMaxEnergy() == maxEnergyAmount
+	 * @throws	IllegalStateException
+	 * 			...
+	 * 			| this.isTerminated()
+	 * @throws	UnsupportedOperationException
+	 * 			When the maximum energy level of this IEnergeHolder cannot be altered
+	 * 			| ! (this instance of Robot)
+	 */
+	public abstract void setMaxEnergy(double maxEnergyAmount) throws IllegalStateException, UnsupportedOperationException;
+	
+	/**
+	 * Checks whether the given maximum energy level is a valid maximum energy level for this IEnergyHolder.
+	 * 
+	 * @param	energy
+	 * 			The maximum energy level to be checked.
+	 * @return 	False if the given energy is negative
+	 * 			| result != (energy < 0)
+	 * @return	False if the given energy is greater than Double.MAX_VALUE.
+	 * 			| result != (energy > Double.MAX_VALUE)
+	 */
+	public abstract boolean canHaveAsMaxEnergy(double maxEnergy);
 
 	/**
 	 * Returns a percentage of the current energy level relative to the maximum amount of energy this IEnergyHolder can have.
@@ -89,18 +121,21 @@ public interface IEnergyHolder
 	 * @param	other
 	 * 			The IEnergyHolder to be given energy.
 	 * @param	amount
-	 * 			The amount of energy to be transferred, expressed in watt-seconds (Ws).
-	 * @pre		The other IEnergyHolder must be able to accept the amount of energy to be transferred.
+	 * 			The amount of energy to be transferred.
+	 * @pre		The IEnergyHolder must be able to accept the amount of energy to be transferred.
 	 * 			| other.canAcceptForRecharge(amount)
 	 * @pre		The amount to be transferred can not be greater than the amount of energy this IEnergyHolder has.
 	 * 			| amount <= this.getEnergy()
-	 * @effect	The other IEnergyHolder is recharged with amount of energy to be transferred.
+	 * @effect	The IEnergyHolder is recharged with amount of energy to be transferred.
 	 * 			| other.recharge(amount)
 	 * @effect	The transferred amount of energy is subtracted from the amount of energy of this IEnergyHolder.
 	 * 			| this.setEnergy(this.getEnergy() - amount);
 	 * @throws	IllegalStateException
-	 * 			...
-	 * 			| this.isTerminated()
+	 * 			When this IEnergyHolder or the other IEnergyHolder is terminated
+	 * 			| this.isTerminated() || other.isTerminated()
+	 * @throws	UnsupportedOperationException
+	 * 			When this IEnergyHolder cannot transfer energy to another IEnergyHolder
+	 * 			| ! this instanceof Battery
 	 */
-	public abstract void transferEnergy(IEnergyHolder other, double amount) throws IllegalStateException;
+	public abstract void transferEnergy(IEnergyHolder other, double amount) throws IllegalStateException, UnsupportedOperationException;
 }

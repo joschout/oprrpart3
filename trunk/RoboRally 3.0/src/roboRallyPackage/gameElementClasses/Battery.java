@@ -56,21 +56,18 @@ public class Battery extends Item implements IEnergyHolder
 	 * 
 	 * @param 	energyAmount
 	 * 			The new energy amount for this battery.
-	 * @pre		The given amount of energy is a valid amount of energy for this battery.
-	 * 			| this.canHaveAsEnergy(energyAmount)
-	 * @post	The new amount of energy is equal to the given amount of energy.
-	 * 			| (new this).getEnergy() == energyAmount
-	 * @post	IllegalStateException
-	 * 			...
-	 * 			| this.isTerminated()
+	 * @see		Interface IEnergyHolder
+	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#setEnergy(double)
 	 */
 	public void setEnergy(double energyAmount) throws IllegalStateException
 	{
-		assert canHaveAsEnergy(energyAmount): "Precondition for setEnergy(double) must be statisfied.";
+		assert this.canHaveAsEnergy(energyAmount): "The given amount of energy is not a valid amount of energy for this battery.";
+		
 		if(this.isTerminated())
 		{
-			throw new IllegalStateException("A terminated battery can not be altered.");
+			throw new IllegalStateException("A terminated battery cannot be altered.");
 		}
+		
 		this.energyAmount = energyAmount;
 	}
 	
@@ -79,16 +76,12 @@ public class Battery extends Item implements IEnergyHolder
 	 * 
 	 * @param	energy
 	 * 			The amount of energy to be checked in watt-seconds.
-	 * @return 	True if and only if the given energy is nonnegative and less than or equal to the maximal amount of energy a battery can have.
-	 * 			| result == (energy >= 0) && (energy <= this.getMaxEnergy())
+	 * @see		Interface IEnergyHolder
+	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#canHaveAsEnergy(double)
 	 */
 	public boolean canHaveAsEnergy(double energy)
 	{
-		if ((energy >= 0) && (energy <= this.getMaxEnergy()))
-		{
-			return true;
-		}
-		return false;
+		return ((energy >= 0) && (energy <= this.getMaxEnergy()));
 	}
 
 	/**
@@ -105,6 +98,38 @@ public class Battery extends Item implements IEnergyHolder
 		return maxBatteryEnergyAmount;
 	}
 
+	/**
+	 * Sets the maximum energy level of this battery to the given maximum energy level, expressed in watt-seconds (Ws).
+	 * 
+ 	 * @param 	maxEnergyAmount
+	 * 			The new maximum energy level for this battery in watt-seconds (Ws).
+	 * @see		Interface IEnergyHolder
+	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#setMaxEnergy(double)
+	 * @throws	UnsupportedOperationException
+	 * 			Always throw this exception when invoked on a battery
+	 * 			| this instance of Battery
+	 */
+	public void setMaxEnergy(double maxEnergyAmount) throws IllegalStateException,
+															UnsupportedOperationException
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Check whether the given maximum energy is a valid maximum energy for this battery.
+	 * 
+	 * @param 	maxEnergy
+	 * 			The maximum energy level to be checked.
+	 * @see		Interface IEnergyHolder
+	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#canHaveAsMaxEnergy(double)
+	 * @return	False if the given energy is greater 5000 Ws.
+	 * 			| result != (energy > 5000)
+	 */
+	public boolean canHaveAsMaxEnergy(double maxEnergy)
+	{
+		return (maxEnergy >= 0 && maxEnergy <= 5000);
+	}
+	
 	/**
 	 * Variable representing the maximum amount of energy this battery can have, expressed in watt-seconds (Ws).
 	 */
@@ -149,9 +174,10 @@ public class Battery extends Item implements IEnergyHolder
 	 * 
 	 * @param 	amount
 	 * 			The amount to be checked.
-	 * @return	True if and only if the given amount of energy is greater than zero 
-	 *			 			 and if this battery can have a total energy level equal to its the given amount of energy added to its current energy level.
-	 *			| result == ((amount > 0) && this.canHaveAsEnergy(this.getEnergy() + amount))
+	 * @return	True if and only if the given amount of energy is strictly positive.
+	 * 			| result == (amount > 0)
+	 * @return	True if this battery can have a total energy level equal to its the given amount of energy added to its current energy level.
+	 * 			| result == this.canHaveAsEnergy(this.getEnergy() + amount))
 	 */
 	public boolean canAcceptForRecharge(double amount)
 	{
@@ -165,10 +191,10 @@ public class Battery extends Item implements IEnergyHolder
 	 * 			The IEnergyHolder to be given energy.
 	 * @param	amount
 	 * 			The amount of energy to be transferred.
-	 * @pre		The IEnergyHolder must be able to accept the amount of energy to be transferred.
-	 * 			| other.canAcceptForRecharge(amount)
 	 * @pre		The amount to be transferred can not be greater than the amount of energy this battery has.
 	 * 			| amount <= this.getEnergy()
+	 * @pre		The IEnergyHolder must be able to accept the amount of energy to be transferred.
+	 * 			| other.canAcceptForRecharge(amount)
 	 * @effect	The IEnergyHolder is recharged with amount of energy to be transferred.
 	 * 			| other.recharge(amount)
 	 * @effect	The transferred amount of energy is subtracted from the amount of energy of this battery.
@@ -179,11 +205,14 @@ public class Battery extends Item implements IEnergyHolder
 	 */
 	public void transferEnergy(IEnergyHolder other, double amount) throws IllegalStateException
 	{
-		assert(other.canAcceptForRecharge(amount) && amount <= this.getEnergy()): "The preconditions of transferEnergy(IEnergyHolder, double) must be satisfied.";
+		assert(amount <= this.getEnergy()): "This battery cannot transfer more energy than it currently has.";
+		assert(other.canAcceptForRecharge(amount)): "The other IEnergyHolder cannot accept this amount of energy for reacharging.";
+		
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated battery can not be altered.");
 		}
+		
 		other.recharge(amount);
 		this.setEnergy(this.getEnergy() - amount);
 	}
