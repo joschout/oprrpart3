@@ -191,6 +191,38 @@ public class Position
 	}
 	
 	/**
+	 * Returns a list of positions that are neighbours of this position.
+	 * If a neighbour of this position is no valid position (e.g. they fall off the board), it is not included in the list.
+	 * 
+	 * @return	A list of all valid neighbours of this position
+	 * 			| for each orientation in Orientation.values(): result.contains(this.getNeighbour(orientation))
+	 * 			|												|| ! this.isValidPosition(this.getNeighbour(orientation))
+	 */
+	public Position[] getAllNeighbours()
+	{
+		// make a new list
+		Position[] neighbours = new Position[Orientation.values().length];
+		
+		int i = 0;
+		
+		// add all neighbours of this position to the list.
+		for(Orientation orientation: Orientation.values())
+		{
+			try
+			{
+				neighbours[i] = this.getNeighbour(orientation);
+				i++;
+			}
+			catch(IllegalPositionException exc)
+			{
+				
+			}
+		}
+		
+		return neighbours;
+	}
+	
+	/**
 	 * Returns the position that lies a given steps from this position, given a certain orientation.
 	 * 
 	 * @param	orientation

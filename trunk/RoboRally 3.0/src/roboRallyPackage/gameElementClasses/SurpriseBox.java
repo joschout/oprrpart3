@@ -82,18 +82,50 @@ public class SurpriseBox extends Item {
 
 		this.terminate();
 	}
+
+	
+	/**
+	 * When an element is hit (e.g. it is shot by a robot) some of its properties are altered.
+	 * A surprise box explodes and hits all elements on the same position as the box itself
+	 * and all the elements on the neighbouring positions of the position of the surprise box.
+	 * In the end the surprise box is terminated.
+	 * 
+	 * @effect	All the elements on the position of this surprise box are hit.
+	 * 			| for each element in this.getBoard().getElements(this.getPosition()): element.takeHit()
+	 * @effect	All the elements that are standing on a position next to the position of this surprise box are hit.
+	 * 			| for each position in this.getPosition().getAllNeighbours():
+	 * 			|   for each element in this.getBoard().getElements(position): element.takeHit()
+	 * @effect	The surprise box is terminated in the end.
+	 * 			| this.terminate()
+	 * @throws	IllegalStateException
+	 * 			When this surprise box is terminated.
+	 * 			| this.isTerminated()
+	 */
 	@Override
-	public void takeHit() {
-		for(Element element:this.getBoard().getElements(this.getPosition())){
+	public void takeHit() throws IllegalStateException
+	{
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated surprise box cannot be hit.");
+		}
+		
+		// all the elements on the position of this surprise box are hit.
+		for(Element element : this.getBoard().getElements(this.getPosition()))
+		{
 			element.takeHit();
 		}
-		for(Orientation orientation: Orientation.values()){
-			for(Element element: this.getBoard().getElements(this.getPosition().getNeighbour(orientation))){
+		
+		// all the elements on the neighouring position of the position of this surprise box are hit.
+		for(Position position: this.getPosition().getAllNeighbours())
+		{
+			for(Element element: this.getBoard().getElements(position))
+			{
 				element.takeHit();
 			}
 		}
+		
+		// this surprise box is hit.
 		this.terminate();
-
 	}
 
 

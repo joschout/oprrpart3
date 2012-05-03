@@ -54,4 +54,21 @@ public class Wall extends Element
 	{
 		return (other == null);
 	}
+	
+	/**
+	 * When an element is hit (e.g. it is shot by a robot) some of its properties are altered.
+	 * A wall does not change it state when hit.
+	 * 
+	 * @throws	IllegalStateException
+	 * 			When this Wall is terminated.
+	 * 			| this.isTerminated()
+	 */
+	@Override
+	public void takeHit() throws IllegalStateException
+	{
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated wall cannot be hit by a laser.");
+		}
+	}
 }

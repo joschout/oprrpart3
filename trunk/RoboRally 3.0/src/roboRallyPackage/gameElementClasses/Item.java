@@ -103,6 +103,17 @@ public abstract class Item extends Element
 	public abstract void use(Robot robot);
 	
 	/**
+	 * When an element is hit (e.g. it is shot by a robot) some of its properties are altered.
+	 * Which properties and to what extend, depends on the elements.
+	 * 
+	 * @throws	IllegalStateException
+	 * 			When this item is terminated.
+	 * 			| this.isTerminated()
+	 */
+	@Override
+	public abstract void takeHit() throws IllegalStateException;
+	
+	/**
 	 * Returns a string representation of this item.
 	 * 
 	 * @return	...

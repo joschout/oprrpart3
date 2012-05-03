@@ -926,6 +926,38 @@ public class Robot extends Element implements IEnergyHolder
 	}
 	
 	/**
+	 * When an element is hit (e.g. it is shot by a robot) some of its properties are altered.
+	 * This robots maximum energy level is decreased with 4000 Ws if possible, otherwise it is terminated.
+	 * 
+	 * @effect	The robots maximum energy level is decreased with 4000 Ws if possible, otherwise it is terminated.
+	 * 			| if(this.canHaveAsMaxEnergy(this.getMaxEnergy()-4000))
+	 * 			|  then this.setMaxEnergy(this.getMaxEnergy()-4000)
+	 * 			| else this.terminate()
+	 * @throws	IllegalStateException
+	 * 			When this robot is terminated.
+	 * 			| this.isTerminated()
+	 */
+	@Override
+	public void takeHit() throws IllegalStateException
+	{
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated robot cannot be hit by a laser.");
+		}
+		
+		// this robots maximum energy level can be decreased with 4000 Ws.
+		if(this.canHaveAsMaxEnergy(this.getMaxEnergy()-4000))
+		{
+			this.setMaxEnergy(this.getMaxEnergy()-4000);
+		}
+		// the robots maximum energy reaches 0 when decreasing it.
+		else
+		{
+			this.terminate();
+		}
+	}
+	
+	/**
 	 * Returns a string representation of this robot.
 	 * 
 	 * @return	A string of this robot.

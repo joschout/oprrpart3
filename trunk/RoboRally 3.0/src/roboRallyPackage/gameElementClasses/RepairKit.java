@@ -274,4 +274,37 @@ public class RepairKit extends Item implements IEnergyHolder
 			this.repair(robot, robot.getMaxEnergy() - robot.getEnergy());
 		}
 	}
+	
+	/**
+	 * When an element is hit (e.g. it is shot by a robot) some of its properties are altered.
+	 * A repair kit increases its energy with 500 Ws when hit if possible. Otherwise it is set to the maximum energy level.
+	 * 
+	 * @post	The energy level of this repair kit is increaesed with 500 Ws if possible, otherwise it is set to the maximum energy level.
+	 * 			| if(this.canHaveAsEnergy(this.getEnergy() + 500))
+	 * 			|  then this.setEnergy(this.getEnergy() + 500)
+	 * 			| else this.setEnergy(this.getMaxEnergy())
+	 * @throws	IllegalStateException
+	 * 			When this repair kit is terminated.
+	 * 			| this.isTerminated()
+	 */
+	@Override
+	public void takeHit() throws IllegalStateException
+	{
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated repair kit cannot be hit.");
+		}
+		
+		// this repair kit has room for 500 Ws extra energy
+		if(this.canHaveAsEnergy(this.getEnergy() + 500))
+		{
+			this.setEnergy(this.getEnergy() + 500);
+		}
+		// the energy level of this repair kit is almost at maximum; it cannot store another 500 Ws extra.
+		// the energy level of this repair kit is set at its maximum.
+		else
+		{
+			this.setEnergy(this.getMaxEnergy());
+		}
+	}
 }
