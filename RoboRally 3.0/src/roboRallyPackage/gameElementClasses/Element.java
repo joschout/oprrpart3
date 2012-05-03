@@ -259,6 +259,16 @@ public abstract class Element extends Terminatable
 	private Board board = null;
 	
 	/**
+	 * When an element is hit (e.g. it is shot by a robot) some of its properties are altered.
+	 * Which properties and to what extend, depends on the elements.
+	 * 
+	 * @throws	IllegalStateException
+	 * 			When this element is terminated.
+	 * 			| this.isTerminated()
+	 */
+	public abstract void takeHit() throws IllegalStateException;
+	
+	/**
 	 * Returns a string representation of this element.
 	 * 
 	 * @return	...
@@ -270,15 +280,15 @@ public abstract class Element extends Terminatable
 	{
 		String resultString = "";
 		
-		if(this.getPosition() != null){
-		resultString += " " + this.getPosition().toString() + ";  " + "\n";
+		if(this.getPosition() != null)
+		{
+			resultString += " " + this.getPosition().toString() + ";  " + "\n";
 		}
-		if(this.getBoard() != null){
-				
+		if(this.getBoard() != null)
+		{
 			resultString +=  " " + this.getBoard().toString();
 		}
 		return resultString;
 	}
 	
-	public abstract void takeHit();
 }

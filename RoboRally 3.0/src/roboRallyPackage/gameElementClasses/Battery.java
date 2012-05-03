@@ -256,6 +256,39 @@ public class Battery extends Item implements IEnergyHolder
 	}
 	
 	/**
+	 * When an element is hit (e.g. it is shot by a robot) some of its properties are altered.
+	 * A battery increases its energy with 500 Ws when hit if possible. Otherwise it is set to the maximum energy level.
+	 * 
+	 * @post	The energy level of this battery is increaesed with 500 Ws if possible, otherwise it is set to the maximum energy level.
+	 * 			| if(this.canHaveAsEnergy(this.getEnergy() + 500))
+	 * 			|  then this.setEnergy(this.getEnergy() + 500)
+	 * 			| else this.setEnergy(this.getMaxEnergy())
+	 * @throws	IllegalStateException
+	 * 			When this battery is terminated.
+	 * 			| this.isTerminated()
+	 */
+	@Override
+	public void takeHit() throws IllegalStateException
+	{
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated battery kit cannot be hit.");
+		}
+		
+		// this battery has room for 500 Ws extra energy
+		if(this.canHaveAsEnergy(this.getEnergy() + 500))
+		{
+			this.setEnergy(this.getEnergy() + 500);
+		}
+		// the energy level of this battery is almost at maximum; it cannot store another 500 Ws extra.
+		// the energy level of this battery kit is set at its maximum.
+		else
+		{
+			this.setEnergy(this.getMaxEnergy());
+		}
+	}
+	
+	/**
 	 * Returns a string representation of this battery.
 	 * 
 	 * @return	...
