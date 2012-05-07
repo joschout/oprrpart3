@@ -12,8 +12,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public class Turn extends BasicCommand
 {
-	public Turn(Direction direction)
+	public Turn(Robot robot, Direction direction)
 	{
+		super(robot);
 		this.direction = direction;
 	}
 	

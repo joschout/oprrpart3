@@ -12,6 +12,11 @@ import roboRallyPackage.commandClasses.*;
  */
 public class PickupAndUse extends BasicCommand
 {
+	public PickupAndUse(Robot robot)
+	{
+		super(robot);
+	}
+	
 	public void execute()
 	{
 		for(Element element: this.getRobot().getBoard().getElements(this.getRobot().getPosition()))

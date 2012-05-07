@@ -12,6 +12,11 @@ import roboRallyPackage.commandClasses.*;
  */
 public class Move extends BasicCommand
 {
+	public Move(Robot robot)
+	{
+		super(robot);
+	}
+	
 	public void execute()
 	{
 		this.getRobot().moveOneStep();
