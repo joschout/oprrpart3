@@ -12,6 +12,11 @@ import roboRallyPackage.commandClasses.*;
  */
 public class Shoot extends BasicCommand
 {
+	public Shoot(Robot robot)
+	{
+		super(robot);
+	}
+	
 	public void execute()
 	{
 		this.getRobot().shoot();

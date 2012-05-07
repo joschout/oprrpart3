@@ -13,5 +13,10 @@ import roboRallyPackage.commandClasses.*;
  */
 public abstract class BasicCommand extends Command implements Executable
 {
+	public BasicCommand(Robot robot)
+	{
+		super(robot);
+	}
+	
 	public abstract void execute();
 }
