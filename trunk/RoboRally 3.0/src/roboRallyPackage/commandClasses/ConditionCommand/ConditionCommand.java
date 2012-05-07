@@ -13,5 +13,10 @@ import roboRallyPackage.commandClasses.ConditionCommand.*;
  */
 public abstract class ConditionCommand extends Command implements Condition
 {
+	public ConditionCommand(Robot robot)
+	{
+		super(robot);
+	}
+	
 	public abstract boolean results();
 }

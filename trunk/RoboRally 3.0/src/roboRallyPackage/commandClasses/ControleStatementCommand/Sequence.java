@@ -12,8 +12,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public class Sequence extends ControleStatementCommand
 {
-	public Sequence(java.util.List<Executable> seqCommands)
+	public Sequence(Robot robot, java.util.List<Executable> seqCommands)
 	{
+		super(robot);
 		this.seqCommands = new java.util.ArrayList<Executable>(seqCommands);
 	}
 	

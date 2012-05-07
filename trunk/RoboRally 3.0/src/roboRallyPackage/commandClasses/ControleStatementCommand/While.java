@@ -12,8 +12,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public class While extends ControleStatementCommand
 {
-	public While(Condition condition, Executable whileCommand)
+	public While(Robot robot, Condition condition, Executable whileCommand)
 	{
+		super(robot);
 		this.condition = condition;
 		this.whileCommand = whileCommand;
 	}

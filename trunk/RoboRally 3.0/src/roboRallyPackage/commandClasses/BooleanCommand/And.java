@@ -14,8 +14,9 @@ import roboRallyPackage.commandClasses.ConditionCommand.*;
  */
 public class And extends BooleanCommand
 {
-	public And(Condition[] conditions)
+	public And(Robot robot, Condition[] conditions)
 	{
+		super(robot);
 		this.conditions = conditions;
 	}
 	

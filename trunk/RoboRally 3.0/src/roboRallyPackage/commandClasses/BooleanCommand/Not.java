@@ -13,8 +13,9 @@ import roboRallyPackage.commandClasses.ConditionCommand.*;
  */
 public class Not extends BooleanCommand
 {
-	public Not(Condition condition)
+	public Not(Robot robot, Condition condition)
 	{
+		super(robot);
 		this.condition = condition;
 	}
 	

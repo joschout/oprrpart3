@@ -13,6 +13,11 @@ import roboRallyPackage.commandClasses.ConditionCommand.*;
  */
 public class CanHitRobot extends ConditionCommand
 {
+	public CanHitRobot(Robot robot)
+	{
+		super(robot);
+	}
+	
 	public boolean results()
 	{
 		Element testElement = this.getRobot().getBoard().getFirstElementStartingAt(this.getRobot().getPosition(), this.getRobot().getOrientation());

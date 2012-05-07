@@ -13,5 +13,16 @@ import roboRallyPackage.commandClasses.ConditionCommand.*;
  */
 public class EnergyAtLeast extends ConditionCommand
 {
+	public EnergyAtLeast(Robot robot, double energy)
+	{
+		super(robot);
+		this.energy = energy;
+	}
+	
+	private double energy;
 
+	public boolean results() 
+	{
+		return (this.getRobot().getEnergy() >= energy);
+	}
 }
