@@ -30,10 +30,10 @@ public class Parser
 		return this.robot;
 	}
 
-	public Executable parse(String fullProgram)
+	public Command parse(String fullProgram)
 	{
 		fullProgram = fullProgram.trim().toLowerCase();
-		Executable resultCommand  = null;
+		Command resultCommand  = null;
 		
 		// BasicCommands
 		if(fullProgram.startsWith("(move)"))
@@ -64,11 +64,10 @@ public class Parser
 		// ControleStatementCommands
 		if(fullProgram.startsWith("(seq"))
 		{
-			java.util.List<Executable> commands = new java.util.ArrayList<Executable>();
 			String subProgram = fullProgram.substring("(seq".length()).trim();
 			
+			java.util.List<Executable> commands = new java.util.ArrayList<Executable>();
 			boolean stop = false;
-			int i = 0;
 			
 			while(! stop)
 			{
@@ -78,7 +77,11 @@ public class Parser
 				}
 				else
 				{
-					commands.add(this.parse(subProgram));
+					// get the first command of the current subProgram
+					commands.add((Executable) this.parse(subProgram));
+					// cut the command that we just found off the current subProgram-string
+					int index = subProgram.indexOf(")");
+					subProgram = subProgram.substring(index + 1).trim();
 				}
 			}
 				
@@ -86,7 +89,28 @@ public class Parser
 		}
 		if(fullProgram.startsWith("(while"))
 		{
-			resultCommand = new While();
+			String subProgram = fullProgram.substring("(while".length()).trim();
+
+			Condition condition;
+			Executable executable;
+
+			condition = (Condition) this.parse(subProgram);
+			
+			subProgram.substring(subProgram.indexOf("(")).trim();
+			if(subProgram.substring(0,subProgram.indexOf(")")).contains("("))
+			{
+				
+			}
+			subProgram.substring(subProgram.indexOf(")")).trim();
+			
+					if(this.parse(subProgram) instanceof Condition)
+					{
+						condition = this.parse(subProgram) instanceof Condition;
+					}
+				}
+			}
+
+			resultCommand = new While(this.getRobot(),condition,executable);
 		}
 		if(fullProgram.startsWith("(if"))
 		{
