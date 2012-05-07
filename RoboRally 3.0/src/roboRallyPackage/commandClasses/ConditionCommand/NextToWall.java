@@ -11,8 +11,13 @@ import roboRallyPackage.commandClasses.ConditionCommand.*;
  * @author Nele
  *
  */
-public class nextToWall extends ConditionCommand
+public class NextToWall extends ConditionCommand
 {
+	public NextToWall(Robot robot)
+	{
+		super(robot);
+	}
+	
 	public boolean results()
 	{
 		for(Position position: this.getRobot().getPosition().getAllNeighbours())

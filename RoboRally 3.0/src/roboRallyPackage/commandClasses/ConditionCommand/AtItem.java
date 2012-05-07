@@ -13,6 +13,11 @@ import roboRallyPackage.commandClasses.ConditionCommand.*;
  */
 public class AtItem extends ConditionCommand
 {
+	public AtItem(Robot robot)
+	{
+		super(robot);
+	}
+	
 	public boolean results()
 	{
 		for(Element element: this.getRobot().getBoard().getElements(this.getRobot().getPosition()))

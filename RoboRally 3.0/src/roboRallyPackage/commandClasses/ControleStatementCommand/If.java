@@ -12,8 +12,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public class If extends ControleStatementCommand
 {
-	public If(Condition condition, Executable ifCommand, Executable elseCommand)
+	public If(Robot robot, Condition condition, Executable ifCommand, Executable elseCommand)
 	{
+		super(robot);
 		this.condition = condition;
 		this.ifCommand = ifCommand;
 		this.elseCommand = elseCommand;
