@@ -1,0 +1,13 @@
+TO DO:
+
+1.
+kijk of overal in de doc this. bijstaat
+
+2.
+System.out.println maken wanneer je de robot wil laten bewegen/draaien en je te weinig energie hebt
+
+3.
+kijken wanneer een lijst teruggeven en wanneer ene clone
+
+4.
+representatie-invarianten! hb p 420
