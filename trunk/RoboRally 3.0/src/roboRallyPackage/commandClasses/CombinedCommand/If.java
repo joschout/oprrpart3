@@ -1,7 +1,7 @@
 /**
  * 
  */
-package roboRallyPackage.commandClasses.ControleStatementCommand;
+package roboRallyPackage.commandClasses.CombinedCommand;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
@@ -10,7 +10,7 @@ import roboRallyPackage.commandClasses.*;
  * @author Nele
  *
  */
-public class If extends ControleStatementCommand
+public class If extends CombinedCommand
 {
 	public If(Robot robot, Condition condition, Executable ifCommand, Executable elseCommand)
 	{

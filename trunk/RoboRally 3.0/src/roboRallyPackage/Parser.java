@@ -6,9 +6,9 @@ package roboRallyPackage;
 import static java.lang.System.out;
 import roboRallyPackage.commandClasses.*;
 import roboRallyPackage.commandClasses.BasicCommand.*;
-import roboRallyPackage.commandClasses.BooleanCommand.*;
-import roboRallyPackage.commandClasses.ConditionCommand.*;
-import roboRallyPackage.commandClasses.ControleStatementCommand.*;
+import roboRallyPackage.commandClasses.BasicCondition.*;
+import roboRallyPackage.commandClasses.CombinedCondition.*;
+import roboRallyPackage.commandClasses.CombinedCommand.*;
 import roboRallyPackage.commandClasses.*;
 import roboRallyPackage.gameElementClasses.*;
 

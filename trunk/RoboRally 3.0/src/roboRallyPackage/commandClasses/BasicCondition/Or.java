@@ -1,17 +1,17 @@
 /**
  * 
  */
-package roboRallyPackage.commandClasses.BooleanCommand;
+package roboRallyPackage.commandClasses.BasicCondition;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.commandClasses.*;
-import roboRallyPackage.commandClasses.ConditionCommand.*;
+import roboRallyPackage.commandClasses.CombinedCondition.*;
 /**
  * @author Nele
  *
  */
-public class Or extends BooleanCommand
+public class Or extends BasicCondition
 {
 	public Or(Robot robot, Condition[] conditions)
 	{

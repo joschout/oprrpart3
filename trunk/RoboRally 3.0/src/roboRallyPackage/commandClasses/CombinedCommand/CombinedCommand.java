@@ -1,4 +1,4 @@
-package roboRallyPackage.commandClasses.ControleStatementCommand;
+package roboRallyPackage.commandClasses.CombinedCommand;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
@@ -12,9 +12,9 @@ import roboRallyPackage.commandClasses.*;
  * @author Nele
  *
  */
-public abstract class ControleStatementCommand extends Command implements Executable
+public abstract class CombinedCommand extends Command implements Executable
 {
-	public ControleStatementCommand(Robot robot)
+	public CombinedCommand(Robot robot)
 	{
 		super(robot);
 	}

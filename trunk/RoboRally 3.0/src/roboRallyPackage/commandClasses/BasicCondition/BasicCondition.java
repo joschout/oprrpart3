@@ -1,19 +1,19 @@
 /**
  * 
  */
-package roboRallyPackage.commandClasses.ConditionCommand;
+package roboRallyPackage.commandClasses.BasicCondition;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.commandClasses.*;
-import roboRallyPackage.commandClasses.ConditionCommand.*;
+import roboRallyPackage.commandClasses.CombinedCondition.*;
 /**
  * @author Nele
  *
  */
-public abstract class ConditionCommand extends Command implements Condition
+public abstract class BasicCondition extends Command implements Condition
 {
-	public ConditionCommand(Robot robot)
+	public BasicCondition(Robot robot)
 	{
 		super(robot);
 	}

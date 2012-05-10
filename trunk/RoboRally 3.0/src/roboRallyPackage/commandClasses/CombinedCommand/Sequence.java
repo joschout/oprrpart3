@@ -1,7 +1,7 @@
 /**
  * 
  */
-package roboRallyPackage.commandClasses.ControleStatementCommand;
+package roboRallyPackage.commandClasses.CombinedCommand;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
@@ -10,7 +10,7 @@ import roboRallyPackage.commandClasses.*;
  * @author Nele
  *
  */
-public class Sequence extends ControleStatementCommand
+public class Sequence extends CombinedCommand
 {
 	public Sequence(Robot robot, java.util.List<Executable> seqCommands)
 	{
