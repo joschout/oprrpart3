@@ -544,7 +544,20 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	@Override
 	public double getMinimalCostToReach(Robot robot, long x, long y)
 	{
-		return robot.getEnergyRequiredToReach(new Position(x, y));
+		try
+		{
+			return robot.getEnergyRequiredToReach(new Position(x, y));
+		}
+		catch(IllegalBoardException exc)
+		{
+			System.out.println("The given robot is not placed on a board..");
+			return -1;
+		}
+		catch(IllegalStateException exc)
+		{
+			System.out.println("The given robot is terminated.");
+			return -1; 
+		}
 	}
 
 	/**
