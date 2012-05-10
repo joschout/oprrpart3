@@ -36,7 +36,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 			 Bachelor Ingenieurswetenschappen, KULeuven
  *
  */
-public class Robot<T extends Item> extends Element implements IEnergyHolder
+public class Robot extends Element implements IEnergyHolder
 {
 
 	/**
@@ -557,7 +557,7 @@ public class Robot<T extends Item> extends Element implements IEnergyHolder
 	 * 			When this robot is terminated
 	 * 			| this.isTerminated()
 	 */
-	public void pickUp(T item) throws IllegalStateException
+	public void pickUp(Item item) throws IllegalStateException
 	{
 		assert canPickUp(item):"The given item cannot be picked up by this robot.";
 		if(this.isTerminated())
@@ -610,7 +610,7 @@ public class Robot<T extends Item> extends Element implements IEnergyHolder
 	 * @return	This robot cannot already carry the given item for the result to be true.
 	 * 			| result == (! this.getPossessions().contains(item))
 	 */
-	public boolean canPickUp(T item)
+	public boolean canPickUp(Item item)
 	{
 		return (item != null) && (! item.isTerminated())
 				&& (item.getPosition() != null) && (item.getPosition().equals(this.getPosition())) 
@@ -652,7 +652,7 @@ public class Robot<T extends Item> extends Element implements IEnergyHolder
 	 * 			When this robot is terminated
 	 * 			| this.isTerminated()
 	 */
-	public void drop(T item) throws IllegalStateException
+	public void drop(Item item) throws IllegalStateException
 	{
 		assert canDrop(item): "This robot cannot drop the given item.";
 		if(this.isTerminated())
@@ -676,11 +676,10 @@ public class Robot<T extends Item> extends Element implements IEnergyHolder
 	 * @result 	The position and the board of the this robot cannot be null.
 	 * 			| result == ((this.getBoard() != null) && (this.getPosition() != null))
 	 */
-	public boolean canDrop(T item)
+	public boolean canDrop(Item item)
 	{
 		return (item != null)
-				&& (this.getPossessions().contains(item))
-				&& (this.getBoard() != null) && (this.getPosition() != null);
+				&& (this.getPossessions().contains(item)) && (this.getBoard() != null) && (this.getPosition() != null);
 	}
 
 
@@ -697,7 +696,7 @@ public class Robot<T extends Item> extends Element implements IEnergyHolder
 	 * 			When this robot is terminated
 	 * 			| this.isTerminated()
 	 */
-	public void use(T item) throws IllegalStateException
+	public void use(Item item) throws IllegalStateException
 	{
 		assert canUse(item): "The given item cannot be use by this robot.";
 		if(this.isTerminated())
@@ -716,14 +715,11 @@ public class Robot<T extends Item> extends Element implements IEnergyHolder
 	 * 			| result == (item != null) && (!item.isTerminated())
 	 * @return	The given item must be possessed by this robot
 	 * 			| result == this.getPossessions().contains(item))
-	 * @return	The given item is not terminated
-	 * 			| result == ! item.isTerminates();
+	 * @return	The given 
 	 */
-	public boolean canUse(T item)
+	public boolean canUse(Item item)
 	{
-		return ((item != null)
-				&& this.getPossessions().contains(item)
-				&& !item.isTerminated());
+		return ((item != null) && this.getPossessions().contains(item) && !item.isTerminated());
 	}
 
 	/**

@@ -312,4 +312,20 @@ public class RepairKit extends Item implements IEnergyHolder
 			this.setEnergy(this.getMaxEnergy());
 		}
 	}
+	
+	/**
+	 * Returns a string representation of this repair kit.
+	 * 
+	 * @return	...
+	 * 			| result == "Repair kit with:" + "\n"
+	 *			| 			+ super.toString() + "\n" 
+	 *			| 			+ " energy level [Ws]: " + this.getEnergy() + "(" + getEnergyFraction() + "%)"
+	 */
+	@Override
+	public java.lang.String toString()
+	{
+		return "Battery with:" + "\n"
+				+ super.toString() +  ";  " + "\n"
+				+ "Energy level [Ws]: " + this.getEnergy() + " (" + getEnergyFraction() + "%)";
+	}
 }
