@@ -1,17 +1,17 @@
 /**
  * 
  */
-package roboRallyPackage.commandClasses.ConditionCommand;
+package roboRallyPackage.commandClasses.CombinedCondition;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.commandClasses.*;
-import roboRallyPackage.commandClasses.ConditionCommand.*;
+import roboRallyPackage.commandClasses.CombinedCondition.*;
 /**
  * @author Nele
  *
  */
-public class EnergyAtLeast extends ConditionCommand
+public class EnergyAtLeast extends CombinedCondition
 {
 	public EnergyAtLeast(Robot robot, double energy)
 	{

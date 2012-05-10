@@ -1,7 +1,7 @@
 /**
  * 
  */
-package roboRallyPackage.commandClasses.ControleStatementCommand;
+package roboRallyPackage.commandClasses.CombinedCommand;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
@@ -10,7 +10,7 @@ import roboRallyPackage.commandClasses.*;
  * @author Nele
  *
  */
-public class While extends ControleStatementCommand
+public class While extends CombinedCommand
 {
 	public While(Robot robot, Condition condition, Executable whileCommand)
 	{

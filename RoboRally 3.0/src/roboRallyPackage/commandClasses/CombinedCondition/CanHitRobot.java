@@ -1,17 +1,17 @@
 /**
  * 
  */
-package roboRallyPackage.commandClasses.ConditionCommand;
+package roboRallyPackage.commandClasses.CombinedCondition;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.commandClasses.*;
-import roboRallyPackage.commandClasses.ConditionCommand.*;
+import roboRallyPackage.commandClasses.CombinedCondition.*;
 /**
  * @author Nele
  *
  */
-public class CanHitRobot extends ConditionCommand
+public class CanHitRobot extends CombinedCondition
 {
 	public CanHitRobot(Robot robot)
 	{
