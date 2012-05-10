@@ -166,9 +166,9 @@ public class Robot extends Element implements IEnergyHolder
 	 * Returns the current energy level of this robot.
 	 */
 	@Basic @Override
-	public double getEnergy()
+	public double getEnergy(EnergyUnit unit)
 	{
-		return currentEnergy;
+		return currentEnergy.toEnergyUnit(unit).getAmount();
 	}
 	
 	/**
@@ -176,9 +176,8 @@ public class Robot extends Element implements IEnergyHolder
 	 * 
 	 * @param 	energyAmount
 	 * 			The new energy amount for this robot in watt-seconds (Ws).
-	 * @see		Interface IEnergyHolder
-	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#setEnergy(double)
 	 */
+	@Override
 	public void setEnergy(double currentEnergy) throws IllegalStateException
 	{
 		assert (canHaveAsEnergy(currentEnergy)): "Preconditions for setEnergy(double) must be satisfied.";
@@ -188,25 +187,22 @@ public class Robot extends Element implements IEnergyHolder
 			throw new IllegalStateException("A terminated robot can not be altered.");
 		}
 		
-		this.currentEnergy = currentEnergy;
+		this.currentEnergy = new EnergyAmount(currentEnergy, EnergyUnit.WATTSECOND);
 	}
 	
 	/**
 	 * Checks whether the given currentEnergy is a valid currentEnergy.
-	 * @param 	currentEnergy
-	 * 			The amount of energy to be checked.
-	 * @see		Interface IEnergyHolder
-	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#canHaveAsEnergy(double)
 	 */
+	@Override
 	public boolean canHaveAsEnergy(double currentEnergy)
 	{
-		return ((currentEnergy >= 0) && (currentEnergy <= this.getMaxEnergy()));
+		return (EnergyAmount.isValidEnergyAmount(currentEnergy) && (currentEnergy <= this.getMaxEnergy()));
 	}
 	
 	/**
 	 * Variable representing the current amount of energy of this robot.
 	 */
-	private double currentEnergy = 0;
+	private EnergyAmount currentEnergy = EnergyAmount.WATTSECOND_0;
 	
 	
 	
@@ -219,7 +215,7 @@ public class Robot extends Element implements IEnergyHolder
 	@Basic @Override
 	public final double getMaxEnergy()
 	{
-		return maxEnergy;
+		return maxEnergy.getAmountInWattSecond();
 	}
 	
 	/**
@@ -258,24 +254,24 @@ public class Robot extends Element implements IEnergyHolder
 	 */
 	public boolean canHaveAsMaxEnergy(double maxEnergy)
 	{
-		return (maxEnergy >= 0 && maxEnergy >= java.util.Collections.max(getListCosts()) && maxEnergy <= 20000);
+		return (EnergyAmount.isValidEnergyAmount(maxEnergy) && maxEnergy >= java.util.Collections.max(getListCosts()) && maxEnergy <= 20000);
 	}
 	
 	/**
 	 * Variable representing the maximum amount of energy this robot can have.
 	 */
-	private double maxEnergy;
+	private EnergyAmount maxEnergy;
 	
 
 	/**
 	 * Returns a percentage of the current energy level relative to the maximum amount of energy this robot can have.
 	 * 
 	 * @return	A percentage of the current energy level relative to the maximum amount of energy this robot can have.
-	 * 			| result == (this.getEnergy() / this.getMaxEnergy()) * 100
+	 * 			| result == (this.getEnergy(EnergyUnit.WATTSECOND) / this.getMaxEnergy()) * 100
 	 */
 	public double getEnergyFraction()
 	{
-		return (this.getEnergy() / this.getMaxEnergy()) * 100;
+		return (this.getEnergy(EnergyUnit.WATTSECOND) / this.getMaxEnergy()) * 100;
 	}
 	
 	/**
