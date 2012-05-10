@@ -320,57 +320,69 @@ public class Robot extends Element implements IEnergyHolder
 	
 	/**
 	 * Returns the minimum amount of energy this robot needs to move to the given position.
-	 * Returns -1 if this robot cannot reach the given position for sure.
+	 * Returns -1 if this robot cannot reach the given position.
+	 * This indicates that either the robot has insufficient energy to reach the given position or the position is not reachable because of obstacles.
 	 * 
 	 * @param	position
-	 * 			The position where to this robot may be moved to
-	 * @return	-1 if this robot is not placed on a board
-	 * 			| if this.getBoard() == null
-	 * 			| 	then result == -1
+	 * 			The position where to this robot may be moved to.
 	 * @return	The minimum amount of energy this robot needs to move to the given position.
-	 *  		| energyForPositionWithDifferingOrientation = { DijkstraSP(this.getBoard().createDiGraphForRobot(this), 0).distTo(thisVertices.indexOf(new OrientatedPosition(position, orientation)) ) 
-	 *  		|																								for all orientation in orientation.values()}
-	 *			| result == {there exists an energy in energyForPositionWithDifferingOrientation | energy <= otherEnergy
-	 * 			|																			for all otherEnergy in energyForPositionWithDifferingOrientation}
-	 * @return	-2 if this robot robot hasn't got enough energy left to reach the given position or if the given position already contains an element 
-	 * 			| for all orientatedPosition in {OrientatedPosition | orientatedPosition.getPosition() == position && orientatedPosition.getOrientation() !=null}
+	 *  		| energyForPositionWithDifferingOrientation
+	 *  		|    == {DijkstraSP(this.getBoard().createDiGraphForRobot(this), 0).distTo(thisVertices.indexOf(new OrientatedPosition(position, orientation)))
+	 *  		|          for all orientation in orientation.values()}
+	 *			| result
+	 *			|    == {there exists an energy in energyForPositionWithDifferingOrientation | energy <= otherEnergy
+	 * 			|			for all otherEnergy in energyForPositionWithDifferingOrientation}
+	 * @return	-1 if this robot robot hasn't got enough energy left to reach the given position or if the given position already contains an element 
+	 * 			| for all orientatedPosition in {OrientatedPosition | orientatedPosition.getPosition() == position && orientatedPosition.getOrientation() !=n ull}
 	 * 			|	if (! (this.getBoard().createListVertices(this).contains(orientatedPosition)))
-	 * 			|		then result == -2
+	 * 			|		then result == -1
 	 * @throws	IllegalStateException
 	 * 			When this robot is terminated
 	 * 			| this.isTerminated()
+	 * @throws	IllegalBoardException
+	 * 			When this robot is not placed on a board.
+	 * 			| this.getBoard() == null
 	 */
 	
-	public double getEnergyRequiredToReach(Position position) throws IllegalStateException
+	public double getEnergyRequiredToReach(Position position) throws IllegalStateException,
+																	 IllegalBoardException
 	{
-		try
+		if(this.getBoard() == null)
 		{
-			DijkstraSP thisShortestPaths = new DijkstraSP(this.getBoard().createDiGraphForRobot(this), 0);
-			java.util.List<OrientatedPosition> thisVertices = this.getBoard().createListVertices(this);
+			throw new IllegalBoardException(this, null);
+		}
 
-			double energy = Double.POSITIVE_INFINITY;
+		// create a Dijkstra that can calculate the shortest path to the given position
+		DijkstraSP thisShortestPaths = new DijkstraSP(this.getBoard().createDiGraphForRobot(this), 0);
+		java.util.List<OrientatedPosition> thisVertices = this.getBoard().createListVertices(this);
 
-			for(Orientation orientation: Orientation.values())
+		// for all orientated positions of the given position, the required energy is calculated, using the shortest path to get there.
+		// the least of these energies are selected and returned in the end of this method.
+		double energy = Double.POSITIVE_INFINITY;
+		for(Orientation orientation: Orientation.values())
+		{
+			try
 			{
-				try
+				OrientatedPosition orientatedPosition = new OrientatedPosition(orientation, position);
+				if(thisShortestPaths.distTo(thisVertices.indexOf(orientatedPosition)) < energy)
 				{
-					OrientatedPosition orientatedPosition = new OrientatedPosition(orientation, position);
-					if(thisShortestPaths.distTo(thisVertices.indexOf(orientatedPosition)) < energy)
-					{
-						energy = thisShortestPaths.distTo(thisVertices.indexOf(orientatedPosition));
-					}
-				}
-				catch(ArrayIndexOutOfBoundsException exc)
-				{
-					return -2;
+					energy = thisShortestPaths.distTo(thisVertices.indexOf(orientatedPosition));
 				}
 			}
-
-			return energy;
+			// the orientated position is not part of the vertex, so this robot cannot reach that orientated position
+			catch(ArrayIndexOutOfBoundsException exc)
+			{
+				return -1;
+			}
 		}
-		catch(NullPointerException exc)
+		// this robot had not enough energy to reach the given position
+		if(energy < this.getEnergy(EnergyUnit.WATTSECOND))
 		{
 			return -1;
+		}
+		else
+		{
+			return energy;
 		}
 	}
 	
