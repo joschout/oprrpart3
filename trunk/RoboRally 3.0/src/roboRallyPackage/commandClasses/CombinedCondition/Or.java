@@ -1,7 +1,7 @@
 /**
  * 
  */
-package roboRallyPackage.commandClasses.BasicCondition;
+package roboRallyPackage.commandClasses.CombinedCondition;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
@@ -11,7 +11,7 @@ import roboRallyPackage.commandClasses.CombinedCondition.*;
  * @author Nele
  *
  */
-public class Or extends BasicCondition
+public class Or extends CombinedCondition
 {
 	public Or(Robot robot, Condition[] conditions)
 	{

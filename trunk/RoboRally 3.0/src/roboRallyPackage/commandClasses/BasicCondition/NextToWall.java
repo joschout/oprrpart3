@@ -11,27 +11,25 @@ import roboRallyPackage.commandClasses.CombinedCondition.*;
  * @author Nele
  *
  */
-public class Not extends BasicCondition
+public class NextToWall extends BasicCondition
 {
-	public Not(Robot robot, Condition condition)
+	public NextToWall(Robot robot)
 	{
 		super(robot);
-		this.condition = condition;
 	}
 	
 	public boolean results()
 	{
-		return ! condition.results();
-	}
-	
-	private Condition condition;
-
-	/**
-	 * @return	...
-	 *			| result == ...
-	 */
-	public Condition getCondition()
-	{
-		return this.condition;
+		for(Position position: this.getRobot().getPosition().getAllNeighbours())
+		{
+			for(Element element: this.getRobot().getBoard().getElements(position))
+			{
+				if(element instanceof Wall)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
