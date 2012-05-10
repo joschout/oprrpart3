@@ -111,7 +111,7 @@ public class Battery extends Item implements IEnergyHolder
 	}
 	
 	/**
-	 * Check whether the given maximum energy is a valid maximum energy for this battery.
+	 * Check whether the given maximum energy, expressed in Watt-second, is a valid maximum energy for this battery.
 	 * 
 	 * @return	False if the given energy is greater 5000 Ws.
 	 * 			| result != (energy > 5000)
@@ -183,9 +183,9 @@ public class Battery extends Item implements IEnergyHolder
 	 * @param	robot
 	 * 			The robot that uses this battery.
 	 * @effect	...
-	 * 			| if(robot.canAcceptForRecharge(this.getEnergy())
-	 * 			|	then this.transferEnergy(robot, this.getEnergy())
-	 * 			| else this.transferEnergy(robot, robot.getMaxEnergy() - robot.getEnergy())
+	 * 			| if(robot.canAcceptForRecharge(this.getEnergy(EnergyUnit.WATTSECOND))
+	 * 			|	then this.transferEnergy(robot, this.getEnergy(EnergyUnit.WATTSECOND))
+	 * 			| else this.transferEnergy(robot, robot.getMaxEnergy(EnergyUnit.WATTSECOND) - robot.getEnergy())
 	 * @throws	IllegalStateException
 	 * 			...
 	 * 			| this.isTerminated() || robot.isTerminates()
@@ -204,16 +204,16 @@ public class Battery extends Item implements IEnergyHolder
 			throw new IllegalStateException("A terminated robot can not be altered.");
 		}
 		// the robot has enough 'room' to store the total amount of energy this battery holds.
-		if(robot.canAcceptForRecharge(this.getEnergy()))
+		if(robot.canAcceptForRecharge(this.getEnergy(EnergyUnit.WATTSECOND)))
 		{
-			this.transferEnergy(robot, this.getEnergy());
+			this.transferEnergy(robot, this.getEnergy(EnergyUnit.WATTSECOND));
 			robot.getPossessions().remove(this);
 			this.terminate();
 		}
 		// the robot can only store part of the energy this battery holds.
 		else
 		{
-			this.transferEnergy(robot, robot.getMaxEnergy() - robot.getEnergy());
+			this.transferEnergy(robot, robot.getMaxEnergy() - robot.getEnergy(EnergyUnit.WATTSECOND));
 		}
 	}
 	
@@ -221,8 +221,8 @@ public class Battery extends Item implements IEnergyHolder
 	 * When an element is hit (e.g. it is shot by a robot) some of its properties are altered.
 	 * A battery increases its energy with 500 Ws when hit if possible. Otherwise it is set to the maximum energy level.
 	 * 
-	 * @post	The energy level of this battery is increaesed with 500 Ws if possible, otherwise it is set to the maximum energy level.
-	 * 			| if(this.canHaveAsEnergy(this.getEnergy() + 500))
+	 * @post	The energy level of this battery is increased with 500 Ws if possible, otherwise it is set to the maximum energy level.
+	 * 			| if(this.canHaveAsEnergy(this.getEnergy(EnergyUnit.WATTSECOND) + 500))
 	 * 			|  then this.setEnergy(this.getEnergy() + 500)
 	 * 			| else this.setEnergy(this.getMaxEnergy())
 	 * @throws	IllegalStateException
@@ -238,9 +238,9 @@ public class Battery extends Item implements IEnergyHolder
 		}
 		
 		// this battery has room for 500 Ws extra energy
-		if(this.canHaveAsEnergy(this.getEnergy() + 500))
+		if(this.canHaveAsEnergy(this.getEnergy(EnergyUnit.WATTSECOND) + 500))
 		{
-			this.setEnergy(this.getEnergy() + 500);
+			this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) + 500);
 		}
 		// the energy level of this battery is almost at maximum; it cannot store another 500 Ws extra.
 		// the energy level of this battery kit is set at its maximum.
@@ -256,14 +256,14 @@ public class Battery extends Item implements IEnergyHolder
 	 * @return	...
 	 * 			| result == "Battery with:" + "\n"
 	 *			| 			+ super.toString() + "\n" 
-	 *			| 			+ " energy level [Ws]: " + this.getEnergy() + "(" + getEnergyFraction() + "%)"
+	 *			| 			+ " Energy level [Ws]: " + this.getEnergy(EnergyUnit.WATTSECOND) + "(" + getEnergyFraction() + "%)"
 	 */
 	@Override
 	public java.lang.String toString()
 	{
 		return "Battery with:" + "\n"
 				+ super.toString() +  ";  " + "\n"
-				+ "Energy level [Ws]: " + this.getEnergy() + " (" + getEnergyFraction() + "%)";
+				+ "Energy level [Ws]: " + this.getEnergy(EnergyUnit.WATTSECOND) + " (" + getEnergyFraction() + "%)";
 	}
 
 }
