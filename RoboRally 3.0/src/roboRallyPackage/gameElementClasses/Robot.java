@@ -28,8 +28,6 @@ import be.kuleuven.cs.som.annotate.*;
  * 			| for each item in this.getPossessions(): item.getBoard() == null && item.getPosition() == null
  * @invar	A terminated Robot cannot carry any items or alter its state.
  * 			| if this.isTerminated() then this.getPossessions().size() == 0
- * @invar	A robot cannot carry elements that are not of its generic type T.
- * 			| for each element in this.getPossessions(): element instanceof T
  * 
  * @version 26 april 2012
  * @author Jonas Schouterden (r0260385) & Nele Rober (r0262954)
@@ -537,6 +535,67 @@ public class Robot extends Element implements IEnergyHolder
 
 
 	/**
+	 * Adds an item to the list of items of this robot. The item is inserted on the right position into the list.
+	 * For the items in the list are ordered by weight: starting with the heaviest item.
+	 * 
+	 * @param	item
+	 * 			The item to be added to the list of items
+	 * @pre		The item can be carried by this robot
+	 * 			| this.canCarry(item)
+	 * @post	The given item is added to the list of possessions of this robot.
+	 * 			| (new this).getPossessions().contains(item)
+	 * @post	The new size of the list of possessions of this robot is incremented with 1.
+	 *			| (new this).getPossessions.size() ==  this.getPossessions.size() + 1
+	 * @post	The items in the list of possessions of this robot are sorted based on their weight, starting with the heaviest item (index 0).
+	 * 			| for i in 0..(new this).getPossessions().size-2:
+	 * 			|	(new this).getPossessions().get(i).getWeight() >= (new this).getPossessions().get(i+1).getWeight()
+	 */
+	@Model
+	private void addItem(Item item)
+	{
+		assert(this.canCarry(item)):"This robot cannot carry this item.";
+		
+		for(int i= 0; i <= getPossessions().size(); i++)
+		{
+			try
+			{
+				// if the item at position i is lighter than the given item, than put the given item before it.
+				if (getPossessions().get(i).getWeight() >= item.getWeight())
+				{
+					getPossessions().add(i, item);
+				}
+			}
+			// add the item to the end of the list; the given item is lighter than all the other items this robot is carrying.
+			catch(IndexOutOfBoundsException exc)
+			{
+				getPossessions().add(item);
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Checks whether this robot carry the given item.
+	 * 
+	 * @param	item
+	 *			The item to be checked.
+	 * @return	The given item cannot be null and it cannot be terminated for the result to be true.
+	 * 			| result == (item != null) 
+	 * 			|			 && (! item.isTerminated())
+	 * @return	The sum of the resulting weight of all the items this robot was already carrying and the weight of the given item
+	 * 			must be smaller than or equal to the maximal weight this robot can carry for the result to be true.
+	 * 			| result == (this.getTotalWeightPossessions() + item.getWeight() <= getMaxWeightToCarry())
+	 * @return	This robot cannot already carry the given item for the result to be true.
+	 * 			| result == (! this.getPossessions().contains(item))
+	 */
+	public boolean canCarry(Item item)
+	{
+		return (item != null) && (! item.isTerminated())
+				&& (this.getTotalWeightPossessions() + item.getWeight() <= getMaxWeightToCarry())
+				&& (! this.getPossessions().contains(item));
+	}
+
+	/**
 	 * Picks up the given item. The item is added to the list of possessions of this robot.
 	 * The item is inserted in the list of possessions based on its weight. 
 	 * The list of possessions of a robot is sorted on the weight of the possessions, starting with the heaviest item (index 0).
@@ -546,13 +605,8 @@ public class Robot extends Element implements IEnergyHolder
 	 * 			The item to be picked up.
 	 * @pre		The given item must be a valid item to be picked up.
 	 * 			| canPickUp(item)
-	 * @post	The given item is added to the list of possessions of this robot.
-	 * 			| (new this).getPossessions().contains(item)
-	 * @post	The items in the list of possessions of this robot are sorted based on their weight, starting with the heaviest item (index 0).
-	 * 			|	for i in 0..(new this).getPossessions().size-2:
-	 * 			|			(new this).getPossessions().get(i).getWeight() <= (new this).getPossessions().get(i+1).getWeight()
-	 * @post	The new size of the list of possessions of this robot is incremented with 1.
-	 *			| (new this).getPossessions.size() ==  this.getPossessions.size() + 1
+	 * @effect	The given item is added to the list of items of this robot.
+	 * 			| this.addItem(item)
 	 * @throws	IllegalStateException
 	 * 			When this robot is terminated
 	 * 			| this.isTerminated()
@@ -564,28 +618,9 @@ public class Robot extends Element implements IEnergyHolder
 		{
 			throw new IllegalStateException("A terminated robot can not be altered.");
 		}
-		for(int i= 0; i <= getPossessions().size(); i++)
-		{
-			try
-			{
-				// if the item at position i is lighter than the given item, than put the given item before it.
-				if (getPossessions().get(i).getWeight() <= item.getWeight())
-				{
-					getPossessions().add(i, item);
-					item.setBoard(null);
-					item.setPosition(null);
-				}
-			}
-			// add the item to the end of the list; the given item is lighter than all the other items this robot is carrying.
-			catch(IndexOutOfBoundsException exc)
-			{
-				item.setBoard(null);
-				item.setPosition(null);
-				getPossessions().add(item);
-				break;
-			}
-		}
-
+		addItem(item);
+		item.setBoard(null);
+		item.setPosition(null);
 	}
 
 	/**
@@ -593,9 +628,8 @@ public class Robot extends Element implements IEnergyHolder
 	 * 
 	 * @param	item
 	 *			The item to be checked.
-	 * @return	The given item cannot be null and it cannot be terminated for the result to be true.
-	 * 			| result == (item != null) 
-	 * 			|			 && (! item.isTerminated())
+	 * @return	The item can be added to the list of items.
+	 * 			| this.canCarry(item)
 	 * @return	The position of the given item cannot be null
 	 * 			and the position of the given item must be equal to the position of this robot for the result to be true.
 	 *			| result == (item.getPosition() != null) 
@@ -604,19 +638,12 @@ public class Robot extends Element implements IEnergyHolder
 	 * 			and the board on which the given item is placed must be equal to the board on which this robot is placed for this result to be true.
 	 *			| result == (item.getBoard() != null) 
 	 *			|			 && (item.getBoard() == this.getBoard())
-	 * @return	The sum of the resulting weight of all the items this robot was already carrying and the weight of the given item
-	 * 			must be smaller than or equal to the maximal weight this robot can carry for the result to be true.
-	 * 			| result == (this.getTotalWeightPossessions() + item.getWeight() <= getMaxWeightToCarry())
-	 * @return	This robot cannot already carry the given item for the result to be true.
-	 * 			| result == (! this.getPossessions().contains(item))
 	 */
 	public boolean canPickUp(Item item)
 	{
-		return (item != null) && (! item.isTerminated())
+		return (this.canCarry(item))
 				&& (item.getPosition() != null) && (item.getPosition().equals(this.getPosition())) 
-				&& (item.getBoard() != null) && (item.getBoard() == this.getBoard())
-				&& (this.getTotalWeightPossessions() + item.getWeight() <= getMaxWeightToCarry())
-				&& (! this.getPossessions().contains(item));
+				&& (item.getBoard() != null) && (item.getBoard() == this.getBoard());
 	}
 	
 	/**
@@ -720,6 +747,42 @@ public class Robot extends Element implements IEnergyHolder
 	public boolean canUse(Item item)
 	{
 		return ((item != null) && this.getPossessions().contains(item) && !item.isTerminated());
+	}
+	
+	/**
+	 * Transfers all the items of this robot to the given other robot if possible.
+	 * If not all items can be transferred, as much items as possible are transferred.
+	 * 
+	 * @param	other
+	 * 			The other robot that will be given the items.
+	 * @throws	IllegalStateException
+	 * 			When this robot is not placed next to the other robot, both robots are not placed on the same board or one of the robots is terminated.
+	 * 			| !this.getPosition().getAllNeighbours()).contains(other.getPosition())
+	 * 			|  && this.getBoard() != other.getBoard()
+	 * 			|  && this.isTerminated() && other.isTerminated()
+	 */
+	public void transferItems(Robot other) throws IllegalStateException
+	{
+		// the other robot is placed next to this robot and on the same board and both are not terminated.
+		if(java.util.Arrays.asList(this.getPosition().getAllNeighbours()).contains(other.getPosition())
+			&& this.getBoard() == other.getBoard()
+			&& !this.isTerminated() && !other.isTerminated())
+		{
+			for(Item item: this.getPossessions())
+			{
+				// this other robot can carry the item.
+				// the item is removed from the list of items of this robot and added to the list of the other robot.
+				if(other.canCarry(item))
+				{
+					this.getPossessions().remove(item);
+					other.addItem(item);
+				}
+			}
+		}
+		else
+		{
+			throw new IllegalStateException();
+		}
 	}
 
 	/**

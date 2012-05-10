@@ -191,7 +191,7 @@ public class Position
 	}
 	
 	/**
-	 * Returns a list of positions that are neighbours of this position.
+	 * Returns a list of positions that are neighbours of this position (this position is not includes in the list).
 	 * If a neighbour of this position is no valid position (e.g. they fall off the board), it is not included in the list.
 	 * 
 	 * @return	A list of all valid neighbours of this position
