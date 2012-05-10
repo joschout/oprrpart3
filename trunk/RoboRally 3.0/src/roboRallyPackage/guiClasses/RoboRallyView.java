@@ -1,4 +1,4 @@
-package roborally;
+package roboRallyPackage.guiClasses;
 
 import java.awt.Color;
 import java.awt.Graphics;

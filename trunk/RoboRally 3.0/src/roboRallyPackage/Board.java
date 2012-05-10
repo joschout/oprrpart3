@@ -217,6 +217,32 @@ public class Board extends Terminatable
 	{
 		return elements;
 	}
+	
+//	/**
+//	 * Returns the variable representing the set of elements placed on this Board.
+//	 */
+//	@Basic
+//	public java.util.Set<Element> getElements(Condition condition)
+//	{
+//		java.util.Set<Element> resultSet = new java.util.HashSet<Element>();
+//		
+//		for(Element element: this.getElements(Element.class))
+//		{
+//			try
+//			{
+//				java.lang.reflect.Method myMethod = condition.getClass().getMethod("results");
+//				if(myMethod.invoke(condition, element))
+//				{
+//					resultSet.add(element);
+//				}
+//			}
+//			catch(java.lang.reflect.InvocationTargetException exc)
+//			{
+//			}
+//		}
+//		
+//		return resultSet;
+//	}
 
 	/**
 	 * Returns a set of all the elements on this board of a given type.
