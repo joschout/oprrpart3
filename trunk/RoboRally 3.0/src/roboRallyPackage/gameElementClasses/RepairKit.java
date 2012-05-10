@@ -212,7 +212,7 @@ public class RepairKit extends Item implements IEnergyHolder
 	 * @effect	...
 	 * 			| if(robot.canHaveAsMaxEnergy(robot.getMaxEnergy() + (this.getEnergy(EnergyUnit.WATTSECOND)/2)))
 	 * 			|	then this.repair(robot, this.getEnergy(EnergyUnit.WATTSECOND))
-	 * 			| else this.repair(robot, robot.getMaxEnergy() - robot.getEnergy())
+	 * 			| else this.repair(robot, robot.getMaxEnergy() - robot.getEnergy(EnergyUnit.WATTSECOND))
 	 * @throws	IllegalStateException
 	 * 			...
 	 * 			| this.isTerminated() || robot.isTerminates()
@@ -242,7 +242,7 @@ public class RepairKit extends Item implements IEnergyHolder
 		// the robot can only store part of the energy this repair kit holds.
 		else
 		{
-			this.repair(robot, robot.getMaxEnergy() - robot.getEnergy());
+			this.repair(robot, robot.getMaxEnergy() - robot.getEnergy(EnergyUnit.WATTSECOND));
 		}
 	}
 	
