@@ -42,23 +42,19 @@ public class Battery extends Item implements IEnergyHolder
 	}
 
 	/**
-	 * Returns the variable representing the current amount if energy of this battery.
+	 * Returns the variable representing the current amount if energy of this battery in the given energy unit.
 	 */
-	@Basic
-	public double getEnergy()
+	@Basic @Override
+	public double getEnergy(EnergyUnit unit)
 	{
-		return energyAmount;
+		return energyAmount.toEnergyUnit(unit).getAmount();
 	}
 
 	
 	/**
-	 * Sets the amount of energy of this battery to the given amount of energy.
-	 * 
-	 * @param 	energyAmount
-	 * 			The new energy amount for this battery.
-	 * @see		Interface IEnergyHolder
-	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#setEnergy(double)
+	 * Sets the amount of energy of this battery to the given amount of energy in Watt-second [Ws].
 	 */
+	@Override
 	public void setEnergy(double energyAmount) throws IllegalStateException
 	{
 		assert this.canHaveAsEnergy(energyAmount): "The given amount of energy is not a valid amount of energy for this battery.";
@@ -68,7 +64,7 @@ public class Battery extends Item implements IEnergyHolder
 			throw new IllegalStateException("A terminated battery cannot be altered.");
 		}
 		
-		this.energyAmount = energyAmount;
+		this.energyAmount = new EnergyAmount(energyAmount, EnergyUnit.WATTSECOND);
 	}
 	
 	/**
@@ -76,26 +72,25 @@ public class Battery extends Item implements IEnergyHolder
 	 * 
 	 * @param	energy
 	 * 			The amount of energy to be checked in watt-seconds.
-	 * @see		Interface IEnergyHolder
-	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#canHaveAsEnergy(double)
 	 */
+	@Override
 	public boolean canHaveAsEnergy(double energy)
 	{
-		return ((energy >= 0) && (energy <= this.getMaxEnergy()));
+		return (EnergyAmount.isValidEnergyAmount(energy) && (energy <= this.getMaxEnergy()));
 	}
 
 	/**
 	 * Variable representing the current amount if energy for this battery, expressed in watt-seconds (Ws).
 	 */
-	private double energyAmount = 0;
+	private EnergyAmount energyAmount = EnergyAmount.WATTSECOND_0;
 
 	/**
 	 * Returns the variable representing the maximum amount of energy this battery can have, expressed in watt-seconds (Ws).
 	 */
-	@Basic @Immutable
+	@Basic @Immutable @Override
 	public double getMaxEnergy()
 	{
-		return maxBatteryEnergyAmount;
+		return maxBatteryEnergyAmount.getAmountInWattSecond();
 	}
 
 	/**
@@ -118,47 +113,33 @@ public class Battery extends Item implements IEnergyHolder
 	/**
 	 * Check whether the given maximum energy is a valid maximum energy for this battery.
 	 * 
-	 * @param 	maxEnergy
-	 * 			The maximum energy level to be checked.
-	 * @see		Interface IEnergyHolder
-	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#canHaveAsMaxEnergy(double)
 	 * @return	False if the given energy is greater 5000 Ws.
 	 * 			| result != (energy > 5000)
 	 */
+	@Override
 	public boolean canHaveAsMaxEnergy(double maxEnergy)
 	{
-		return (maxEnergy >= 0 && maxEnergy <= 5000);
+		return (EnergyAmount.isValidEnergyAmount(maxEnergy) && maxEnergy <= 5000);
 	}
 	
 	/**
 	 * Variable representing the maximum amount of energy this battery can have, expressed in watt-seconds (Ws).
 	 */
-	private final double maxBatteryEnergyAmount = 5000;
+	private final EnergyAmount maxBatteryEnergyAmount = EnergyAmount.WATTSECOND_5000;
 
 	/**
 	 * Returns a percentage of the current energy level relative to the maximum amount of energy this battery can have.
-	 * 
-	 * @return	A percentage of the current energy level relative to the maximum amount of energy this battery can have.
-	 * 			| result == (this.getEnergy() / this.getMaxEnergy()) * 100
 	 */
+	@Override
 	public double getEnergyFraction()
 	{
-		return (this.getEnergy() / this.getMaxEnergy()) * 100;
+		return (this.getEnergy(EnergyUnit.WATTSECOND) / this.getMaxEnergy()) * 100;
 	}
 
 	/**
-	 * Recharges this battery with the given amount of energy.
-	 * 
-	 * @param	amount
-	 * 			The amount of energy to be added to this battery.
-	 * @pre		This battery can be recharged with the given amount of energy.
-	 * 			| this.canAcceptForRecharge(amount)
-	 * @effect	The given amount of energy is added to the current amount of energy this battery has.
-	 * 			| this.setEnergy(this.getEnergy() + amount)
-	 * @throws	IllegalStateException
-	 * 			...
-	 * 			| this.isTerminated()
+	 * Recharges this battery with the given amount of energy, expressed in Watt-second.
 	 */
+	@Override
 	public void recharge(double amount) throws IllegalStateException
 	{
 		assert this.canAcceptForRecharge(amount): "Pecondition for recharge(double) must be statisfied.";
@@ -166,46 +147,25 @@ public class Battery extends Item implements IEnergyHolder
 		{
 			throw new IllegalStateException("A terminated battery can not be altered.");
 		}
-		this.setEnergy(this.getEnergy() + amount);
+		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) + amount);
 	}
 
 	/**
-	 * Checks whether the given amount of energy can be added to the current energy level of this battery.
-	 * 
-	 * @param 	amount
-	 * 			The amount to be checked.
-	 * @return	True if and only if the given amount of energy is strictly positive.
-	 * 			| result == (amount > 0)
-	 * @return	True if this battery can have a total energy level equal to its the given amount of energy added to its current energy level.
-	 * 			| result == this.canHaveAsEnergy(this.getEnergy() + amount))
+	 * Checks whether the given amount of energy, expressed in watt-second, can be added to the current energy level of this battery.
 	 */
 	public boolean canAcceptForRecharge(double amount)
 	{
-		return ((amount > 0) && this.canHaveAsEnergy(this.getEnergy() + amount));
+		return (EnergyAmount.isValidEnergyAmount(amount) 
+				&& this.canHaveAsEnergy(this.getEnergy(EnergyUnit.WATTSECOND) + amount));
 	}
 
 	/**
 	 * Energy is transferred from this battery to another IEnergyHolder.
-	 * 
-	 * @param	other
-	 * 			The IEnergyHolder to be given energy.
-	 * @param	amount
-	 * 			The amount of energy to be transferred.
-	 * @pre		The amount to be transferred can not be greater than the amount of energy this battery has.
-	 * 			| amount <= this.getEnergy()
-	 * @pre		The IEnergyHolder must be able to accept the amount of energy to be transferred.
-	 * 			| other.canAcceptForRecharge(amount)
-	 * @effect	The IEnergyHolder is recharged with amount of energy to be transferred.
-	 * 			| other.recharge(amount)
-	 * @effect	The transferred amount of energy is subtracted from the amount of energy of this battery.
-	 * 			| this.setEnergy(this.getEnergy() - amount)
-	 * @throws	IllegalStateException
-	 * 			...
-	 * 			| this.isTerminated()
 	 */
+	@Override
 	public void transferEnergy(IEnergyHolder other, double amount) throws IllegalStateException
 	{
-		assert(amount <= this.getEnergy()): "This battery cannot transfer more energy than it currently has.";
+		assert(amount <= this.getEnergy(EnergyUnit.WATTSECOND)): "This battery cannot transfer more energy than it currently has.";
 		assert(other.canAcceptForRecharge(amount)): "The other IEnergyHolder cannot accept this amount of energy for reacharging.";
 		
 		if(this.isTerminated())
@@ -214,7 +174,7 @@ public class Battery extends Item implements IEnergyHolder
 		}
 		
 		other.recharge(amount);
-		this.setEnergy(this.getEnergy() - amount);
+		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - amount);
 	}
 
 	/**
