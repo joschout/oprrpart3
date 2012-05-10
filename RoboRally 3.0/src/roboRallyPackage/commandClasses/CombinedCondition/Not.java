@@ -11,22 +11,27 @@ import roboRallyPackage.commandClasses.CombinedCondition.*;
  * @author Nele
  *
  */
-public class AtItem extends CombinedCondition
+public class Not extends CombinedCondition
 {
-	public AtItem(Robot robot)
+	public Not(Robot robot, Condition condition)
 	{
 		super(robot);
+		this.condition = condition;
 	}
 	
 	public boolean results()
 	{
-		for(Element element: this.getRobot().getBoard().getElements(this.getRobot().getPosition()))
-		{
-			if(element instanceof Item)
-			{
-				return true;
-			}
-		}
-		return false;
+		return ! condition.results();
+	}
+	
+	private Condition condition;
+
+	/**
+	 * @return	...
+	 *			| result == ...
+	 */
+	public Condition getCondition()
+	{
+		return this.condition;
 	}
 }
