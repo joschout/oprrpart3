@@ -1,4 +1,4 @@
-package roborally;
+package roboRallyPackage.guiClasses;
 
 import static java.lang.System.out;
 
@@ -488,8 +488,8 @@ public class RoboRally<Board, Robot, Wall, Battery, RepairKit, SurpriseBox> exte
 		// modify the code between <begin> and <end> (substitute the generic arguments with your classes and replace
 		// roborally.model.Facade with your facade implementation)
 		/* <begin> */
-		RoboRally<roborally.model.Board, roborally.model.Robot<roborally.model.Item>, roborally.model.Wall, roborally.model.Battery, roborally.model.RepairKit, roborally.model.SurpriseBox> roboRally 
-			= new RoboRally<roborally.model.Board, roborally.model.Robot<roborally.model.Item>, roborally.model.Wall, roborally.model.Battery, roborally.model.RepairKit, roborally.model.SurpriseBox>(new roborally.model.Facade());
+		RoboRally<roboRallyPackage.Board, roboRallyPackage.gameElementClasses.Robot<roboRallyPackage.gameElementClasses.Item>, roboRallyPackage.gameElementClasses.Wall, roboRallyPackage.gameElementClasses.Battery, roboRallyPackage.gameElementClasses.RepairKit, roboRallyPackage.gameElementClasses.SurpriseBox> roboRally 
+			= new RoboRally<roboRallyPackage.Board, roboRallyPackage.gameElementClasses.Robot<roboRallyPackage.gameElementClasses.Item>, roboRallyPackage.gameElementClasses.Wall, roboRallyPackage.gameElementClasses.Battery, roboRallyPackage.gameElementClasses.RepairKit, roboRallyPackage.gameElementClasses.SurpriseBox>(new roboRallyPackage.guiClasses.Facade());
 		/* <end> */
 		roboRally.setVisible(true);
 		roboRally.run();

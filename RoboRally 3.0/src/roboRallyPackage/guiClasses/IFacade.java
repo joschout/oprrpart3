@@ -1,4 +1,5 @@
-package roborally;
+
+package roboRallyPackage.guiClasses;
 
 import java.io.Writer;
 import java.util.Set;

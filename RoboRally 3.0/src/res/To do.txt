@@ -11,3 +11,6 @@ kijken wanneer een lijst teruggeven en wanneer ene clone
 
 4.
 representatie-invarianten! hb p 420
+
+5.
+Iterator in Board + programs
