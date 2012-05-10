@@ -24,7 +24,8 @@ public class SurpriseBox extends Item {
 	 * @param	weight
 	 * 			The weight for this new SurpriseBox in grams.
 	 */
-	public SurpriseBox(int weight){
+	public SurpriseBox(int weight)
+	{
 		super(weight);
 	}
 
@@ -55,8 +56,8 @@ public class SurpriseBox extends Item {
 	 * 			| this.isTerminated() || robot.isTerminates()
 	 */
 	@Override
-	public void use(Robot robot) {
-		
+	public void use(Robot robot) 
+	{
 		Robot tempRobot = robot;
 		if(this.isTerminated())
 		{
@@ -174,6 +175,19 @@ public class SurpriseBox extends Item {
 		this.terminate();
 	}
 
+	/**
+	 * Returns a string representation of this surprise box.
+	 * 
+	 * @return	...
+	 * 			| result == "Surprise box with:" + "\n"
+	 *			| 			+ super.toString() + "\n"
+	 */
+	@Override
+	public java.lang.String toString()
+	{
+		return "Surprise box with:" + "\n"
+				+ super.toString() +  ";  " + "\n";
+	}
 
 }
 

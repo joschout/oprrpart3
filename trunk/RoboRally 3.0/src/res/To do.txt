@@ -1,16 +1,14 @@
 TO DO:
 
-1.
-kijk of overal in de doc this. bijstaat
+1. kijk of overal in de doc this. bijstaat
+2. System.out.println maken wanneer je de robot wil laten bewegen/draaien en je te weinig energie hebt
+3. kijken wanneer een lijst teruggeven en wanneer ene clone
+4. representatie-invarianten! hb p 420
+6. Liskov
+7. IEnergyHolder verder naar EnergyAmount/-Unit uitwerken ipv enkel getters
 
-2.
-System.out.println maken wanneer je de robot wil laten bewegen/draaien en je te weinig energie hebt
 
-3.
-kijken wanneer een lijst teruggeven en wanneer ene clone
 
-4.
-representatie-invarianten! hb p 420
-
-5.
-Iterator in Board + programs
+VRAGEN:
+1. Facade.createRobot(); Hoe doe je dit generisch? je kan immers geen type meegeven. voorlopig enkel Item-robots
+2. Iterator in Board; set retourneren of Iterator; hoe doe je iterator?
