@@ -512,6 +512,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	@Override
 	public void transferItems(Robot from, Robot to)
 	{
+		from.transferItems(to);
 	}
 
 	/**
