@@ -17,6 +17,9 @@ public interface IEnergyHolder
 
 	/**
 	 * Returns the variable representing the current amount if energy of this IEnergyHolder in the given energy unit.
+	 *
+	 * @param	unit
+	 * 			The energy unit in which the returned energy amount will be expressed.
 	 */
 	public abstract double getEnergy(EnergyUnit unit);
 
@@ -36,12 +39,12 @@ public interface IEnergyHolder
 	public abstract void setEnergy(double energyAmount) throws IllegalStateException;
 
 	/**
-	 * Checks whether the given amount of energy is a valid amount of energy for this IEnergyHolder.
+	 * Checks whether the given amount of energy, expressed in Watt-second, is a valid amount of energy for this IEnergyHolder.
 	 * 
 	 * @param	energy
-	 * 			The amount of energy to be checked.
-	 * @return 	False if the given energy is negative
-	 * 			| result != (energy < 0)
+	 * 			The amount of energy to be checked, expressed in Watt-second.
+	 * @return 	False if the given energy is not a valid energy amount.
+	 * 			| result ==EnergyAmount.isValidEnergyAmount(energy)
 	 * @return	False if the given energy is greater than or equal to the maximal amount of energy an IEnergyHolder can have.
 	 * 			| result != (energy > this.getMaxEnergy())
 	 */
@@ -71,14 +74,12 @@ public interface IEnergyHolder
 	public abstract void setMaxEnergy(double maxEnergyAmount) throws IllegalStateException, UnsupportedOperationException;
 	
 	/**
-	 * Checks whether the given maximum energy level is a valid maximum energy level for this IEnergyHolder.
+	 * Checks whether the given maximum energy level, expressed in Watt-second [Ws], is a valid maximum energy level for this IEnergyHolder.
 	 * 
-	 * @param	energy
-	 * 			The maximum energy level to be checked.
-	 * @return 	False if the given energy is negative
-	 * 			| result != (energy < 0)
-	 * @return	False if the given energy is greater than Double.MAX_VALUE.
-	 * 			| result != (energy > Double.MAX_VALUE)
+	 * @param	maxEnergy
+	 * 			The maximum energy level to be checked, expressed in Watt-second [Ws].
+	 * @return 	False if the given energy isn't a valid energy amount
+	 * 			| result == EnergyAmount.isValidEnergyAmount(maxEnergy)
 	 */
 	public abstract boolean canHaveAsMaxEnergy(double maxEnergy);
 
@@ -86,7 +87,7 @@ public interface IEnergyHolder
 	 * Returns a percentage of the current energy level relative to the maximum amount of energy this IEnergyHolder can have.
 	 * 
 	 * @return	A percentage of the current energy level relative to the maximum amount of energy this IEnergyHolder can have.
-	 * 			| result == (this.getEnergy() / this.getMaxEnergy()) * 100
+	 * 			| result == (this.getEnergy(EnergyUnit.WATTSECOND)) / this.getMaxEnergy()) * 100
 	 */
 	public abstract double getEnergyFraction();
 
@@ -97,8 +98,8 @@ public interface IEnergyHolder
 	 * 			The amount of energy to be added to this IEnergyHolder, expressed in watt-seconds (Ws).
 	 * @pre		This IEnergyHolder can be recharged with the given amount of energy.
 	 * 			| this.canAcceptForRecharge(amount)
-	 * @effect	The given amount of energy is added to the current amount of energy this IEnergyHolder has.
-	 * 			| this.setEnergy(this.getEnergy() + amount)
+	 * @effect	The given amount of energy is added to the current amount of energy(expressed in Watt-second) this IEnergyHolder has.
+	 * 			| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) + amount)
 	 * @throws	IllegalStateException
 	 * 			...
 	 * 			| this.isTerminated()
@@ -110,9 +111,10 @@ public interface IEnergyHolder
 	 * 
 	 * @param 	amount
 	 * 			The amount to be checked, expressed in watt-seconds (Ws).
-	 * @return	True if and only if the given amount of energy is greater than zero 
-	 *			 			 and if this IEnergyHolder can have a total energy level equal to its the given amount of energy added to its current energy level.
-	 *			| result == ((amount > 0) && this.canHaveAsEnergy(this.getEnergy() + amount))
+	 * @return	False  if the given amount of energy is a not valid energy amount
+	 * 			| result == EnergyAmount.isValidEnergyAmount(amount)
+	 *@return	False if this IEnergyHolder cannot have a total energy level equal to  the given amount of energy added to its current energy level.
+	 *			| result == (this.canHaveAsEnergy(this.getEnergy(EnergyUnit.WATTSECOND) + amount))
 	 */
 	public abstract boolean canAcceptForRecharge(double amount);
 
@@ -122,15 +124,15 @@ public interface IEnergyHolder
 	 * @param	other
 	 * 			The IEnergyHolder to be given energy.
 	 * @param	amount
-	 * 			The amount of energy to be transferred.
+	 * 			The amount of energy to be transferred, expressed in Watt-second [Ws].
 	 * @pre		The IEnergyHolder must be able to accept the amount of energy to be transferred.
 	 * 			| other.canAcceptForRecharge(amount)
-	 * @pre		The amount to be transferred can not be greater than the amount of energy this IEnergyHolder has.
-	 * 			| amount <= this.getEnergy()
+	 * @pre		The amount to be transferred [Ws] can not be greater than the amount of energy this IEnergyHolder has [Ws].
+	 * 			| amount <= this.getEnergy(EnergyUnit.WATTSECOND)
 	 * @effect	The IEnergyHolder is recharged with amount of energy to be transferred.
 	 * 			| other.recharge(amount)
-	 * @effect	The transferred amount of energy is subtracted from the amount of energy of this IEnergyHolder.
-	 * 			| this.setEnergy(this.getEnergy() - amount);
+	 * @effect	The transferred amount of energy [Ws] is subtracted from the amount of energy of this IEnergyHolder.
+	 * 			| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - amount);
 	 * @throws	IllegalStateException
 	 * 			When this IEnergyHolder or the other IEnergyHolder is terminated
 	 * 			| this.isTerminated() || other.isTerminated()

@@ -22,7 +22,9 @@ public class EnergyAmount implements Comparable<EnergyAmount> {
 	
 	public final static EnergyAmount WATTSECOND_0 =  new EnergyAmount((double)0, EnergyUnit.WATTSECOND);
 	
-
+	public final static EnergyAmount WATTSECOND_5000 =  new EnergyAmount((double)5000, EnergyUnit.WATTSECOND);
+	
+	public final static EnergyAmount WATTSECOND_DOUBLE_MAXVALUE =  new EnergyAmount(Double.MAX_VALUE, EnergyUnit.WATTSECOND);
 	/*
 	 * 
 	 */
