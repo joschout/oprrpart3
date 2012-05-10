@@ -1,6 +1,7 @@
 
 package roboRallyPackage.gameElementClasses;
 
+
 /**
  * An interface which classes, whose objects represent gamepieces with an internal energy level, can implement.
  * The methods in this interface concern the energy of these gamepieces in Ws.
@@ -15,9 +16,9 @@ public interface IEnergyHolder
 	public abstract boolean isTerminated();
 
 	/**
-	 * Returns the variable representing the current amount if energy of this IEnergyHolder in watt-seconds (Ws).
+	 * Returns the variable representing the current amount if energy of this IEnergyHolder in the given energy unit.
 	 */
-	public abstract double getEnergy();
+	public abstract double getEnergy(EnergyUnit unit);
 
 	/**
 	 * Sets the amount of energy of this IEnergyHolder to the given amount of energy, expressed in watt-seconds (Ws).
@@ -27,7 +28,7 @@ public interface IEnergyHolder
 	 * @pre		The given amount of energy (in watt-seconds (Ws)) is a valid amount of energy for this IEnergyHolder.
 	 * 			| this.canHaveAsEnergy(energyAmount)
 	 * @post	The new amount of energy is equal to the given amount of energy.
-	 * 			| (new this).getEnergy() == energyAmount
+	 * 			| (new this).getEnergy(EnergyUnit.WATTSECOND) == energyAmount
 	 * @throws	IllegalStateException
 	 * 			...
 	 * 			| this.isTerminated()
