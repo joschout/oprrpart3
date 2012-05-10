@@ -78,6 +78,7 @@ public class Robot extends Element implements IEnergyHolder
 		}
 		else
 		{
+			//this.setMaxEnergy(EnergyAmount.WATTSECOND_ROBOT_MAXIMUM_ENERGY_LIMIT.getAmountInWattSecond());
 			this.setMaxEnergy(20000);
 		}
 	}
@@ -253,6 +254,7 @@ public class Robot extends Element implements IEnergyHolder
 	public boolean canHaveAsMaxEnergy(double maxEnergy)
 	{
 		return (EnergyAmount.isValidEnergyAmount(maxEnergy) && maxEnergy >= java.util.Collections.max(getListCosts()) && maxEnergy <= 20000);
+	//	&& maxEnergy<= EnergyAmount.WATTSECOND_ROBOT_MAXIMUM_ENERGY_LIMIT.getAmountInWattSecond()
 	}
 	
 	/**
