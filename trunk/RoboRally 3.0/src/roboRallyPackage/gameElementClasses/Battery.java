@@ -193,6 +193,8 @@ public class Battery extends Item implements IEnergyHolder
 	@Override
 	public void use(Robot robot) throws IllegalStateException
 	{
+		assert robot.getPossessions().contains(this): "The given robot does is not carrying this item.";
+		
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated battery can not be altered.");

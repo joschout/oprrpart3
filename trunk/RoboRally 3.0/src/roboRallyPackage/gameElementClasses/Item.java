@@ -99,6 +99,9 @@ public abstract class Item extends Element
 
 	/**
 	 * A robot uses this item.
+	 * 
+	 * @pre		...
+	 * 			| robot.getPossessions().contains(this)
 	 */
 	public abstract void use(Robot robot);
 	

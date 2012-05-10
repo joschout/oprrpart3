@@ -220,6 +220,8 @@ public class RepairKit extends Item implements IEnergyHolder
 	@Override
 	public void use(Robot robot)
 	{
+		assert robot.getPossessions().contains(this): "The given robot does is not carrying this item.";
+		
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated repairkit can not be altered.");

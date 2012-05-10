@@ -1,6 +1,7 @@
 
 package roboRallyPackage.gameElementClasses;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 import roboRallyPackage.Board;
@@ -23,139 +24,192 @@ public class SurpriseBox extends Item
 	 * 
 	 * @param	weight
 	 * 			The weight for this new SurpriseBox in grams.
+	 * @post	...
+	 * 			| this.getWeight() = weight
+	 * @effect	...
+	 * 			| this.addAllSurpriceMethods()
+	 * @effect	...
+	 * 			| this.addAllSurpriseItems()
 	 */
 	public SurpriseBox(int weight)
 	{
 		super(weight);
-		this.addAllMethods();
+		this.addAllSurpriseMethods();
+		this.addAllSurpriseItems();
 	}
 	
-	private java.lang.reflect.Method[] surprises;
-	
-	private void addMethod(java.lang.reflect.Method method)
+	/**
+	 * Returns the variable representing a list of all the items this surprise box can contain.
+	 */
+	@Basic
+	private Item[] getSurpriseItems()
 	{
-		java.lang.reflect.Method newSurprises[] = new java.lang.reflect.Method[surprises.length];
-		newSurprises[surprises.length] = method;
-		surprises = newSurprises;
+		return surpriseItems;
 	}
-	
-	private void addAllMethods()
-	{
-		try
-		{
-			java.lang.reflect.Method explodeMethod = this.getClass().getMethod("explode");
-			this.addMethod(explodeMethod);
-
-			java.lang.reflect.Method teleportMethod = this.getClass().getMethod("teleport");
-			this.addMethod(teleportMethod);
-
-			java.lang.reflect.Method otherItemMethod = this.getClass().getMethod("otherItem");
-			this.addMethod(otherItemMethod);
-		}
-		catch(NoSuchMethodException exc)
-		{
-			
-		}
-	}
-	
-	public java.lang.reflect.Method[] getAllMethods()
-	{
-		return surprises;
-	}
-	
-	private void explode()
-	{
-		this.takeHit();
-	}
-	
-	private void teleport()
-	{
-		
-	}
-	
-	private void otherItem(Robot robot)
-	{
-		// create a random number between 0 and 3
-		Random generator = new Random();
-		int randomInt = generator.nextInt(3);
-
-		// add the new item to the possessions of the robot.
-		if(randomInt == 0)
-		{
-			Battery battery = new Battery(2500, 5);
-			battery.setPosition(robot.getPosition());
-			battery.setBoard(robot.getBoard());
-			robot.pickUp(battery);
-		}
-		if(randomInt == 1)
-		{
-			RepairKit repairKit = new RepairKit(500,5);
-			repairKit.setPosition(robot.getPosition());
-			repairKit.setBoard(robot.getBoard());
-			robot.pickUp(repairKit);
-		}
-		if(randomInt == 2)
-		{
-			SurpriseBox surpriseBox = new SurpriseBox(5);
-			surpriseBox.setPosition(robot.getPosition());
-			surpriseBox.setBoard(robot.getBoard());
-			robot.pickUp(surpriseBox);
-		}
-	}
-	
 
 	/**
-	 * A robot uses this SurpriseBox. One of the following three events will occur:
-	 * 1. The SurpriseBox explodes, hitting the robot and all other Elements on the position of this robot and its adjacent positions.
-	 * 2. The robot is teleported to another location.
-	 * 3. The SurpriseBox contained another Item (either a battery, a repair kit or a new surprise box), which will be added to the list of items carried by the robot
+	 * Initialize the list with all the items that need to be added to the list of items this surprise box can contain.
+	 * These are: a battery, a repair kit and another surprise box.
 	 * 
-	 * @effect	...
-	 * 			| for one random integer i in 0..2:
-	 * 			|	if(i == 0)
-	 * 			|		than this.takeHit();
-	 * 			|	if(i == 1)
-	 * 			|		than new Teleporter(robot)
-	 * 			|	if(i == 2)
-	 * 			|		than for one random integer j in 0..2:
-	 * 			|			if( j == 0) than  robot.getPossessions().add(new Battery(2500,5))
-	 * 			|			if( j == 1) than  robot.getPossessions().add(new RepairKit(500,5))
-	 * 			|			if( j == 1) than  robot.getPossessions().add(new SurpriseBox(5))
-	 * @effect	...
-	 * 			| this.terminate()
-	 * @throws	IllegalStateException
-	 * 			...
-	 * 			| this.isTerminated() || robot.isTerminates()
+	 * Only items are allowed to be added to the list.
+	 * 
+	 * @post	...
+	 * 			| (new this).getSurprisItems().contains(new Battery(2500, 5))
+	 * @post	...
+	 * 			| (new this).getSurprisItems().contains(new RepairKit(500,5))
+	 * @post	...
+	 * 			| (new this).getSurprisItems().contains(new SurpriseBox(5))
+	 * @post	...
+	 * 			| (new this).getSurprisItems().length == 3
 	 */
-	@Override
-	public void use(Robot robot) 
+	private void addAllSurpriseItems()
 	{
-		Robot tempRobot = robot;
-		if(this.isTerminated())
-		{
-			throw new IllegalStateException("A terminated battery can not be altered.");
-		}
-		if(robot.isTerminated())
-		{
-			throw new IllegalStateException("A terminated robot can not be altered.");
-		}
-		
-		// create a random number between 0 and 3
-		Random generator = new Random();
-		int randomInt = generator.nextInt(this.getAllMethods().length);
-		
-		// a random method is selected and invoked
-		this.getAllMethods()[randomInt].invoke(robot);
-		
-		this.terminate();
+		surpriseItems[0] = new Battery(2500, 5);
+		surpriseItems[1] = new RepairKit(500,5);
+		surpriseItems[2] = new SurpriseBox(5);
+	}
+	
+	/**
+	 * Variable representing all the items that this surprise box can contain.
+	 */
+	private Item[] surpriseItems;
 
-//		//the box explodes and the robot is hit.
-//		if(randomInt == 0){
-//			this.takeHit();
-//		}
-//		//the robot is teleported.
-//		if(randomInt == 1){
-//			//			Teleporter tele = new Teleporter(robot);
+	/**
+	 * Returns the variable representing a list of all the methods this surprise can invoke when using a surprise box.
+	 */
+	@Basic
+	public java.lang.reflect.Method[] getSurpriseMethods()
+	{
+		return surpriseMethods;
+	}
+	
+	/**
+	 * Add a method the the list of methods than can be invoked when using a surprise box.
+	 * 
+	 * @param	method
+	 * 			The method to be added.
+	 * @pre		...
+	 * 			| this.isValidSurpriseMethod(method)
+	 * @post	...
+	 * 			| this.getSurpriseMethods().length + 1 = (new this).getSurpriseMethods().length
+	 * @post	...
+	 * 			| (new this).getSurpriseMethods().contains(method)
+	 */
+	@Model
+	private void addSurpriseMethod(java.lang.reflect.Method method)
+	{
+		assert this.isValidSurpriseMethod(method): "The given method is not a valid method to add to the list of surprise methods.";
+		
+		// a new list, one size greater that the current list of methods is created.
+		java.lang.reflect.Method newSurprises[] = new java.lang.reflect.Method[surpriseMethods.length];
+		
+		// the new method is added to the list and the old list is replaced with the new list.
+		newSurprises[surpriseMethods.length] = method;
+		surpriseMethods = newSurprises;
+	}
+
+	/**
+	 * Initialize the list of methods with all the methods that can be invoked when using a surprise box.
+	 * These are: takeHit(), teleport() and otherItem()
+	 * 
+	 * @post	...
+	 * 			| (new this).getSurpriseMethods().contains(this.getClass().getMethod("takeHit", new Class[0]))
+	 * @post	...
+	 * 			| (new this).getSurpriseMethods().contains(this.getClass().getMethod("teleport", Robot.class))
+	 * @post	...
+	 * 			| (new this).getSurpriseMethods().contains(this.getClass().getMethod("otherItem", Robot.class))
+	 * @post	...
+	 * 			| (new this).getSurpriseMethods().length == 3
+	 */
+	@Model
+	private void addAllSurpriseMethods()
+	{
+		// note: only public methods are found using Class.getMethod()
+	
+		java.lang.reflect.Method explodeMethod = this.getClass().getMethod("takeHit", new Class[0]);
+		this.addSurpriseMethod(explodeMethod);
+	
+		java.lang.reflect.Method teleportMethod = this.getClass().getMethod("teleport", Robot.class);
+		this.addSurpriseMethod(teleportMethod);
+	
+		java.lang.reflect.Method otherItemMethod = this.getClass().getMethod("otherItem", Robot.class);
+		this.addSurpriseMethod(otherItemMethod);
+	}
+
+	/**
+	 * Checks whether the given method is a valid method to be added to the list of surprise methods.
+	 * These checks concern the number and the type of parameters the given method requires.
+	 * For, in use() one of these methods may be invoked and only those with a valid number and type of parameters can properly be invoked.
+	 * 
+	 * @param	method
+	 * 			The method to be checked.
+	 * @return	...
+	 * 			| method.getParameterTypes().length == 0
+	 * @return	...
+	 * 			| method.getParameterTypes().length == 1 && method.getParameterTypes()[0] == Robot.class
+	 */
+	private boolean isValidSurpriseMethod(java.lang.reflect.Method method)
+	{
+		return (method.getParameterTypes().length == 0)
+				|| (method.getParameterTypes().length == 1 && method.getParameterTypes()[0] == Robot.class);
+	}
+
+	/**
+	 * Variable representing all the methods that can be invoked when using a surprise box.
+	 */
+	private java.lang.reflect.Method[] surpriseMethods;
+
+	
+	/**
+	 * Teleports the given robot to a random position on the board.
+	 * If the robot is not standing on a board, it is not moved.
+	 * If the calculated random position is not a valid position for the given robot, a new random position is calculated
+	 * until a valid position is found or more that 25 positions are checked.
+	 * 
+	 * @param	robot
+	 * 			The robot to be moved
+	 * @post	...
+	 * 			| if(robot.getBoard() != null)
+	 * 			|  then for some random i in 0..robot.getBoard().getWidth() and some random j in 0..robot.getBoard().getHeigth():
+	 * 			|   if(robot.getBoard().canElementBePutAtPosition(new Position(i,j),robot)
+	 * 			|    then robot.setPostion(new Position(i,j)
+	 * 			|	else calculate new random position until more than 25 positions are checked
+	 */
+	public void teleport(Robot robot)
+	{
+		// the robot is not standing on a board, nothing happens.
+		if(robot.getBoard() == null)
+		{		
+		}
+		else
+		{
+			boolean stop = false;
+			int i = 0;
+
+			while(!stop || i >= 25)
+			{
+				// create a random number between 0 and the width of the board of the given robot
+				// and create a random number between 0 and the height of the board of the given robot.
+				Random generator = new Random();
+				long randomX = (long) generator.nextInt((int) robot.getBoard().getWidth());
+				long randomY = (long) generator.nextInt((int) robot.getBoard().getHeight());
+
+				// this is valid random position for the robot; move the robot to the position.
+				if(robot.getBoard().canElementBePutAtPosition(new Position(randomX, randomY), robot))
+				{
+					robot.setPosition(new Position(randomX, randomY));
+					stop = true;
+				}
+				// the while-loop will be re-invoked till either a valid random position is found or more than 25 random position are checked.
+				else
+				{
+					i++;
+				}
+			}
+		}
+		
+		
+//		Teleporter tele = new Teleporter(robot);
 //			//			tele.teleport();
 //			new Terminatable(){
 //				public void teleport(){
@@ -180,28 +234,86 @@ public class SurpriseBox extends Item
 //
 //				}
 //			};
-//
-//		}
-//		// a new random item is created
-//		if(randomInt == 2){
-//			int randomIntTwo = generator.nextInt(3);
-//			if(randomIntTwo == 0){
-//				Battery bat = new Battery(2500, 5);
-//				robot.getPossessions().add(bat);
-//			}
-//
-//
-//			if(randomIntTwo == 1){
-//				RepairKit kit = new RepairKit(500,5);
-//				robot.getPossessions().add(kit);
-//			}
-//			if(randomIntTwo == 2){
-//				SurpriseBox newBox = new SurpriseBox(5);
-//				robot.getPossessions().add(newBox);
-//			}
-//		}
+	}
+	
+	/**
+	 * A surprise box can contain another item; this item is added to the list of possessions of the given robot.
+	 * The added item must be an item stored in the list of items this surprise box holds (this.getSurpriseItems())
+	 * This method can be invoked when using a surprise box.
+	 * 
+	 * @param	robot
+	 * 			The robot to be given the surprise item.
+	 * @effect	...
+	 * 			| for a random i in 0..this.getSurpriseItems().length - 1: robot.addItem(this.getSurpriseItems()[i])
+	 * @post	...
+	 * 			| robot.getPossession().length + 1 = (new robot).getPossessions().length
+	 */
+	public void otherItem(Robot robot)
+	{
+		// create a random number between 0 and the number of surprise items (-1)
+		Random generator = new Random();
+		int randomInt = generator.nextInt(getSurpriseItems().length - 1);
 
+		// add the new, random selected, item to the possessions of the robot.
+		this.getSurpriseItems()[randomInt].setPosition(robot.getPosition());
+		this.getSurpriseItems()[randomInt].setBoard(robot.getBoard());
+		robot.pickUp(this.getSurpriseItems()[randomInt]);
+		System.out.println("A " + this.getSurpriseItems()[randomInt].getClass() + " is added to the possessions of the robot.");
+	}
+	
 
+	/**
+	 * A robot uses this surprise box. One of the methods in getSurpriseMethods() will be invoked.
+	 * In the end this surprise box will be terminated and thus removed from the list of items of the robot.
+	 * 
+	 * @effect	...
+	 * 			| for one random integer i in 0..this.getSurpriseMethods().length - 1:
+	 * 			|	this.getSurpriseMethods()[i].invoke(robot)
+	 * @effect	...
+	 * 			| this.terminate()
+	 * @throws	IllegalStateException
+	 * 			...
+	 * 			| this.isTerminated() || robot.isTerminates()
+	*/
+	@Override
+	public void use(Robot robot) throws IllegalStateException
+	{
+		assert robot.getPossessions().contains(this): "The given robot does is not carrying this item.";
+
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated battery can not be altered.");
+		}
+		if(robot.isTerminated())
+		{
+			throw new IllegalStateException("A terminated robot can not be altered.");
+		}
+
+		// create a random number
+		Random generator = new Random();
+		int randomInt = generator.nextInt(this.getSurpriseMethods().length - 1);
+
+		// a random method is selected and invoked
+		try
+		{
+			// the method does not require any parameter
+			if(this.getSurpriseMethods()[randomInt].getParameterTypes().length == 0)
+			{
+				this.getSurpriseMethods()[randomInt].invoke(this, new Object[0]);
+			}
+			// the method requires the given robot as parameter.
+			if(this.getSurpriseMethods()[randomInt].getParameterTypes().length == 1 && this.getSurpriseMethods()[randomInt].getParameterTypes()[0] == Robot.class)
+			{
+				this.getSurpriseMethods()[randomInt].invoke(this, robot);
+			}
+		}
+		catch(Exception exc)
+		{
+
+		}
+		
+		// this surprise box is terminated
+		this.terminate();
 	}
 
 
@@ -264,7 +376,6 @@ public class SurpriseBox extends Item
 		return "Surprise box with:" + "\n"
 				+ super.toString() +  ";  " + "\n";
 	}
-
 }
 
 // randomiser
