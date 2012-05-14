@@ -4,6 +4,9 @@
 package roboRallyPackage;
 
 import static java.lang.System.out;
+
+import java.util.ArrayList;
+
 import roboRallyPackage.commandClasses.*;
 import roboRallyPackage.commandClasses.BasicCommand.*;
 import roboRallyPackage.commandClasses.BasicCondition.*;
@@ -32,7 +35,8 @@ public class Parser
 
 	public Command parse(String fullProgram)
 	{
-		fullProgram = fullProgram.trim().toLowerCase();
+		fullProgram = fullProgram.replaceAll(" ","").toLowerCase();
+		
 		Command resultCommand  = null;
 		
 		// BasicCommands
@@ -120,5 +124,44 @@ public class Parser
 		return resultCommand;
 	}
 	
+	public java.util.ArrayList<String> getSubstringsBracketCutter(String fullProgram){
+		// stores the index of the first '(' in the given String
+		int openingBracketIndex = 0;
+		// stores the index of the ')' that closes the first '('
+		int closingBracketIndex = 0;
+		
+		// counts the number of opening brackets '(' the loop encounters until the loop encounters its closing bracket ')'
+		int openingBracketCounter = 0;
+		// counts the number of closing brackets ')' the loop encounters 
+		// until the loop encounters the closing bracket ')' of the first opening bracket.
+		int closingBracketCounter = 0;
+		// variable representing the index of the array of characters, made by using the method .toCharArray() on the given String
+		int index = 0;
+		
+		char[] fullPrStrings = fullProgram.toCharArray();
+		java.util.ArrayList<String> subStringList= new ArrayList<String>();
+
+		while(index <= fullPrStrings.length-1 ) {
+			if(closingBracketCounter <= openingBracketCounter){
+
+				if (fullPrStrings[index] == '('){
+					if(openingBracketCounter == 0)
+						openingBracketIndex = index;
+					openingBracketCounter++;
+				}
+				if (fullPrStrings[index] == ')'){
+					closingBracketCounter++;
+					if (openingBracketCounter == closingBracketCounter){
+						closingBracketIndex =index;
+					}
+				}
+			}
+			openingBracketCounter = 0;
+			closingBracketCounter = 0;
+
+			subStringList.add(fullProgram.substring(openingBracketIndex, closingBracketIndex));
+		}
+		return subStringList;
+	}
 
 }
