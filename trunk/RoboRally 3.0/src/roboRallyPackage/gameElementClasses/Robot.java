@@ -19,7 +19,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar	The orientation of each robot must be a valid orientation.
  * 			| this.canHaveAsOrientation(this.getOrientation())
  * @invar	The current energy level of each robot must be a valid current energy level.
- * 			| this.canHaveAsEnergy(this.getEnergy())
+ * 			| this.canHaveAsEnergy(this.getEnergy(EnergyUnit.WATTSECOND))
  * @invar	The maximum energy level of each robot must be a valid maximum energy level.
  * 			| this.canHaveAsMaxEnergy(this.getMaxEnergy())
  * @invar	The total weight of the items a robot can carry must not exceed the maximum weight it can carry.
@@ -307,7 +307,7 @@ public class Robot extends Element implements IEnergyHolder
 	 * @return 	True if the given amount is strictly positive and.
 	 *  		| result == (amount > 0)
 	 * @return	True if the sum of the given amount and the current energy level equals or is smaller than the maximum energy level this robot can have.
-	 * 			| result == (this.getEnergy() + amount <= getMaxEnergy())
+	 * 			| result == (this.getEnergy(EnergyUnit.WATTSECOND) + amount <= getMaxEnergy())
 	 */
 	@Override
 	public boolean canAcceptForRecharge(double amount)
@@ -874,7 +874,7 @@ public class Robot extends Element implements IEnergyHolder
 	 * 			| this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn()
 	 * @effect	The current orientation of this robot is changed by turning 90 degrees clockwise
 	 * 			if this robot has sufficient energy.
-	 * 			| if(this.getEnergy() >= getCostToTurn())
+	 * 			| if(this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn())
 	 * 			| then this.setOrientation(this.getOrientation().turn90Clockwise())
 	 * 	     	|	    && this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND)-getCostToTurn())
 	 * @throws	IllegalStateException
@@ -900,7 +900,7 @@ public class Robot extends Element implements IEnergyHolder
 	 * 			| this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn()
 	 * @effect	The current orientation of this robot is changed by turning 90 degrees counter-clockwise
 	 * 			if this robot has sufficient energy.
-	 * 			| if(this.getEnergy() >= getCostToTurn())
+	 * 			| if(this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn())
 	 * 			| then this.setOrientation(this.getOrientation().turn90CounterClockwise())
 	 * 			|		&& this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND)-getCostToTurn())
 	 * @throws	IllegalStateException
@@ -1040,7 +1040,7 @@ public class Robot extends Element implements IEnergyHolder
 	 * @return	A string of this robot.
 	 * 			| result == "Robot with:" + "\n"
 	 *			| 			+ super.toString() + "\n" 
-	 *			| 			+ " Energy level: " + this.getEnergy(EnergyUnit.WATTSECOND) + "(" + getEnergyFraction() + "%)" + ";  " + "\n"
+	 *			| 			+ " Energy level: " + this.getEnergy(EnergyUnit.WATTSECOND) + "(" + this.getEnergyFraction() + "%)" + ";  " + "\n"
 	 *			+ " Possessions: " + this.getPossessionsString();
 	 */
 	@Override
@@ -1048,7 +1048,7 @@ public class Robot extends Element implements IEnergyHolder
 	{
 		return "Robot with:" + "\n"
 				+ super.toString() + ";  " + "\n"
-				+ " Energy level: " + this.getEnergy(EnergyUnit.WATTSECOND) + " (" + getEnergyFraction() + "%) " + ";  " + "\n"
+				+ " Energy level: " + this.getEnergy(EnergyUnit.WATTSECOND) + " (" + this.getEnergyFraction() + "%) " + ";  " + "\n"
 				+ " Possessions: " + this.getPossessionsString();
 	}
 

@@ -21,16 +21,11 @@ public class SurpriseBox extends Item
 	 * 			The weight for this new SurpriseBox in grams.
 	 * @post	...
 	 * 			| this.getWeight() = weight
-	 * @effect	...
-	 * 			| this.addAllSurpriceMethods()
-	 * @effect	...
-	 * 			| this.addAllSurpriseItems()
 	 */
 	public SurpriseBox(int weight)
 	{
 		super(weight);
-		this.addAllSurpriseMethods();
-		this.addAllSurpriseItems();
+
 	}
 	
 	/**
@@ -59,15 +54,17 @@ public class SurpriseBox extends Item
 	 */
 	private void addAllSurpriseItems()
 	{
-		surpriseItems[0] = new Battery(2500, 5);
-		surpriseItems[1] = new RepairKit(500,5);
-		surpriseItems[2] = new SurpriseBox(5);
+		Item[] newSurpriseItems = new Item[3];
+		newSurpriseItems[0] = new Battery(2500, 5);
+		newSurpriseItems[1] = new RepairKit(500,5);
+		newSurpriseItems[2] = new SurpriseBox(5);
+		surpriseItems = newSurpriseItems;
 	}
 	
 	/**
 	 * Variable representing all the items that this surprise box can contain.
 	 */
-	private Item[] surpriseItems;
+	private Item[] surpriseItems = new Item[0];
 
 	/**
 	 * Returns the variable representing a list of all the methods this surprise can invoke when using a surprise box.
@@ -96,10 +93,13 @@ public class SurpriseBox extends Item
 		assert this.isValidSurpriseMethod(method): "The given method is not a valid method to add to the list of surprise methods.";
 		
 		// a new list, one size greater that the current list of methods is created.
-		java.lang.reflect.Method newSurprises[] = new java.lang.reflect.Method[surpriseMethods.length];
-		
+		java.lang.reflect.Method newSurprises[] = new java.lang.reflect.Method[surpriseMethods.length + 1];
+		for(int i = 0; i < surpriseMethods.length; i++)
+		{
+			newSurprises[i] = surpriseMethods[i];
+		}
 		// the new method is added to the list and the old list is replaced with the new list.
-		newSurprises[surpriseMethods.length] = method;
+		newSurprises[newSurprises.length - 1] = method;
 		surpriseMethods = newSurprises;
 	}
 
@@ -183,7 +183,7 @@ public class SurpriseBox extends Item
 	/**
 	 * Variable representing all the methods that can be invoked when using a surprise box.
 	 */
-	private java.lang.reflect.Method[] surpriseMethods;
+	private java.lang.reflect.Method[] surpriseMethods = new java.lang.reflect.Method[0];
 
 	
 	/**
@@ -297,6 +297,10 @@ public class SurpriseBox extends Item
 	 * 			|	this.getSurpriseMethods()[i].invoke(robot)
 	 * @effect	...
 	 * 			| this.terminate()
+	 * @effect	...
+	 * 			| this.addAllSurpriceMethods()
+	 * @effect	...
+	 * 			| this.addAllSurpriseItems()
 	 * @throws	IllegalStateException
 	 * 			...
 	 * 			| this.isTerminated() || robot.isTerminates()
@@ -306,6 +310,9 @@ public class SurpriseBox extends Item
 	{
 		assert robot.getPossessions().contains(this): "The given robot does is not carrying this item.";
 
+		this.addAllSurpriseMethods();
+		this.addAllSurpriseItems();
+		
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated battery can not be altered.");
@@ -322,6 +329,8 @@ public class SurpriseBox extends Item
 		// a random method is selected and invoked
 		try
 		{
+			System.out.println("The surprise box had the following effect: " + this.getSurpriseMethods()[randomInt].getName());
+			
 			// the method does not require any parameter
 			if(this.getSurpriseMethods()[randomInt].getParameterTypes().length == 0)
 			{

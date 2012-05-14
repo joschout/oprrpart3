@@ -698,7 +698,7 @@ public class Board extends Terminatable
 	 * @return	...
 	 * 			| for each orientatedPosition in OrientatedPosition:
 	 * 			|   result.contains(orientatedPosition)
-	 * 			|	|| orientatedPosition.getPosition().getManhattanDistance(robot.getPosition()) >= robot.getEnergy()/robot.getTotalCostToMove()
+	 * 			|	|| orientatedPosition.getPosition().getManhattanDistance(robot.getPosition()) >= robot.getEnergy(EnergyUnit.WATTSECOND)/robot.getTotalCostToMove()
 	 * 			|   || this.canElementBePutAtPosition(orientatedPosition.getPosition(),robot)
 	 * @throws	IllegalStateException
 	 * 			| robot.getBoard() != this || robot.isTerminated()
@@ -727,7 +727,7 @@ public class Board extends Terminatable
 		}
 		
 		// initialize the theoretical maximum distance the given robot can 'walk' in a straight line, given its current energy.
-		long maxDistance = (long) (robot.getEnergy()/robot.getTotalCostToMove());
+		long maxDistance = (long) (robot.getEnergy(EnergyUnit.WATTSECOND)/robot.getTotalCostToMove());
 		// the variable representing the last orientatedPosition from which the neighbours are added to the list.
 		int lastChecked = -1;
 		
