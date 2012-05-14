@@ -22,4 +22,6 @@ public abstract class Command
 	}
 	
 	private Robot robot;
+	
+	public abstract void execute();
 }
