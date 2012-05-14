@@ -12,7 +12,7 @@ import roboRallyPackage.commandClasses.*;
  */
 public class While extends CombinedCommand
 {
-	public While(Robot robot, Condition condition, Executable whileCommand)
+	public While(Robot robot, Condition condition, Command whileCommand)
 	{
 		super(robot);
 		this.condition = condition;
@@ -32,11 +32,11 @@ public class While extends CombinedCommand
 	 * @return	...
 	 *			| result == ...
 	 */
-	public Executable getWhileCommand() {
+	public Command getWhileCommand() {
 		return this.whileCommand;
 	}
 
-	Executable whileCommand;
+	Command whileCommand;
 	
 	public void execute()
 	{

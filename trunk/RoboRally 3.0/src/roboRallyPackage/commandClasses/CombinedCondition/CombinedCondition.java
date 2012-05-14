@@ -11,7 +11,7 @@ import roboRallyPackage.commandClasses.CombinedCondition.*;
  * @author Nele
  *
  */
-public abstract class CombinedCondition extends Command implements Condition
+public abstract class CombinedCondition extends Condition
 {
 	public CombinedCondition(Robot robot)
 	{

@@ -11,7 +11,7 @@ import roboRallyPackage.commandClasses.*;
  * @author Nele
  *
  */
-public abstract class BasicCommand extends Command implements Executable
+public abstract class BasicCommand extends Command
 {
 	public BasicCommand(Robot robot)
 	{

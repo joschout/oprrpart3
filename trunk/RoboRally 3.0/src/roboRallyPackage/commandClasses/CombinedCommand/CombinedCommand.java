@@ -12,7 +12,7 @@ import roboRallyPackage.commandClasses.*;
  * @author Nele
  *
  */
-public abstract class CombinedCommand extends Command implements Executable
+public abstract class CombinedCommand extends Command
 {
 	public CombinedCommand(Robot robot)
 	{
