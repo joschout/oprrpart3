@@ -34,103 +34,103 @@ public class Parser
 		return this.robot;
 	}
 
-	public Command parse(String fullProgram)
-	{
-		fullProgram = fullProgram.replaceAll(" ","").toLowerCase();
-		
-		Command resultCommand  = null;
-		
-		// BasicCommands
-		if(fullProgram.startsWith("(move)"))
-		{
-			resultCommand = new Move(this.getRobot());
-		}
-		if(fullProgram.startsWith("(turn"))
-		{
-			String subProgram = fullProgram.substring("(turn".length()).trim();
-			if(subProgram.startsWith("clockwise)"))
-			{
-				resultCommand = new Turn(this.getRobot(),Direction.CLOCKWISE);
-			}
-			if(subProgram.startsWith("counterclockwise)"))
-			{
-				resultCommand = new Turn(this.getRobot(),Direction.COUNTER_CLOCKWISE);
-			}
-		}
-		if(fullProgram.startsWith("(shoot)"))
-		{
-			resultCommand = new Shoot(this.getRobot());
-		}
-		if(fullProgram.startsWith("(pick-up-and-use)"))
-		{
-			resultCommand = new PickupAndUse(this.getRobot());
-		}
-		
-		// ControleStatementCommands
-		if(fullProgram.startsWith("(seq"))
-		{
-			String subProgram = fullProgram.substring("(seq".length()).trim();
-			
-			java.util.List<Executable> commands = new java.util.ArrayList<Executable>();
-			boolean stop = false;
-			
-			while(! stop)
-			{
-				if(subProgram.startsWith(")"))
-				{
-					stop = true;
-				}
-				else
-				{
-					// get the first command of the current subProgram
-					commands.add((Executable) this.parse(subProgram));
-					// cut the command that we just found off the current subProgram-string
-					int index = subProgram.indexOf(")");
-					subProgram = subProgram.substring(index + 1).trim();
-				}
-			}
-				
-			resultCommand = new Sequence(this.getRobot(), commands);
-		}
-		if(fullProgram.startsWith("(while"))
-		{
-			String subProgram = fullProgram.substring("(while".length()).trim();
-
-			Condition condition;
-			Executable executable;
-
-			condition = (Condition) this.parse(subProgram);
-			
-			subProgram.substring(subProgram.indexOf("(")).trim();
-			if(subProgram.substring(0,subProgram.indexOf(")")).contains("("))
-			{
-				
-			}
-			subProgram.substring(subProgram.indexOf(")")).trim();
-			
-					if(this.parse(subProgram) instanceof Condition)
-					{
-						condition = this.parse(subProgram) instanceof Condition;
-					}
-				}
-			}
-
-			resultCommand = new While(this.getRobot(),condition,executable);
-		}
-		if(fullProgram.startsWith("(if"))
-		{
-			resultCommand = new If();
-		}
-		
-		return resultCommand;
-	}
-	
+//	public Command parse(String fullProgram)
+//	{
+//		fullProgram = fullProgram.replaceAll(" ","").toLowerCase();
+//		
+//		Command resultCommand  = null;
+//		
+//		// BasicCommands
+//		if(fullProgram.startsWith("(move)"))
+//		{
+//			resultCommand = new Move(this.getRobot());
+//		}
+//		if(fullProgram.startsWith("(turn"))
+//		{
+//			String subProgram = fullProgram.substring("(turn".length()).trim();
+//			if(subProgram.startsWith("clockwise)"))
+//			{
+//				resultCommand = new Turn(this.getRobot(),Direction.CLOCKWISE);
+//			}
+//			if(subProgram.startsWith("counterclockwise)"))
+//			{
+//				resultCommand = new Turn(this.getRobot(),Direction.COUNTER_CLOCKWISE);
+//			}
+//		}
+//		if(fullProgram.startsWith("(shoot)"))
+//		{
+//			resultCommand = new Shoot(this.getRobot());
+//		}
+//		if(fullProgram.startsWith("(pick-up-and-use)"))
+//		{
+//			resultCommand = new PickupAndUse(this.getRobot());
+//		}
+//		
+//		// ControleStatementCommands
+//		if(fullProgram.startsWith("(seq"))
+//		{
+//			String subProgram = fullProgram.substring("(seq".length()).trim();
+//			
+//			java.util.List<Executable> commands = new java.util.ArrayList<Executable>();
+//			boolean stop = false;
+//			
+//			while(! stop)
+//			{
+//				if(subProgram.startsWith(")"))
+//				{
+//					stop = true;
+//				}
+//				else
+//				{
+//					// get the first command of the current subProgram
+//					commands.add((Executable) this.parse(subProgram));
+//					// cut the command that we just found off the current subProgram-string
+//					int index = subProgram.indexOf(")");
+//					subProgram = subProgram.substring(index + 1).trim();
+//				}
+//			}
+//				
+//			resultCommand = new Sequence(this.getRobot(), commands);
+//		}
+//		if(fullProgram.startsWith("(while"))
+//		{
+//			String subProgram = fullProgram.substring("(while".length()).trim();
+//
+//			Condition condition;
+//			Executable executable;
+//
+//			condition = (Condition) this.parse(subProgram);
+//			
+//			subProgram.substring(subProgram.indexOf("(")).trim();
+//			if(subProgram.substring(0,subProgram.indexOf(")")).contains("("))
+//			{
+//				
+//			}
+//			subProgram.substring(subProgram.indexOf(")")).trim();
+//			
+//					if(this.parse(subProgram) instanceof Condition)
+//					{
+//						condition = this.parse(subProgram) instanceof Condition;
+//					}
+//				}
+//			}
+//
+//			resultCommand = new While(this.getRobot(),condition,executable);
+//		}
+//		if(fullProgram.startsWith("(if"))
+//		{
+//			resultCommand = new If();
+//		}
+//		
+//		return resultCommand;
+//	}
+//	
 	
 	public java.util.ArrayList<Program> parse2(String inputProgram){
 		
 		inputProgram = inputProgram.replaceAll(" ","").toLowerCase();
 		java.util.ArrayList<String> progAsSubProgs = this.getSubstringsBracketCutter(inputProgram);
-		java.util.ArrayList<> program = new ArrayList<Command>();
+		java.util.ArrayList<Program> program = new ArrayList<Program>();
 		
 		for(int i=0; i<=progAsSubProgs.size()-1;i++){
 		// BasicCommands
@@ -150,7 +150,7 @@ public class Parser
 				{
 					program.add(new Shoot(this.getRobot()));
 				}
-				if(progAsSubProgs.get(i).equals("(pick-up-and-use)"));
+				if(progAsSubProgs.get(i).equals("(pick-up-and-use)"))
 				{
 					program.add(new PickupAndUse(this.getRobot()));
 				}
@@ -163,6 +163,7 @@ public class Parser
 					// het haakje ')' van "(seq" moet er nog vanachter afgeknipt worden
 					subProgram = subProgram.substring(0, subProgram.length()-2);
 					java.util.ArrayList subProgAsSubProgs=this.parse2(subProgram);
+					// mag dit?
 					if(subProgAsSubProgs.contains(Condition.class)){
 						throw new IllegalSyntaxException ;
 					}
@@ -188,10 +189,79 @@ public class Parser
 					String subProgram = progAsSubProgs.get(i).replaceFirst("(if", "").trim();
 					subProgram = subProgram.substring(0, subProgram.length()-2);
 					java.util.ArrayList<Program> subProgAsSubProgs=this.parse2(subProgram);
-					
+
 					if(subProgAsSubProgs.size() == 3 && (subProgAsSubProgs.get(0) instanceof Condition) && (subProgAsSubProgs.get(1) instanceof Command )&&(subProgAsSubProgs.get(2) instanceof Command)){
-						program.add(new If(this.getRobot(), ((Condition) subProgAsSubProgs.get(0)), ((Command)subProgAsSubProgs.get(1)), ((Command )subProgAsSubProgs.get(2)));
-				} 
+						program.add(new If(this.getRobot(), ((Condition) subProgAsSubProgs.get(0)), ((Command)subProgAsSubProgs.get(1)), ((Command )subProgAsSubProgs.get(2))));
+					} 
+					else{
+						throw new IllegalSyntaxExeption;
+					}
+				}
+				
+				
+				//the BasicConditions
+				if(progAsSubProgs.get(i).equals("(true)")){
+					program.add(new True(this.getRobot()));
+				}
+				if(progAsSubProgs.get(i).startsWith("(energy-at-least")){
+					String subProgram = progAsSubProgs.get(i).replaceFirst("(energy-at-least", "").trim();
+					subProgram = subProgram.substring(0, subProgram.length()-2);
+					double energyValue=Double.valueOf(subProgram).doubleValue();
+					if (EnergyAmount.isValidEnergyAmount(energyValue)){
+						program.add(new EnergyAtLeast(this.getRobot(), energyValue));
+					}else{
+						throw new IllegalSyntaxException;
+					}
+				}
+				if(progAsSubProgs.get(i).equals("(at-item)")){
+					program.add(new AtItem(this.getRobot()));
+				}
+				if(progAsSubProgs.get(i).equals("(can-hit-robot)")){
+					program.add(new CanHitRobot(this.getRobot()));
+				}
+				if(progAsSubProgs.get(i).equals("(wall)")){
+					program.add(new NextToWall(this.getRobot()));
+				}
+				
+				
+				//the CombinedConditions
+				if(progAsSubProgs.get(i).startsWith("(and")){
+					String subProgram = progAsSubProgs.get(i).replaceFirst("(and", "").trim();
+					// het haakje ')' van "(seq" moet er nog vanachter afgeknipt worden
+					subProgram = subProgram.substring(0, subProgram.length()-2);
+					java.util.ArrayList subProgAsSubProgs=this.parse2(subProgram);
+					//mag dit?
+					if(subProgAsSubProgs.contains(Command.class)){
+						throw new IllegalSyntaxException ;
+					}
+				
+					program.add(new And(this.getRobot(), ((java.util.ArrayList<Condition>) subProgAsSubProgs)));
+				}
+				if(progAsSubProgs.get(i).startsWith("(or")){
+					String subProgram = progAsSubProgs.get(i).replaceFirst("(or", "").trim();
+					// het haakje ')' van "(seq" moet er nog vanachter afgeknipt worden
+					subProgram = subProgram.substring(0, subProgram.length()-2);
+					java.util.ArrayList subProgAsSubProgs=this.parse2(subProgram);
+					// mag dit?
+					if(subProgAsSubProgs.contains(Command.class)){
+						throw new IllegalSyntaxException ;
+					}
+				// ook hier is zijn de condities een array terwijl een lijst handiger zou zijn
+					program.add(new And(this.getRobot(), ((java.util.ArrayList<Condition>) subProgAsSubProgs)));
+				}
+				if(progAsSubProgs.get(i).startsWith("(not")){
+					String subProgram = progAsSubProgs.get(i).replaceFirst("(not", "").trim();
+					// het haakje ')' van "(seq" moet er nog vanachter afgeknipt worden
+					subProgram = subProgram.substring(0, subProgram.length()-2);
+					java.util.ArrayList subProgAsSubProgs=this.parse2(subProgram);
+					
+				
+					if(subProgAsSubProgs.size() == 1 &&(subProgAsSubProgs.get(0) instanceof  Condition)){
+						program.add(new Not(this.getRobot(), ((Condition)subProgAsSubProgs.get(0))));
+					}
+					else{
+						throw new IllegalSyntaxException ;
+					}
 				}
 				return program;
 			}

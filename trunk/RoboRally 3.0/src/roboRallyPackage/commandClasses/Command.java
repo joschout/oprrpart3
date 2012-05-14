@@ -9,7 +9,7 @@ import roboRallyPackage.gameElementClasses.*;
  * @author Nele
  *
  */
-public abstract class Command
+public abstract class Command extends Program
 {
 	public Command(Robot robot)
 	{
