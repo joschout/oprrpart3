@@ -8,6 +8,8 @@ TO DO:
 7. IEnergyHolder verder naar EnergyAmount/-Unit uitwerken ipv enkel getters
 8. iterator van board
 9. programs
+10. element-is-in-conflict met van Item
+11. robot moven naar een plaats waar een ander Item staat
 
 // momenteel mee bezig
 10. surpriseBox

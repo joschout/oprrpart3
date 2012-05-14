@@ -98,7 +98,7 @@ public class Robot extends Element implements IEnergyHolder
 	{
 		for(Item item: this.getPossessions())
 		{
-			this.getPossessions().remove(item);
+			this.removeItem(item);
 			item.terminate();
 		}
 		super.terminate();
@@ -537,7 +537,7 @@ public class Robot extends Element implements IEnergyHolder
 			// make a string that contains all the possessions of this robot
 			for(Item item: this.getPossessions())
 			{
-				possessionString = possessionString + item.toString() + ", ";
+				possessionString = possessionString + item.getClass().getName() + ", ";
 			}
 		}
 		return possessionString;
@@ -578,12 +578,12 @@ public class Robot extends Element implements IEnergyHolder
 			// add the item to the end of the list; the given item is lighter than all the other items this robot is carrying.
 			catch(IndexOutOfBoundsException exc)
 			{
-				getPossessions().add(item);
+				this.possessions.add(item);
 				break;
 			}
 		}
 	}
-
+	
 	/**
 	 * Checks whether this robot carry the given item.
 	 * 
@@ -629,7 +629,7 @@ public class Robot extends Element implements IEnergyHolder
 			throw new IllegalStateException("A terminated robot can not be altered.");
 		}
 		addItem(item);
-		item.setBoard(null);
+		item.getBoard().removeElement(item);
 		item.setPosition(null);
 	}
 
@@ -671,6 +671,20 @@ public class Robot extends Element implements IEnergyHolder
 	private static final int maxWeightToCarry = Integer.MAX_VALUE;
 
 	/**
+	 * Removes the given item from the list of items.
+	 * 
+	 * @param	item
+	 * 			The item to be removed
+	 * @post	The robot is no longer carrying the given item
+	 * 			| ! this.getPossessions().contains(item)
+	 */
+	@Model
+	private void removeItem(Item item)
+	{
+		this.possessions.remove(item);
+	}
+
+	/**
 	 * Drops the given item. The item is removed from the list of possessions of this robot.
 	 * The position of the given item is set to the position of this robot.
 	 * The board on which the given item is placed is the board on which this robot is placed.
@@ -696,9 +710,9 @@ public class Robot extends Element implements IEnergyHolder
 		{
 			throw new IllegalStateException("A terminated robot can not be altered.");
 		}
-		this.getPossessions().remove(item);
+		this.removeItem(item);
 		item.setPosition(this.getPosition());
-		item.setBoard(this.getBoard());
+		this.getBoard().putElement(this.getPosition(), item);
 	}
 
 	/**
@@ -729,6 +743,8 @@ public class Robot extends Element implements IEnergyHolder
 	 * 			| canUse(item)
 	 * @effect	The robot uses this item
 	 * 			| item.use(this)
+	 * @post	If the item is terminated after is had been used, it is removed from the list of possession of this robot.
+	 * 			| if((new item).isTerminated()) then !(new this).getPossessions().contains(item)
 	 * @throws	IllegalStateException
 	 * 			When this robot is terminated
 	 * 			| this.isTerminated()
@@ -736,11 +752,18 @@ public class Robot extends Element implements IEnergyHolder
 	public void use(Item item) throws IllegalStateException
 	{
 		assert canUse(item): "The given item cannot be use by this robot.";
+		
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated robot can not be altered.");
 		}
+		
 		item.use(this);
+		
+		if(item.isTerminated())
+		{
+			this.removeItem(item);
+		}
 	}
 	
 	/**
@@ -752,7 +775,6 @@ public class Robot extends Element implements IEnergyHolder
 	 * 			| result == (item != null) && (!item.isTerminated())
 	 * @return	The given item must be possessed by this robot
 	 * 			| result == this.getPossessions().contains(item))
-	 * @return	The given 
 	 */
 	public boolean canUse(Item item)
 	{
@@ -947,7 +969,7 @@ public class Robot extends Element implements IEnergyHolder
 			// check whether this robot can be placed at the next position.
 			this.getBoard().canElementBePutAtPosition(this.getPosition().getNeighbour(this.getOrientation()), this);
 			// these setters are not executes when the previous checker throws an exception
-			this.setPosition(this.getPosition().getNeighbour(this.getOrientation()));
+			this.getBoard().moveElement((this.getPosition().getNeighbour(this.getOrientation())),this);
 			this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - this.getTotalCostToMove());
 		}
 		catch(IllegalPositionException exc)
@@ -1148,12 +1170,12 @@ public class Robot extends Element implements IEnergyHolder
 		}
 		
 		// move this robot to the found best orientatedPosition and reduce its energy
-		this.setPosition(thisBestOrientatedPosition.getPosition());
+		this.getBoard().moveElement(thisBestOrientatedPosition.getPosition(), this);
 		this.setOrientation(thisBestOrientatedPosition.getOrientation());
 		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - thisShortestPaths.distTo(thisVertices.indexOf(thisBestOrientatedPosition)));
 		
 		// move the other robot to the found best orientatedPosition and reduce its energy
-		other.setPosition(otherBestOrientatedPosition.getPosition());
+		other.getBoard().moveElement(otherBestOrientatedPosition.getPosition(), other);
 		other.setOrientation(otherBestOrientatedPosition.getOrientation());
 		other.setEnergy(other.getEnergy(EnergyUnit.WATTSECOND) - otherShortestPaths.distTo(otherVertices.indexOf(otherBestOrientatedPosition)));		
 	}	

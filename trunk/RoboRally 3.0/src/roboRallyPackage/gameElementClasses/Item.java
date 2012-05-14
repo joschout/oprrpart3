@@ -45,7 +45,7 @@ public abstract class Item extends Element
 	 * @return	...
 	 * 			| result == (other == null)
 	 * @return	...
-	 * 			| result == !(other instanceof Wall)
+	 * 			| result == (other != null && !(other instanceof Wall)
 	 */
 	@Override
 	public boolean canSharePositionWith(Element other)

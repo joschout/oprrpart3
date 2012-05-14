@@ -386,7 +386,7 @@ public class Board extends Terminatable
 	public void removeElement(Element element) throws NullPointerException,
 													  IllegalStateException
 	{
-		if(element.getBoard() == this)
+		if(this.getElements(Element.class).contains(element))
 		{
 			// removes the element from the list in board
 			Set<Element> newSet = this.getElements(element.getPosition());
@@ -406,12 +406,12 @@ public class Board extends Terminatable
 	 * 
 	 * @param	position
 	 * 			The position where this element has to be placed.
-	 * @param	element
+	 * @param	newElement
 	 * 			The element that will be placed on this board.
 	 * @effect	...
-	 * 			| element.setPosition(position)
+	 * 			| newElement.setPosition(position)
 	 * @effect	...
-	 * 			| if(canElementBePutAtPosition(position, newElement)) then element.setBoard(this)
+	 * 			| if(canElementBePutAtPosition(position, newElement)) then newElement.setBoard(this)
 	 * @post	...
 	 * 			| if(canElementBePutAtPosition(position, newElement)) then (new this).getElements(Element).contains(newElement)
 	 * @throws	NullPointerException
@@ -422,13 +422,13 @@ public class Board extends Terminatable
 	 * 			| newElement.isTerminated()
 	 * @throws	IllegalPositionException
 	 * 			...
-	 * 			| ! canElementBePutAtPosition(position, newElement)
+	 * 			| ! this.canElementBePutAtPosition(position, newElement)
 	 * @throws	IllegalBoardException
 	 * 			...
-	 * 			| ! canElementBePutAtPosition(position, newElement)
+	 * 			| ! this.canElementBePutAtPosition(position, newElement)
 	 * @throws	IllegalElementCombinationException
 	 * 			...
-	 * 			| ! canElementBePutAtPosition(position, newElement)
+	 * 			| ! this.canElementBePutAtPosition(position, newElement)
 	 */
 	public void putElement(Position position, Element newElement) throws NullPointerException,
 																		 IllegalStateException,
@@ -441,14 +441,65 @@ public class Board extends Terminatable
 			throw new IllegalStateException();
 		}
 		// this element can be placed here (otherwise an exception will be thrown by canElemenBePutAtPosition)
-		if(canElementBePutAtPosition(position, newElement))
-		{
+		if(this.canElementBePutAtPosition(position, newElement))
+		{	
 			// replace the old list of elements at this position with the new list of elements (containing this new element as well)
 			elements = addElementToGivenMap(this.getElements(), newElement, position);
 			
 			// change the board and the position of the element
 			newElement.setPosition(position);
 			newElement.setBoard(this);			
+		}
+	}
+	
+	
+	/**
+	 * Moves a given element from one place on this board to another place on this board if possible.
+	 * 
+	 * @param	position
+	 * 			The position where this element has to be placed.
+	 * @param	element
+	 * 			The element that has to be moved
+	 * @effect	...
+	 * 			| if(canElementBePutAtPosition(position, element)) then this.removeElement(element) && this.putElement(element)
+	 * @throws	NullPointerException
+	 * 			...
+	 * 			| element == null
+	 * @throws	IllegalStateException
+	 * 			...
+	 * 			| element.isTerminated()
+	 * @throws	IllegalPositionException
+	 * 			...
+	 * 			| ! this.canElementBePutAtPosition(position, element)
+	 * @throws	IllegalBoardException
+	 * 			...
+	 * 			| !this.getElements(Element.class).contains(element) || ! this.canElementBePutAtPosition(position, element)
+	 * @throws	IllegalElementCombinationException
+	 * 			...
+	 * 			| ! this.canElementBePutAtPosition(position, element)
+	 */
+	public void moveElement(Position position, Element element) throws NullPointerException,
+																		  IllegalStateException,
+																		  IllegalPositionException,
+																		  IllegalBoardException,
+																		  IllegalElementCombinationException
+	{
+		if(element.isTerminated())
+		{
+			throw new IllegalStateException();
+		}
+		// the given element is not placed on this board
+		if(!this.getElements(Element.class).contains(element))
+		{
+			throw new IllegalBoardException(element, this);
+		}
+		
+		// this element can be placed here (otherwise an exception will be thrown by canElemenBePutAtPosition)
+		if(this.canElementBePutAtPosition(position, element))
+		{	
+			this.removeElement(element);
+			element.setPosition(position);
+			element.setBoard(this);
 		}
 	}
 	

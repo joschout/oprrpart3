@@ -60,7 +60,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A terminated board cannot be merged with another (terminated) board.");
+			System.out.println("Either this board or the other board is terminated; the boards cannot be merged.");
 		}
 	}
 	/**
@@ -87,7 +87,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A (terminated) battery cannot be put on a (terminated) board.");
+			System.out.println("Either this battery or this board is terminated; the battery cannot be placed on the board.");
 		}
 	}
 
@@ -145,7 +145,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A (terminated) repair kit cannot be put on a (terminated) board.");
+			System.out.println("Either this repair kit or this board is terminated; the repair kit cannot be placed on the board.");
 		}
 	}
 
@@ -203,7 +203,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A (terminated) surprise box cannot be put on a (terminated) board.");
+			System.out.println("Either this surprise box or this board is terminated; the surprise box cannot be placed on the board.");
 		}
 	}
 
@@ -274,7 +274,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A (terminated) robot cannot be put on a (terminated) board.");
+			System.out.println("Either this robot or this board is terminated; the robot cannot be placed on the board.");
 		}
 	}
 
@@ -325,7 +325,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	@Override
 	public double getEnergy(Robot robot)
 	{
-		return robot.getEnergy();
+		return robot.getEnergy(EnergyUnit.WATTSECOND);
 	}
 
 	/**
@@ -341,7 +341,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A (terminated) robot cannot be moved.");
+			System.out.println("A terminated robot cannot be moved.");
 		}
 	}
 
@@ -358,7 +358,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A (terminated) robot cannot be turned.");
+			System.out.println("A terminated robot cannot be turned.");
 		}
 	}
 
@@ -374,7 +374,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A terminated robot cannot pickup a battery.");
+			System.out.println("Either this robot or this battery is terminated; the robot cannot pick up the battery.");
 		}
 	}
 
@@ -390,7 +390,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A terminated robot cannot use a battery.");
+			System.out.println("Either this robot or this battery is terminated; the robot cannot use the battery.");
 		}
 	}
 
@@ -406,7 +406,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A terminated robot cannot be drop a battery.");
+			System.out.println("Either this robot or this battery is terminated; the robot cannot drop the battery.");
 		}
 	}
 
@@ -422,7 +422,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A terminated robot cannot pickup a repair kit.");
+			System.out.println("Either this robot or this repair kit is terminated; the robot cannot pick up the repair kit.");
 		}
 	}
 
@@ -438,7 +438,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A terminated robot cannot use a repair kit.");
+			System.out.println("Either this robot or this repair kit is terminated; the robot cannot use the repair kit.");
 		}
 	}
 
@@ -454,7 +454,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A terminated robot cannot be drop a repair kit.");
+			System.out.println("Either this robot or this repair kit is terminated; the robot cannot drop the repair kit.");
 		}
 	}
 
@@ -470,7 +470,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A terminated robot cannot pickup a surprise box.");
+			System.out.println("Either this robot or this surprise box is terminated; the robot cannot pick up the surprise box.");
 		}
 	}
 
@@ -486,7 +486,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A terminated robot cannot use a surprise box.");
+			System.out.println("Either this robot or this surprise box is terminated; the robot cannot use the surprise box.");
 		}
 	}
 
@@ -502,7 +502,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A terminated robot cannot be drop a surprise box.");
+			System.out.println("Either this robot or this surprise box is terminated; the robot cannot drop the surprise box.");
 		}
 	}
 
@@ -648,7 +648,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		}
 		catch(IllegalStateException exc)
 		{
-			System.out.println("A (terminated) wall cannot be put on a (terminated) board.");
+			System.out.println("Either this wall or this board is terminated; the wall cannot be placed on the board.");
 		}
 	}
 
