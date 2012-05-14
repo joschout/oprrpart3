@@ -1,14 +1,9 @@
 
 package roboRallyPackage.gameElementClasses;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
-
-import roboRallyPackage.Board;
-import roboRallyPackage.Orientation;
 import roboRallyPackage.Position;
-import roboRallyPackage.Terminatable;
-import roboRallyPackage.exceptionClasses.IllegalPositionException;
+import be.kuleuven.cs.som.annotate.*;
 
 /**
  * A class of SurpriseBoxes. Extends Item.
@@ -126,14 +121,45 @@ public class SurpriseBox extends Item
 	{
 		// note: only public methods are found using Class.getMethod()
 	
-		java.lang.reflect.Method explodeMethod = this.getClass().getMethod("takeHit", new Class[0]);
-		this.addSurpriseMethod(explodeMethod);
-	
-		java.lang.reflect.Method teleportMethod = this.getClass().getMethod("teleport", Robot.class);
-		this.addSurpriseMethod(teleportMethod);
-	
-		java.lang.reflect.Method otherItemMethod = this.getClass().getMethod("otherItem", Robot.class);
-		this.addSurpriseMethod(otherItemMethod);
+		try
+		{
+			java.lang.reflect.Method explodeMethod;
+			explodeMethod = this.getClass().getMethod("takeHit", new Class[0]);
+			this.addSurpriseMethod(explodeMethod);
+		}
+		catch (NoSuchMethodException e)
+		{
+		}
+		catch (SecurityException e)
+		{
+		}
+		
+		try
+		{
+			java.lang.reflect.Method teleportMethod;
+			teleportMethod = this.getClass().getMethod("teleport", Robot.class);
+			this.addSurpriseMethod(teleportMethod);
+		}
+		catch (NoSuchMethodException e) 
+		{
+		}
+		catch (SecurityException e) 
+		{
+		}
+		
+		try
+		{
+			java.lang.reflect.Method otherItemMethod;
+			otherItemMethod = this.getClass().getMethod("otherItem", Robot.class);
+			this.addSurpriseMethod(otherItemMethod);
+		} 
+		catch (NoSuchMethodException e)
+		{
+		}
+		catch (SecurityException e) 
+		{
+		}
+		
 	}
 
 	/**
