@@ -1,24 +1,22 @@
 /**
  * 
  */
-package roboRallyPackage.commandClasses.BasicCommand;
+package roboRallyPackage.commandClasses.BasicCommandClasses;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.commandClasses.*;
+
 /**
  * @author Nele
  *
  */
-public class Move extends BasicCommand
+public abstract class BasicCommand extends Command
 {
-	public Move(Robot robot)
+	public BasicCommand(Robot robot)
 	{
 		super(robot);
 	}
 	
-	public void execute()
-	{
-		this.getRobot().moveOneStep();
-	}
+	public abstract void execute();
 }

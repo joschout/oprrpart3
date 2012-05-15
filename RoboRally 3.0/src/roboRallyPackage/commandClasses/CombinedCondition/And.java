@@ -14,7 +14,7 @@ import roboRallyPackage.commandClasses.CombinedCondition.*;
  */
 public class And extends CombinedCondition
 {
-	public And(Robot robot, Condition[] conditions)
+	public And(Robot robot, java.util.List<Condition> conditions)
 	{
 		super(robot);
 		this.conditions = conditions;
@@ -32,13 +32,13 @@ public class And extends CombinedCondition
 		return result;
 	}
 	
-	private Condition[] conditions;
+	private java.util.List<Condition> conditions;
 
 	/**
 	 * @return	...
 	 *			| result == ...
 	 */
-	public Condition[] getConditions()
+	public java.util.List<Condition> getConditions()
 	{
 		return this.conditions;
 	}

@@ -1,32 +1,32 @@
 /**
  * 
  */
-package roboRallyPackage.commandClasses.BasicCondition;
+package roboRallyPackage.commandClasses.BasicCommandClasses;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.commandClasses.*;
-import roboRallyPackage.commandClasses.CombinedCondition.*;
 /**
  * @author Nele
  *
  */
-public class AtItem extends BasicCondition
+public class PickupAndUse extends BasicCommand
 {
-	public AtItem(Robot robot)
+	public PickupAndUse(Robot robot)
 	{
 		super(robot);
 	}
 	
-	public boolean results()
+	public void execute()
 	{
 		for(Element element: this.getRobot().getBoard().getElements(this.getRobot().getPosition()))
 		{
 			if(element instanceof Item)
 			{
-				return true;
+				this.getRobot().pickUp((Item) element);
+				this.getRobot().use((Item) element);
+				break;
 			}
 		}
-		return false;
 	}
 }
