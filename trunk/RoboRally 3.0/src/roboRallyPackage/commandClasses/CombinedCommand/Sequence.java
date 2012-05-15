@@ -15,7 +15,7 @@ public class Sequence extends CombinedCommand
 	public Sequence(Robot robot, java.util.List<Command> seqCommands)
 	{
 		super(robot);
-		this.seqCommands = new java.util.ArrayList<Command>(seqCommands);
+		this.seqCommands = seqCommands;
 	}
 	
 	java.util.List<Command> seqCommands;

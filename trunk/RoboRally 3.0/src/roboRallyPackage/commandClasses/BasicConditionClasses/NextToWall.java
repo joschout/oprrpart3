@@ -1,7 +1,7 @@
 /**
  * 
  */
-package roboRallyPackage.commandClasses.BasicCondition;
+package roboRallyPackage.commandClasses.BasicConditionClasses;
 
 import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;

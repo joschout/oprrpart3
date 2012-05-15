@@ -10,6 +10,9 @@ TO DO:
 9. programs
 10. element-is-in-conflict met van Item
 11. robot moven naar een plaats waar een ander Item staat
+12. IllegalSyntaxException
+13. een variabele voor de mawimale maximum energie van een robot in op te slaan, in plaats van 20000 3-4 keer te herhalen (ook in de doc!)
+14. invar enAmount: isValidEnergy
 
 // momenteel mee bezig
 10. surpriseBox
