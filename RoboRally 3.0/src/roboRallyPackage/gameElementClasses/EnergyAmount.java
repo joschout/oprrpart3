@@ -96,6 +96,25 @@ public class EnergyAmount implements Comparable<EnergyAmount> {
 		assert isValidEnergyAmount(newAmount);
 		return new EnergyAmount(newAmount, unit);	
 	}
+	@Override
+	public boolean equals(Object other){
+		if(other == null)
+			return false;
+		if(this.getClass() != other.getClass())
+			return false;
+		EnergyAmount otherAmount = (EnergyAmount) other;
+		return (this.getAmountInWattSecond() == otherAmount.getAmountInWattSecond() 
+				&& this.getUnit().equals(otherAmount.getUnit()));
+	}
 	
+	@Override
+	public int hashCode(){
+		return getAmountInWattSecond().hashCode()+getUnit().hashCode();
+	}
+	
+	@Override
+	public String toString(){
+		return ""+getAmount() + getUnit();
+	}
 	
 }
