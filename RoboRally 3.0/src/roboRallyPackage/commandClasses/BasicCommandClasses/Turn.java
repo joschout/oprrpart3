@@ -40,4 +40,8 @@ public class Turn extends BasicCommand
 			this.getRobot().turnCounterClockwise();
 		}
 	}
+	@Override
+	public String toString(){
+		return "(turn " + this.getDirection().toString() + ")";
+	}
 }

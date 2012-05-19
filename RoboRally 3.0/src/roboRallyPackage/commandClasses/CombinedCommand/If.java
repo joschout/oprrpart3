@@ -59,4 +59,12 @@ public class If extends CombinedCommand
 			this.getElseCommand().execute();
 		}
 	}
+	@Override
+	public String toString(){
+		return "(if"+ "\n" + "  " + this.getCondition().toString()
+				+ "\n" + "  " +this.getIfCommand().toString()
+				+ "\n" + "  " +this.getElseCommand().toString()
+				+ "\n" +  ")";
+				
+	}
 }

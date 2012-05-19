@@ -2,6 +2,7 @@
 // test
 
 package roboRallyPackage;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
@@ -947,5 +948,38 @@ public class Board extends Terminatable
 	public String toString()
 	{
 		return "Board: (width, height) = (" + this.getWidth() + "," + this.getHeight() + ")";
+		
 	}
+	
+//public java.util.Iterator getAllElements(Condition condition){
+//	
+//	java.util.Map<Position, java.util.Set<Element>> elements = this.getElements();
+//	return new Iterator() {
+//
+//		 java.util.Map<Position, java.util.Set<Element>> = 
+//		
+//		
+//		
+//		@Override
+//		public boolean hasNext() {
+//			// TODO Auto-generated method stub
+//			return false;
+//		}
+//
+//		@Override
+//		public Object next() throw NoSuchElementException() {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
+//
+//		@Override
+//		public void remove() throws UnsupportedOperationException {
+//			throw new UnsupportedOperationException();
+//		}
+//	};
+//	
+//}
+	
+	
+	
 }

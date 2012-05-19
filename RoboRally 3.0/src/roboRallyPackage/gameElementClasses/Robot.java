@@ -858,7 +858,7 @@ public class Robot extends Element implements IEnergyHolder
 			Element shotElement = this.getBoard().getFirstElementStartingAt(this.getPosition(), this.getOrientation());
 			try
 			{
-				shotElement.terminate();
+				shotElement.takeHit();
 			}
 			// no element is found within the shooting range of this robot.
 			catch(NullPointerException exc)

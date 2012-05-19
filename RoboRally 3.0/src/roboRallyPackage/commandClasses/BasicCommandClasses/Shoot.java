@@ -21,4 +21,9 @@ public class Shoot extends BasicCommand
 	{
 		this.getRobot().shoot();
 	}
+	@Override
+	public String toString(){
+		return "(shoot)";
+	}
+
 }
