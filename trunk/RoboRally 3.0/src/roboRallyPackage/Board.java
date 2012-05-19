@@ -1,6 +1,4 @@
 
-// test
-
 package roboRallyPackage;
 import java.util.Iterator;
 import java.util.Random;
@@ -553,9 +551,9 @@ public class Board extends Terminatable
 																																				  IllegalElementCombinationException		
 	{
 		// the given position is not  a valid position.
-		if( ! isValidPositionOnBoard(position))
+		if(!isValidPositionOnBoard(position))
 		{
-			throw new IllegalPositionException(position, this);
+			throw new IllegalPositionException(position.getCoordX(), position.getCoordY(), this);
 		}
 		
 		else

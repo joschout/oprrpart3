@@ -2,30 +2,49 @@
 package roboRallyPackage.gameElementClasses;
 
 import java.util.Random;
+
+import roboRallyPackage.Board;
 import roboRallyPackage.Position;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
  * A class of SurpriseBoxes. Extends Item.
  * 
- * @version 3 mei 2012
- * @author Nele & Jonas
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  *
  */
 public class SurpriseBox extends Item
 {
 	/**
-	 * Initialize this new SurpriseBox with the given weight.
+	 * Initialize this new SurpriseBox with the given position, board and weight [g].
+	 * 
+	 * @param 	position
+	 * 			The position for this new element.
+	 * @param	board
+	 * 			The board on which this new element will be placed.
+	 * @param	weight
+	 * 			The weight for this new SurpriseBox, expressed in grams [g].
+	 * @effect	This new surprise box is initialized as an Item with the given position, board and weight.
+	 * 			| super(position, board, weight)
+	 */
+	public SurpriseBox(Position position, Board board, int weight)
+	{
+		super(position, board, weight);
+	}
+	
+	/**
+	 * Initialize this new SurpriseBox with the given weight [g].
 	 * 
 	 * @param	weight
-	 * 			The weight for this new SurpriseBox in grams.
-	 * @post	...
-	 * 			| this.getWeight() = weight
+	 * 			The weight for this new SurpriseBox, expressed in grams [g].
+	 * @effect	...
+	 * 			| this(null, null, weight)
 	 */
 	public SurpriseBox(int weight)
 	{
-		super(weight);
-
+		this(null, null, weight);
 	}
 	
 	/**
@@ -189,8 +208,9 @@ public class SurpriseBox extends Item
 	/**
 	 * Teleports the given robot to a random position on the board.
 	 * If the robot is not standing on a board, it is not moved.
-	 * If the calculated random position is not a valid position for the given robot, a new random position is calculated
-	 * until a valid position is found or more that 25 positions are checked.
+	 * If the calculated random position is not a valid position for the given robot,
+	 * a new random position is calculated until a valid position is found or more that 25 positions are checked.
+	 * If no valid position is found after 25 checks, the robot is not moved.
 	 * 
 	 * @param	robot
 	 * 			The robot to be moved
@@ -232,6 +252,7 @@ public class SurpriseBox extends Item
 					i++;
 				}
 			}
+			// when no valid position is found after 25 invocations of the while-statement, the robot will not be moved.
 		}
 		
 		
@@ -289,7 +310,7 @@ public class SurpriseBox extends Item
 	
 
 	/**
-	 * A robot uses this surprise box. One of the methods in getSurpriseMethods() will be invoked.
+	 * The given robot uses this surprise box. One of the methods in getSurpriseMethods() will be invoked.
 	 * In the end this surprise box will be terminated and thus removed from the list of items of the robot.
 	 * 
 	 * @effect	...
@@ -297,13 +318,6 @@ public class SurpriseBox extends Item
 	 * 			|	this.getSurpriseMethods()[i].invoke(robot)
 	 * @effect	...
 	 * 			| this.terminate()
-	 * @effect	...
-	 * 			| this.addAllSurpriceMethods()
-	 * @effect	...
-	 * 			| this.addAllSurpriseItems()
-	 * @throws	IllegalStateException
-	 * 			...
-	 * 			| this.isTerminated() || robot.isTerminates()
 	*/
 	@Override
 	public void use(Robot robot) throws IllegalStateException
@@ -366,11 +380,7 @@ public class SurpriseBox extends Item
 	 * 			|   for each element in this.getBoard().getElements(position): element.takeHit()
 	 * @effect	The surprise box is terminated in the end.
 	 * 			| this.terminate()
-	 * @throws	IllegalStateException
-	 * 			When this surprise box is terminated.
-	 * 			| this.isTerminated()
 	 */
-
 	@Override
 	public void takeHit() throws IllegalStateException
 	{

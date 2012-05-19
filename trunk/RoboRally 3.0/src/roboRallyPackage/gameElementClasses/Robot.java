@@ -10,36 +10,25 @@ import roboRallyPackage.pathFindingClasses.*;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * @invar	Each robot must have either no position at all or exactly one valid position.
- *			(the fact that position == null is ok is checked in board.isValidPositionOnBoard() and Position.isValidPosition())
- * 			| this.getBoard() != null && this.getBoard().isValidPositionOnBoard(this.getPosition())
- * 			|  || this.getBoard() == null && this.getPosition().isValidPosition(Position)()
- * @invar	Each robot must have either no board at all or exactly one valid board.
- * 			| this.getBoard() == null
- * 			|  || ! this.getBoard().isTerminated()
  * @invar	The orientation of each robot must be a valid orientation.
  * 			| this.canHaveAsOrientation(this.getOrientation())
- * @invar	The current energy level of each robot must be a valid current energy level.
- * 			| this.canHaveAsEnergy(this.getEnergy(EnergyUnit.WATTSECOND))
- * @invar	The maximum energy level of each robot must be a valid maximum energy level.
- * 			| this.canHaveAsMaxEnergy(this.getMaxEnergy())
  * @invar	The total weight of the items a robot can carry must not exceed the maximum weight it can carry.
  * 			| this.getTotalWeightToCarry() <= getMaxWeightToCarry()
  * @invar	An item that this robot is carrying cannot have a Board or a Position
  * 			| for each item in this.getPossessions(): item.getBoard() == null && item.getPosition() == null
+ * @invar	A robot cannot carry a terminated item
+ * 			| for each item in this.getPossessions().size(): ! item.isTerminated()
  * @invar	A terminated Robot cannot carry any items or alter its state.
  * 			| if this.isTerminated() then this.getPossessions().size() == 0
  * 
- * @version 26 april 2012
- * @author Jonas Schouterden (r0260385) & Nele Rober (r0262954)
- * 			 Bachelor Ingenieurswetenschappen, KULeuven
- *
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public class Robot extends Element implements IEnergyHolder
 {
-
 	/**
-	 * Initialize this new robot with given position, board, orientation, currentEnergy and maxEngery.
+	 * Initialize this new robot with given position, board, orientation, currentEnergy [Ws] and maxEngery [Ws].
 	 * 
 	 * @param 	position
 	 * 			The position for this new robot.
@@ -48,23 +37,17 @@ public class Robot extends Element implements IEnergyHolder
 	 * @param	orientation
 	 * 			The orientation for this new robot.
 	 * @param	currentEnergy
-	 * 			The current energy level for this new robot.
+	 * 			The current energy level for this new robot, expressed in watt-second [Ws].
 	 * @param	maxEnergy
-	 * 			The maximum amount of energy this new robot can ever have.
-	 * @effect	This new robot is initialized as an Element with the given position and the given board.
+	 * 			The maximum amount of energy this new robot can ever have, expressed in watt-second [Ws].
+	 * @effect	This new robot is initialized as an Element with the given position and board.
 	 * 			| super(position, board)
 	 * @effect	The new orientation of this new robot is equal to the given orientation.
 	 * 			| this.setOrientation(orientation)
-	 * @effect	The new current energy of this new robot is equal to the given current energy if this is a valid value for current energy.
-	 * 			Otherwise, the currentEnergy is set to 0.
-	 * 			| if(canHaveAsEnergy(currentEnergy))
-	 * 			| 	then this.setEnergy(currentEnergy)
-	 * 			| else this.setEnergy(0)
-	 * @post	If the value of maxEnergy is a valid value, the new maximum energy level of this new robot is set to this value (in Ws).
-	 * 			Otherwise, the maxEnergy is set to 20 000 Ws.
-	 * 			| if(canHaveAsMaxEnergy(maxEnergy))
-	 * 			|	then (new this).getMaxEnergy == maxEnergy
-	 *			| else (new this).getMaxEnergy == 20000
+	 * @effect	The new current energy of this new robot is equal to the given current energy, expressed in watt-second [Ws], if this is a valid value for current energy.
+	 * 			| if(canHaveAsEnergy(currentEnergy)	then this.setEnergy(currentEnergy)
+	 * @post	If the value of maxEnergy, expressed in watt-second [Ws], is a valid value, the new maximum energy level of this new robot is set to this value (in Ws).
+	 * 			| if(canHaveAsMaxEnergy(maxEnergy)) then (new this).getMaxEnergy == maxEnergy
 	 */
 	public Robot(Position position, Board board, Orientation orientation, double currentEnergy, double maxEnergy)
 	{	
@@ -72,16 +55,7 @@ public class Robot extends Element implements IEnergyHolder
 
 		this.setOrientation(orientation);
 		this.setEnergy(currentEnergy);
-		
-		if(this.canHaveAsMaxEnergy(maxEnergy))
-		{
-			this.setMaxEnergy(maxEnergy);
-		}
-		else
-		{
-			//this.setMaxEnergy(EnergyAmount.WATTSECOND_ROBOT_MAXIMUM_ENERGY_LIMIT.getAmountInWattSecond());
-			this.setMaxEnergy(20000);
-		}
+		this.setMaxEnergy(maxEnergy);
 	}
 
 	/**
@@ -89,7 +63,7 @@ public class Robot extends Element implements IEnergyHolder
 	 * 
 	 * @post	This robot is terminated
 	 * 			| (new this).isTerminated()
-	 * @post	All the elements of this are terminated
+	 * @post	All the elements of this robot are terminated
 	 * 			| for each item in this.getPossessions(): (new this).isTerminated
 	 * @post	All the elements this robot possesses are removed from the list that keeps these items
 	 * 			| (new this).getPossessions().size() == 0
@@ -104,8 +78,6 @@ public class Robot extends Element implements IEnergyHolder
 		}
 		super.terminate();
 	}
-
-	// getter and setter of Position and Board are defined in the superclass Element
 	
 	/**
 	 * Returns the orientation of this robot.
@@ -174,10 +146,7 @@ public class Robot extends Element implements IEnergyHolder
 	}
 	
 	/**
-	 * Sets the amount of energy of this robot to the given amount of energy, expressed in watt-seconds (Ws).
-	 * 
-	 * @param 	energyAmount
-	 * 			The new energy amount for this robot in watt-seconds (Ws).
+	 * Sets the amount of energy of this robot to the given amount of energy, expressed in watt-seconds [Ws].
 	 */
 	@Override
 	public void setEnergy(double currentEnergy) throws IllegalStateException
@@ -193,12 +162,12 @@ public class Robot extends Element implements IEnergyHolder
 	}
 	
 	/**
-	 * Checks whether the given currentEnergy is a valid currentEnergy.
+	 * Checks whether the given amount of energy, expressed in Watt-second [Ws], is a valid amount of energy for this robot.
 	 */
 	@Override
-	public boolean canHaveAsEnergy(double currentEnergy)
+	public boolean canHaveAsEnergy(double energy)
 	{
-		return (EnergyAmount.isValidEnergyAmount(currentEnergy) && (currentEnergy <= this.getMaxEnergy()));
+		return ((energy <= this.getMaxEnergy()) && (EnergyAmount.isValidEnergyAmount(energy)));
 	}
 	
 	/**
@@ -212,7 +181,7 @@ public class Robot extends Element implements IEnergyHolder
 	
 	
 	/**
-	 * Returns the maximum energy level of this robot.
+	 * Returns the variable representing the maximum amount of energy this robot can have, expressed in watt-seconds [Ws].
 	 */
 	@Basic @Override
 	public final double getMaxEnergy()
@@ -221,10 +190,7 @@ public class Robot extends Element implements IEnergyHolder
 	}
 	
 	/**
-	 * Sets the maximum energy level of this Robot to the given maximum energy level, expressed in watt-seconds (Ws).
-	 * 
- 	 * @param 	maxEnergyAmount
-	 * 			The new maximum energy level for this Robot in watt-seconds (Ws).
+	 * Sets the maximum energy level of this Robot to the given maximum energy level, expressed in watt-seconds [Ws].
 	 */
 	@Override
 	public void setMaxEnergy(double maxEnergyAmount) throws IllegalStateException,
@@ -241,27 +207,25 @@ public class Robot extends Element implements IEnergyHolder
 	}
 	
 	/**
-	 * Check whether the given maximum energy, expressed in Watt-second, is a valid maximum energy for this robot.
+	 * Check whether the given maximum energy, expressed in Watt-second [Ws], is a valid maximum energy for this robot.
 	 * 
 	 * @param 	maxEnergy
 	 * 			The maximum energy level to be checked.
-	 * @return	True if the given maximum energy level equals or is greater than the most expensive cost for an action
-	 * 			(otherwise, this robot will f.e. never be able to shoot)
-	 * 			| result == (maxEnergy >= java.util.Collections.max(getListCosts()))
+	 * @return	False if the given maximum energy is less than the most expensive cost for an action (otherwise this robot will never be able to do that action)
+	 * 			| result != (maxEnergy < java.util.Collections.max(getListCosts()))
 	 * @return	False if the given energy is greater than 20000 Ws.
 	 * 			| result != (energy > 20000)
 	 */
 	@Override
 	public boolean canHaveAsMaxEnergy(double maxEnergy)
 	{
-		return (EnergyAmount.isValidEnergyAmount(maxEnergy) && maxEnergy >= java.util.Collections.max(getListCosts()) && maxEnergy <= 20000);
-	//	&& maxEnergy<= EnergyAmount.WATTSECOND_ROBOT_MAXIMUM_ENERGY_LIMIT.getAmountInWattSecond()
+		return (maxEnergy <= 20000 && maxEnergy >= java.util.Collections.max(getListCosts()) && EnergyAmount.isValidEnergyAmount(maxEnergy));
 	}
 	
 	/**
 	 * Variable representing the maximum amount of energy this robot can have.
 	 */
-	private EnergyAmount maxEnergy;
+	private EnergyAmount maxEnergy = new EnergyAmount((double) 20000,EnergyUnit.WATTSECOND);
 	
 
 	/**
@@ -277,38 +241,21 @@ public class Robot extends Element implements IEnergyHolder
 	}
 	
 	/**
-	 * Recharges the current energy level with the given amount of energy, expressed in watt-seconds (Ws).
-	 * 
-	 * @param	amount
-	 * 			The amount of energy added to the current energy of this robot.
-	 * @pre		This robot can accept the given amount of energy.
-	 * 			| canAcceptForRecharge(amount)
-	 * @effect	The given amount of energy is added to the current amount of energy this robot has.
-	 * 			| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) + amount)
-	 * @throws	IllegalStateException
-	 * 			When this robot is terminated
-	 * 			| this.isTerminated()
+	 * Recharges this robot with the given amount of energy, expressed in watt-seconds [Ws].
 	 */
 	@Override
 	public void recharge(double amount) throws IllegalStateException
 	{
-		assert canAcceptForRecharge(amount): "Precondition for recharge(double) must be satisfied.";
+		assert canAcceptForRecharge(amount): "This robot cannot accept the given amoutn of energy for reacharge.";
 		if(this.isTerminated())
 		{
-			throw new IllegalStateException("A terminated robot can not be altered.");
+			throw new IllegalStateException("A terminated robot cannot recharge.");
 		}
 		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) + amount);
 	}
 	
 	/**
-	 * Returns a boolean reflecting whether the given amount of energy (expressed in watt-seconds (Ws)) can be added to the energy stack of this robot.
-	 *
-	 * @param 	amount
-	 * 			The amount of energy added to the current energy of this robot, expressed in watt-seconds (Ws).	
-	 * @return 	True if the given amount is strictly positive and.
-	 *  		| result == (amount > 0)
-	 * @return	True if the sum of the given amount and the current energy level equals or is smaller than the maximum energy level this robot can have.
-	 * 			| result == (this.getEnergy(EnergyUnit.WATTSECOND) + amount <= getMaxEnergy())
+	 * Checks whether the given amount of energy, expressed in watt-seconds [Ws], can be added to the current energy level of this robot.
 	 */
 	@Override
 	public boolean canAcceptForRecharge(double amount)
@@ -319,9 +266,9 @@ public class Robot extends Element implements IEnergyHolder
 	
 	
 	/**
-	 * Returns the minimum amount of energy this robot needs to move to the given position.
+	 * Returns the minimum amount of energy, expressed in watt-second [Ws], this robot needs to move to the given position.
 	 * Returns -1 if this robot cannot reach the given position.
-	 * This indicates that either the robot has insufficient energy to reach the given position or the position is not reachable because of obstacles.
+	 * This would mean that either the robot has insufficient energy to reach the given position or the position is not reachable because of obstacles.
 	 * 
 	 * @param	position
 	 * 			The position where to this robot may be moved to.
@@ -389,7 +336,7 @@ public class Robot extends Element implements IEnergyHolder
 	
 	
 	/**
-	 * Returns the energy cost of turning 90 degree, expressed in Watt-second (Ws).
+	 * Returns the energy cost of turning 90 degree, expressed in Watt-second [Ws].
 	 */
 	@Basic @Immutable
 	public static final double getCostToTurn()
@@ -398,12 +345,12 @@ public class Robot extends Element implements IEnergyHolder
 	}
 	
 	/**
-	 * Variable representing the loss of energy for a robot when turning 90 degrees, expressed in Watt-second (Ws).
+	 * Variable representing the loss of energy for a robot when turning 90 degrees, expressed in Watt-second [Ws].
 	 */
 	private static final EnergyAmount costToTurn = new EnergyAmount((double)100, EnergyUnit.WATTSECOND);
 	
 	/**
-	 * Returns the energy cost of shoot, expressed in Watt-second (Ws).
+	 * Returns the energy cost of shooting, expressed in Watt-second [Ws].
 	 */
 	@Basic @Immutable
 	public static final double getCostToShoot()
@@ -412,12 +359,12 @@ public class Robot extends Element implements IEnergyHolder
 	}
 
 	/**
-	 * Variable representing the loss of energy for a robot when shooting one time, expressed in Watt-second (Ws).
+	 * Variable representing the loss of energy for a robot when shooting one time, expressed in Watt-second [Ws].
 	 */
 	private static final EnergyAmount costToShoot = new EnergyAmount((double)1000, EnergyUnit.WATTSECOND);
 
 	/**
-	 * Returns the energy cost of moving one step, expressed in Watt-second (Ws).
+	 * Returns the energy cost of moving one step, expressed in Watt-second [Ws].
 	 * This method does not take into account whether a robot is carrying items or not.
 	 */
 	@Basic @Immutable
@@ -427,12 +374,12 @@ public class Robot extends Element implements IEnergyHolder
 	}
 	
 	/**
-	 * Variable representing the loss of energy for a robot when moving one step, expressed in Watt-second (Ws).
+	 * Variable representing the loss of energy for a robot when moving one step, expressed in Watt-second [Ws].
 	 */
 	private static final EnergyAmount costToMove = new EnergyAmount((double) 500, EnergyUnit.WATTSECOND);
 	
 	/**
-	 * Returns the the additional loss of energy for each kg this robot is carrying when moving one step, expressed in Watt-second (Ws).
+	 * Returns the the additional loss of energy for each kilogram of items this robot is carrying when moving one step, expressed in Watt-second [Ws].
 	 */
 	@Basic @Immutable
 	public static final double getAdditionalCostToMove()
@@ -441,20 +388,20 @@ public class Robot extends Element implements IEnergyHolder
 	}
 	
 	/**
-	 * Variable representing the additional loss of energy for each kg a robot is carrying when moving one step, expressed in Watt-second (Ws).
+	 * Variable representing the additional loss of energy for each kg a robot is carrying when moving one step, expressed in Watt-second [Ws].
 	 */
-	private static final EnergyAmount additionalCostToMove = new EnergyAmount((double)50, EnergyUnit.WATTSECOND);
+	private static final EnergyAmount additionalCostToMove = new EnergyAmount((double) 50, EnergyUnit.WATTSECOND);
 	
 	/**
-	 * Returns the total energy cost of moving this robot one step,, expressed in Watt-second (Ws).
-	 * This method takes into account the normal cost and the additional cost per kg of items this robot is carrying.
+	 * Returns the total energy cost of moving this robot one step, expressed in Watt-second [Ws].
+	 * This method takes into account the normal cost and the additional cost per kilogram of items this robot is carrying.
 	 * 
 	 * @return	The cost to move increased with the additional cost to move times the total weight of all the possessions this robot is carrying.
-	 * 			| result == getCostToMove() + getAdditionalCostToMove() * this.getTotalWeightPossessions()
+	 * 			| result == getCostToMove() + Math.round(getAdditionalCostToMove() * (this.getTotalWeightPossessions()/1000))
 	 */
 	public double getTotalCostToMove()
 	{
-		return getCostToMove() + Math.round((getAdditionalCostToMove() * this.getTotalWeightPossessions())/1000);
+		return getCostToMove() + Math.round(getAdditionalCostToMove() * (this.getTotalWeightPossessions()/1000));
 	}
 
 	/**
@@ -486,9 +433,9 @@ public class Robot extends Element implements IEnergyHolder
 	}
 		
 	/**
-	 * Returns the total weight of all the elements this robot is carrying.
+	 * Returns the total weight of all the elements this robot is carrying, expressed in grams [g].
 	 * 
-	 * @return	The total weight of all the items this robot is carrying.
+	 * @return	The total weight of all the items this robot is carrying, expressed in kilograms [g].
 	 * 			| for each item in this.getPossessions(): result == result + item.getWeight()
 	 */
 	public int getTotalWeightPossessions()
@@ -509,11 +456,14 @@ public class Robot extends Element implements IEnergyHolder
 	 * @param	index
 	 * 			The index that indicates the ith heaviest possession.
 	 * @return	The ith heaviest possession
-	 * 			| result == this.getPossessions().get(index)
+	 * 			| result == this.getPossessions().get(index - 1)
+	 * @throws	IndexOutOfBoundsException 
+	 * 			When the given index is not a valid index
+	 * 			| index <= 0 || index > this.getPossessions().size()
 	 */
-	public Item getIthHeaviestPossession(int index)
+	public Item getIthHeaviestPossession(int index) throws IndexOutOfBoundsException 
 	{
-		return this.getPossessions().get(index);
+		return this.getPossessions().get(index - 1);
 	}
 	
 	/**
@@ -547,7 +497,7 @@ public class Robot extends Element implements IEnergyHolder
 
 	/**
 	 * Adds an item to the list of items of this robot. The item is inserted on the right position into the list.
-	 * For the items in the list are ordered by weight: starting with the heaviest item.
+	 * The items in the list are ordered by weight: starting with the heaviest item.
 	 * 
 	 * @param	item
 	 * 			The item to be added to the list of items
@@ -590,14 +540,15 @@ public class Robot extends Element implements IEnergyHolder
 	 * 
 	 * @param	item
 	 *			The item to be checked.
-	 * @return	The given item cannot be null and it cannot be terminated for the result to be true.
-	 * 			| result == (item != null) 
-	 * 			|			 && (! item.isTerminated())
-	 * @return	The sum of the resulting weight of all the items this robot was already carrying and the weight of the given item
-	 * 			must be smaller than or equal to the maximal weight this robot can carry for the result to be true.
-	 * 			| result == (this.getTotalWeightPossessions() + item.getWeight() <= getMaxWeightToCarry())
-	 * @return	This robot cannot already carry the given item for the result to be true.
-	 * 			| result == (! this.getPossessions().contains(item))
+	 * @return	False if the given item is null.
+	 * 			| result != (item == null)
+	 * @return	False if the given item is terminated.
+	 * 			| result != item.isTerminated()
+	 * @return	False if the sum of the resulting weight of all the items this robot was already carrying and the weight of the given item
+	 * 			is greater than the maximal weight this robot can carry.
+	 * 			| result != (this.getTotalWeightPossessions() + item.getWeight() > getMaxWeightToCarry())
+	 * @return	False when this robot is already carrying the given item.
+	 * 			| result ! this.getPossessions().contains(item)
 	 */
 	public boolean canCarry(Item item)
 	{
@@ -615,19 +566,19 @@ public class Robot extends Element implements IEnergyHolder
 	 * @param	item
 	 * 			The item to be picked up.
 	 * @pre		The given item must be a valid item to be picked up.
-	 * 			| canPickUp(item)
+	 * 			| this.canPickUp(item)
 	 * @effect	The given item is added to the list of items of this robot.
 	 * 			| this.addItem(item)
 	 * @throws	IllegalStateException
 	 * 			When this robot is terminated
-	 * 			| this.isTerminated()
+	 * 			| this.isTerminated() || item.isTerminated()
 	 */
 	public void pickUp(Item item) throws IllegalStateException
 	{
-		assert canPickUp(item):"The given item cannot be picked up by this robot.";
-		if(this.isTerminated())
+		assert this.canPickUp(item):"The given item cannot be picked up by this robot.";
+		if(this.isTerminated() || item.isTerminated())
 		{
-			throw new IllegalStateException("A terminated robot can not be altered.");
+			throw new IllegalStateException("Either this robot or this item is terminated. The robot cannot pick up the item.");
 		}
 		addItem(item);
 		item.getBoard().removeElement(item);
@@ -639,16 +590,16 @@ public class Robot extends Element implements IEnergyHolder
 	 * 
 	 * @param	item
 	 *			The item to be checked.
-	 * @return	The item can be added to the list of items.
-	 * 			| this.canCarry(item)
-	 * @return	The position of the given item cannot be null
-	 * 			and the position of the given item must be equal to the position of this robot for the result to be true.
-	 *			| result == (item.getPosition() != null) 
-	 *			|		     && (item.getPosition().equals(this.getPosition())) 
-	 * @return	The board on which the given item is placed cannot be null
-	 * 			and the board on which the given item is placed must be equal to the board on which this robot is placed for this result to be true.
-	 *			| result == (item.getBoard() != null) 
-	 *			|			 && (item.getBoard() == this.getBoard())
+	 * @return	False if the item cannot be added to the list of items.
+	 * 			| result == this.canCarry(item)
+	 * @return	False if the given item does not have a position
+	 * 			| result != (item.getPosition() == null)
+	 * @return	False if the position of the given item is not equal to the position of this robot.
+	 *			| result != !(item.getPosition().equals(this.getPosition()))
+	 * @return  False if the given item is not standing on a board
+	 * 			| result != (item.getBoard() == null) 
+	 * @return	False if the board on which the given item is placed is not equal to the board on which this robot is placed.
+	 *			| result != !(item.getBoard() == this.getBoard())
 	 */
 	public boolean canPickUp(Item item)
 	{
@@ -673,6 +624,7 @@ public class Robot extends Element implements IEnergyHolder
 
 	/**
 	 * Removes the given item from the list of items.
+	 * If this robot is not carrying the given item, nothing changes.
 	 * 
 	 * @param	item
 	 * 			The item to be removed
@@ -693,9 +645,9 @@ public class Robot extends Element implements IEnergyHolder
 	 * @param	item
 	 * 			The item to be dropped.
 	 * @pre		The given item must be a valid item to be dropped.
-	 * 			| canDrop(item)
+	 * 			| this.canDrop(item)
 	 * @post	The new list of possessions of this robot does not contain the given item.
-	 * 			|   !((new this).getPossessions().contains(item))
+	 * 			| !((new this).getPossessions().contains(item))
 	 * @post	The new position of the given item is the position of this robot.
 	 * 			| (new item).getPosition() == this.getPostion()
 	 * @post	The new board on which the given item is placed is the board on which this robot is placed.
@@ -706,10 +658,10 @@ public class Robot extends Element implements IEnergyHolder
 	 */
 	public void drop(Item item) throws IllegalStateException
 	{
-		assert canDrop(item): "This robot cannot drop the given item.";
+		assert this.canDrop(item): "This robot cannot drop the given item.";
 		if(this.isTerminated())
 		{
-			throw new IllegalStateException("A terminated robot can not be altered.");
+			throw new IllegalStateException("A terminated robot cannot pick up, carry, use or drop items.");
 		}
 		this.removeItem(item);
 		item.setPosition(this.getPosition());
@@ -721,17 +673,18 @@ public class Robot extends Element implements IEnergyHolder
 	 * 
 	 * @param	item
 	 * 			The item to be dropped.
-	 * @return	The given item cannot be null.
-	 * 			| result == (item != null)
-	 * @result	This robot must carry the given item.
-	 * 			| result == this.getPossessions().contains(item)
-	 * @result 	The position and the board of the this robot cannot be null.
-	 * 			| result == ((this.getBoard() != null) && (this.getPosition() != null))
+	 * @return	False if the given item is null.
+	 * 			| result != (item == null)
+	 * @result 	False if this robot is not standing on a board (this implies that the robot has a position as well)
+	 * 			| result != (this.getBoard() == null)
+	 * @result	False if this robot is not carrying the given item.
+	 * 			| result != !this.getPossessions().contains(item)
 	 */
 	public boolean canDrop(Item item)
 	{
 		return (item != null)
-				&& (this.getPossessions().contains(item)) && (this.getBoard() != null) && (this.getPosition() != null);
+				&& (this.getBoard() != null)
+				&& (this.getPossessions().contains(item)) ;
 	}
 
 
@@ -741,7 +694,7 @@ public class Robot extends Element implements IEnergyHolder
 	 * @param	item
 	 * 			The item to use.
 	 * @pre		The robot must be able to use the given item
-	 * 			| canUse(item)
+	 * 			| this.canUse(item)
 	 * @effect	The robot uses this item
 	 * 			| item.use(this)
 	 * @post	If the item is terminated after is had been used, it is removed from the list of possession of this robot.
@@ -752,11 +705,11 @@ public class Robot extends Element implements IEnergyHolder
 	 */
 	public void use(Item item) throws IllegalStateException
 	{
-		assert canUse(item): "The given item cannot be use by this robot.";
+		assert this.canUse(item): "The given item cannot be use by this robot.";
 		
 		if(this.isTerminated())
 		{
-			throw new IllegalStateException("A terminated robot can not be altered.");
+			throw new IllegalStateException("A terminated robot cannot pick up, carry, use or drop items.");
 		}
 		
 		item.use(this);
@@ -772,14 +725,14 @@ public class Robot extends Element implements IEnergyHolder
 	 * 
 	 * @param	item
 	 * 			The item to be checked
-	 * @return	The given item cannot be null or terminated
-	 * 			| result == (item != null) && (!item.isTerminated())
-	 * @return	The given item must be possessed by this robot
+	 * @return	False if the given item is null or terminated
+	 * 			| result == (item != null)
+	 * @return	The given item must be carried by this robot (this implies that it is not terminated)
 	 * 			| result == this.getPossessions().contains(item))
 	 */
 	public boolean canUse(Item item)
 	{
-		return ((item != null) && this.getPossessions().contains(item) && !item.isTerminated());
+		return ((item != null) && this.getPossessions().contains(item));
 	}
 	
 	/**
@@ -788,33 +741,39 @@ public class Robot extends Element implements IEnergyHolder
 	 * 
 	 * @param	other
 	 * 			The other robot that will be given the items.
+	 * @throws	When both robots are not placed next to each other
+	 * 			| !this.getPosition().getAllNeighbours().contains(other.getPosition())
+	 * @throws	IllegalBoardException
+	 * 			When both robots are not placed on the same board.
+	 * 			| this.getBoard() != other.getBoard()
 	 * @throws	IllegalStateException
-	 * 			When this robot is not placed next to the other robot, both robots are not placed on the same board or one of the robots is terminated.
-	 * 			| !this.getPosition().getAllNeighbours()).contains(other.getPosition())
-	 * 			|  && this.getBoard() != other.getBoard()
-	 * 			|  && this.isTerminated() && other.isTerminated()
+	 * 			When either this robot or the given robot is terminated
+	 * 			| this.isTerminated() || other.isTerminated()
 	 */
-	public void transferItems(Robot other) throws IllegalStateException
+	public void transferItems(Robot other) throws IllegalPositionException, IllegalBoardException, IllegalStateException
 	{
-		// the other robot is placed next to this robot and on the same board and both are not terminated.
-		if(java.util.Arrays.asList(this.getPosition().getAllNeighbours()).contains(other.getPosition())
-			&& this.getBoard() == other.getBoard()
-			&& !this.isTerminated() && !other.isTerminated())
+		if(!java.util.Arrays.asList(this.getPosition().getAllNeighbours()).contains(other.getPosition()))
 		{
-			for(Item item: this.getPossessions())
-			{
-				// this other robot can carry the item.
-				// the item is removed from the list of items of this robot and added to the list of the other robot.
-				if(other.canCarry(item))
-				{
-					this.getPossessions().remove(item);
-					other.addItem(item);
-				}
-			}
+			throw new IllegalPositionException("Both robots are not placed next to each other.");
 		}
-		else
+		if(this.getBoard() != other.getBoard())
 		{
-			throw new IllegalStateException();
+			throw new IllegalBoardException("Both robots are not placed on the same board.");
+		}
+		if(this.isTerminated() || other.isTerminated())
+		{
+			throw new IllegalStateException("Either this robot or the given robot is terminated. The items cannot be transferred.");
+		}
+		
+		for(Item item: this.getPossessions())
+		{
+			// this other robot can carry the item.
+			// the item is removed from the list of items of this robot and added to the list of the other robot.
+			if(other.canCarry(item))
+			{
+				this.getPossessions().remove(item);
+				other.addItem(item);
+			}
 		}
 	}
 
@@ -833,43 +792,41 @@ public class Robot extends Element implements IEnergyHolder
 	 * If no element is standing within the shooting range of this robot, it will shoot anyway, though nothing is hit.
 	 * 
 	 * @pre		The robot must be able to use its laser.
-	 * 			| canShoot()
+	 * 			| this.canShoot()
 	 * @effect	The energy level of this robot is decreased with the cost of shooting one time
 	 * 			| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToShoot())
-	 * @throws	IllegalBoardException
-	 * 			The robot must be placed on a board
-	 * 			| this.getBoard() == null
 	 * @throws	IllegatStateException
-	 * 			When this robot has either no position, no orientation or no board or when it is terminated
-	 * 			| this.getPostition() == null || this.getOrientation() == null || this.getBoard() == null || this.isTerminated()
+	 * 			When this is terminated
+	 * 			| this.isTerminated()
 	 */
-	public void shoot() throws IllegalBoardException
+	public void shoot() throws IllegalStateException
 	{
-		assert canShoot(): "The preconditions of shoot() must be satisfied.";
+		assert this.canShoot(): "This robot cannot shoot.";
 		if(this.isTerminated())
 		{
-			throw new IllegalStateException("A terminated robot can not shoot.");
+			throw new IllegalStateException("A terminated robot cannot shoot.");
 		}
+		
 		// the energy of this robot is decreased with the energy it costs to shoot
 		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToShoot());
 		
 		try
-		{
-			// the element that is hit is terminated
-			Element shotElement = this.getBoard().getFirstElementStartingAt(this.getPosition(), this.getOrientation());
-			try
-			{
-				shotElement.takeHit();
-			}
-			// no element is found within the shooting range of this robot.
-			catch(NullPointerException exc)
-			{
-			}
-		}
-		catch(NullPointerException exc)
-		{
-			throw new IllegalStateException();
-		}
+        {
+                // the element that is hit is terminated
+                Element shotElement = this.getBoard().getFirstElementStartingAt(this.getPosition(), this.getOrientation());
+                try
+                {
+                        shotElement.takeHit();
+                }
+                // no element is found within the shooting range of this robot.
+                catch(NullPointerException exc)
+                {
+                }
+        }
+        catch(NullPointerException exc)
+        {
+                throw new IllegalStateException();
+        }
 	}
 	
 
@@ -877,15 +834,16 @@ public class Robot extends Element implements IEnergyHolder
 	/**
 	 * Checks whether this robot can use its laser.
 	 * 
-	 * @return	True if this robot is standing on a board.
-	 * 			| result == (this.getBoard() != null)
-	 * @return	True if and only if the current amount of energy of this robot is greater than
-	 * 			or equal to the amount of energy it costs for this robot to shoot its laser.
-	 *			| result == (this.getEnergy(EnergyUnit.WATTSECOND) <= getCostToShoot())
+	 * @return	False if this robot is not standing on a board.
+	 * 			| result != (this.getBoard() == null)
+	 * @return	False if this robot does not have a position.
+	 * 			| result != (this.getPosition() == null)
+	 * @return	False the current amount of energy of this robot is less than the amount of energy it costs for this robot to shoot its laser.
+	 *			| result != (this.getEnergy(EnergyUnit.WATTSECOND) < getCostToShoot())
 	 */
 	public boolean canShoot()
 	{
-		return (this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToShoot()) && (this.getBoard() != null) && (this.getPosition() != null);
+		return ((this.getBoard() != null) && (this.getPosition() != null) && (this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToShoot()));
 	}
 	
 
@@ -896,10 +854,9 @@ public class Robot extends Element implements IEnergyHolder
 	 * @pre		The robot must have enough energy to turn
 	 * 			| this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn()
 	 * @effect	The current orientation of this robot is changed by turning 90 degrees clockwise
-	 * 			if this robot has sufficient energy.
-	 * 			| if(this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn())
-	 * 			| then this.setOrientation(this.getOrientation().turn90Clockwise())
-	 * 	     	|	    && this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND)-getCostToTurn())
+	 * 			| this.setOrientation(this.getOrientation().turn90Clockwise())
+	 * @effect	The energy level of this robot is decreased with the cost of one turn
+	 * 	     	| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToTurn())
 	 * @throws	IllegalStateException
 	 * 			When this robot is terminated.
 	 * 			| this.isTerminated()
@@ -909,7 +866,7 @@ public class Robot extends Element implements IEnergyHolder
 		assert this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn(): "This robot has not enough enery to turn.";
 		if(this.isTerminated())
 		{
-			throw new IllegalStateException("A terminated robot can not be altered.");
+			throw new IllegalStateException("A terminated robot cannot turn.");
 		}
 		this.setOrientation(this.getOrientation().turn90Clockwise());
 		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToTurn());
@@ -919,13 +876,12 @@ public class Robot extends Element implements IEnergyHolder
 	 * Turns this robot 90 degrees in counter-clockwise direction if the robot has sufficient energy.
 	 * Does not modify the state of the robot if it has insufficient energy.
 	 * 
-	 * @pre		This robot must have enough energy to turn
+	 * @pre		The robot must have enough energy to turn
 	 * 			| this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn()
-	 * @effect	The current orientation of this robot is changed by turning 90 degrees counter-clockwise
-	 * 			if this robot has sufficient energy.
-	 * 			| if(this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn())
-	 * 			| then this.setOrientation(this.getOrientation().turn90CounterClockwise())
-	 * 			|		&& this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND)-getCostToTurn())
+	 * @effect	The current orientation of this robot is changed by turning 90 degrees counter clockwise
+	 * 			| this.setOrientation(this.getOrientation().turn90CounterClockwise())
+	 * @effect	The energy level of this robot is decreased with the cost of one turn
+	 * 	     	| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToTurn())
 	 * @throws	IllegalStateException
 	 * 			When this robot is terminated
 	 * 			| this.isTerminated
@@ -935,7 +891,7 @@ public class Robot extends Element implements IEnergyHolder
 		assert this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn(): "This robot has not enough energy to turn.";
 		if(this.isTerminated())
 		{
-			throw new IllegalStateException("A terminated robot can not be altered.");
+			throw new IllegalStateException("A terminated robot cannot turn.");
 		}
 
 		this.setOrientation(this.getOrientation().turn90CounterClockwise());
@@ -948,7 +904,7 @@ public class Robot extends Element implements IEnergyHolder
 	 * 
 	 * @pre		This robot has enough energy to move
 	 * 			| this.getEnergy(EnergyUnit.WATTSECOND) >= this.getTotalCostToMove()
-	 * @effect	The current position is changed according to the current orientation of this robot if this robot had sufficient energy.
+	 * @effect	The current position is changed according to the current orientation of this robot.
 	 * 			For example, if this robot is facing to the right, he will move one step to the right.
 	 *			| this.setPosition(this.getPosition().getNeighbour(this.getOrientation()))
 	 * @effect	The energy level of this robot is decreased with the cost to move for this robot.
@@ -963,7 +919,7 @@ public class Robot extends Element implements IEnergyHolder
 
 		if(this.isTerminated())
 		{
-			throw new IllegalStateException("A terminated robot can not be altered.");
+			throw new IllegalStateException("A terminated robot cannot move.");
 		}
 		try
 		{
@@ -990,15 +946,6 @@ public class Robot extends Element implements IEnergyHolder
 
 	/**
 	 * Checks whether this robot can share a position with another element.
-	 * 
-	 * @param	other
-	 * 			The element where to this robot may be in conflict.
-	 * @return	True if the other element is not an element
-	 * 			| result == (other == null)
-	 * @return	False if the other element is a.
-	 * 			| result != (other instanceof Wall)
-	 * @return	False if the other element is a robot.
-	 * 			| result != (other instanceof Robot)
 	 */
 	@Override
 	public boolean canSharePositionWith(Element other)
@@ -1007,17 +954,7 @@ public class Robot extends Element implements IEnergyHolder
 	}
 
 	/**
-	 * Energy is transferred from this robot to another IEnergyHolder.
-	 * 
-	 * @param	other
-	 * 			The IEnergyHolder to be given energy.
-	 * @param	amount
-	 * 			The amount of energy to be transferred.
-	 * @see		Interface IEnergyHolder
-	 * 			roboRallyPackage.gameElementClasses.IEnergyHolder#transferEnergy(double)
-	 * @throws	UnsupportedOperationException
-	 * 			Always throw this exception when invoked on a robot.
-	 * 			| this instance of Robot
+	 * Transfers the given amount of energy, expressed in watt-seconds [Ws], from this robot to another IEnergyHolder.
 	 */
 	@Override
 	public void transferEnergy(IEnergyHolder other, double amount) throws IllegalStateException, UnsupportedOperationException
@@ -1030,8 +967,8 @@ public class Robot extends Element implements IEnergyHolder
 	 * This robots maximum energy level is decreased with 4000 Ws if possible, otherwise it is terminated.
 	 * 
 	 * @effect	The robots maximum energy level is decreased with 4000 Ws if possible, otherwise it is terminated.
-	 * 			| if(this.canHaveAsMaxEnergy(this.getMaxEnergy()-4000))
-	 * 			|  then this.setMaxEnergy(this.getMaxEnergy()-4000)
+	 * 			| if(this.canHaveAsMaxEnergy(this.getMaxEnergy() - 4000))
+	 * 			|  then this.setMaxEnergy(this.getMaxEnergy() - 4000)
 	 * 			| else this.terminate()
 	 * @throws	IllegalStateException
 	 * 			When this robot is terminated.
@@ -1099,22 +1036,22 @@ public class Robot extends Element implements IEnergyHolder
      * @effect	The energy the given other robot is decreased with the energy it needs to reach the position where it ends up.
      * 			| other.setEnergy(other.getEnergy(EnergyUnit.WATTSECOND) - other.getEnergyRequiredToReach((new other).getPosititon()))
 	 * @throws	IllegalBoardException
-	 * 			When this robot and the given other robot are not placed on the same board.
-	 * 			| other.getBoard() != this.getBoard()
+	 * 			When this robot and the given other robot are not placed on the same board or they are not standing on any board.
+	 * 			| other.getBoard() != this.getBoard() || this.getBoard() == null || other.getBoard() == null
 	 * @throws	IllegalStateException
-	 * 			When this robot or the other robot are terminated or when both robots are not standing on a board
-	 * 			| this.isTerminated() || other.isTerminated() || this.getBoard() == null || other.getBoard() == null
+	 * 			When this robot or the other robot are terminated
+	 * 			| this.isTerminated() || other.isTerminated()
 	 */
 	public void moveNextTo(Robot other) throws IllegalBoardException,
 											   IllegalStateException
 	{
-		if(other.getBoard() != this.getBoard())
+		if(other.getBoard() != this.getBoard() || this.getBoard() == null || other.getBoard() == null)
 		{
-			throw new IllegalBoardException(other, this.getBoard());
+			throw new IllegalBoardException("Both robots are not standing on the same board or on no board at all.");
 		}
-		if(this.isTerminated() || other.isTerminated() || this.getBoard() == null || other.getBoard() == null)
+		if(this.isTerminated() || other.isTerminated())
 		{
-			throw new IllegalStateException();
+			throw new IllegalStateException("A terminated robot cannot move.");
 		}
 		
 		DijkstraSP thisShortestPaths = new DijkstraSP(this.getBoard().createDiGraphForRobot(this), 0);

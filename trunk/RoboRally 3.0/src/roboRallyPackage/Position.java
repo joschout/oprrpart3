@@ -7,13 +7,13 @@ import be.kuleuven.cs.som.annotate.*;
  * Class representing a position.
  * 
  * @invar	A Position must have valid X coordinate
- * 			| this.canHaveAsXCoord(this.getCoordX())
+ * 			| canHaveAsXCoord(this.getCoordX())
  * @invar	A Position must have a valid Y coordinate
- * 			| this.vanHavaAsYCoord(hits.getCoordY())
+ * 			| canHavaAsYCoord(hits.getCoordY())
  * 
- * @version 26 april 2012
- * @author Jonas Schouterden (r0260385) & Nele Rober (r0262954)
- * 			 Bachelor Ingenieurswetenschappen, KULeuven
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 @Value
 public class Position
@@ -29,6 +29,9 @@ public class Position
 	 * 			| this.setCoordX(coordX)
 	 * @effect	The new Y coordinate of this new position is equal to the given Y coordinate if this is a valid coordinate.
 	 * 			| this.setCoordY(coordY)
+	 * @throws	IllegalPositionException
+	 * 			When either the given X coordinate or the given Y coordinate is unvalid
+	 * 			| canHaveAsXCoordinate(coordX) || canHaveAsYCoordinate(coordY)
 	 * 
 	 */
 	public Position(long coordX, long coordY)
@@ -49,6 +52,7 @@ public class Position
 	
 	/**
 	 * Sets the X coordinate of this position to the given value.
+	 * 
 	 * @param 	coordX
 	 * 			The new X coordinate of this position.
 	 * @post	The new X coordinate of this position is equal to the given X coordinate.
@@ -60,9 +64,9 @@ public class Position
 	@Model
 	private void setCoordX(long coordX) throws IllegalPositionException
 	{
-		if  (! canHaveAsXCoordinate(coordX))
+		if(!canHaveAsXCoordinate(coordX))
 		{
-			throw new IllegalPositionException(new Position(coordX, this.getCoordY()), null);
+			throw new IllegalPositionException(coordX, this.getCoordY(), null);
 		}
 		else
 		{
@@ -72,18 +76,17 @@ public class Position
 	
 	/**
 	 * Checks whether the given X coordinate is a valid X coordinate.
+	 * 
 	 * @param 	coordX
 	 * 			The X coordinate to be checked.
-	 * @return	True if and only if the given X coordinate is nonnegative
-	 * 								and equals or is smaller than the maximal X coordinate.
-	 * 			| result == ((coordX >= 0) && (coordX <= Board.getMaxWidth()))
-	 * @throws	NullPointerException
-	 * 			...
-	 * 			| coordX == null
+	 * @return	False if the given X coordinate is negative.
+	 * 			| result != coordX < 0
+	 * @return	False if the given X coordinate is greater than the maximum width of all boards.
+	 * 			| result != coordX > Board.getMaxWidth()
 	 */
 	public static final boolean canHaveAsXCoordinate(long coordX)
 	{
-		return ((coordX >= 0) && (coordX <= Board.getMaxWidth()));
+		return (coordX >= 0) && (coordX <= Board.getMaxWidth());
 	}
 	
 	/**
@@ -114,14 +117,13 @@ public class Position
 	 * @throws	IllegalPositionException
 	 * 			This position cannot accept the given Y coordinate.
 	 * 			| ! canHaveAsYCoordinate(coordY)
-	 * 
 	 */
 	@Model
 	private void setCoordY(long coordY) throws IllegalPositionException
 	{
-		if  (! canHaveAsYCoordinate(coordY))
+		if(!canHaveAsYCoordinate(coordY))
 		{
-			throw new IllegalPositionException(new Position(this.getCoordX(), coordY), null);
+			throw new IllegalPositionException(this.getCoordX(), coordY, null);
 		}
 		else
 		{
@@ -131,18 +133,17 @@ public class Position
 	
 	/**
 	 * Checks whether the given Y coordinate is a valid Y coordinate.
+	 * 
 	 * @param 	coordY
 	 * 			The Y coordinate to be checked.
-	 * @return	True if and only if the given Y coordinate is nonnegative
-	 * 			 and equals or is smaller than the maximal Y coordinate.
-	 * 			| result == ((coordY >= 0) && (coordX <= Board.getMaxHeight()))
-	 * @throws	NullPointerException
-	 * 			...
-	 * 			| coordY == null
+	 * @return	False if the given Y coordinate is negative
+	 * 			| result != coordY < 0
+	 * @return	False if the given Y coordinate is greater than the maximum height of all boards.
+	 * 			| result != coordY > Board.getMaxHeight()
 	 */
 	public static final boolean canHaveAsYCoordinate(long coordY)
 	{
-		return ((coordY >= 0) && (coordY <= Board.getMaxHeight()));
+		return (coordY >= 0) && (coordY <= Board.getMaxHeight());
 	}
 		
 	/**
@@ -153,23 +154,32 @@ public class Position
 	
 	/**
 	 * Checks whether the given position is a valid position.
+	 * 
 	 * @param 	position
 	 * 			The position to be checked.
-	 * @return	True if and only if the X coordinate of the given position is a valid X coordinate
-	 * 			and the Y coordinate of the given position is a valid Y coordinate.
-	 * 			| result == ((position == null)
-	 * 			|  			 || (canHaveAsXCoordinate(position.getCoordX()) && canHaveAsYCoordinate(position.getCoordY())))
+	 * @return	True if the given position is null
+	 * 			| result == (position == null)
+	 * @effect	False if the given (x,y)-combination is not a valid position.
+	 * 			| result == ((position == null) && isValidPosition(position.getCoordX(), position.getCoordY()))
 	 */
 	public static final boolean isValidPosition(Position position)
 	{
-		try
-		{
-			return canHaveAsXCoordinate(position.getCoordX()) && canHaveAsYCoordinate(position.getCoordY());
-		}
-		catch(NullPointerException exc)
-		{
-			return true;
-		}
+		return position == null || isValidPosition(position.getCoordX(), position.getCoordY());
+	}
+	
+	/**
+	 * Checks whether the given (x,y)-combination is a valid position.
+	 * 
+	 * @param 	position
+	 * 			The position to be checked.
+	 * @return	False if the given X coordinate is not a valid X coordinate.
+	 * 			| result == canHaveAsXCoordinate(coordX)
+	 * @return	False if the given Y coordinate is not a valid Y coordinate.
+	 * 			| result == canHaveAsYCoordinate(coordY)
+	 */
+	public static final boolean isValidPosition(long coordX, long coordY)
+	{
+		return canHaveAsXCoordinate(coordX) && canHaveAsYCoordinate(coordY);
 	}
 	
 
@@ -215,7 +225,7 @@ public class Position
 			}
 			catch(IllegalPositionException exc)
 			{
-				
+				// the calculated position is not a valid position and is not added to the list of neighbours
 			}
 		}
 		
@@ -242,15 +252,15 @@ public class Position
 		// the calculated x coordinate is not a valid x coordinate
 		if(! canHaveAsXCoordinate(this.getCoordX() + steps * orientation.getRelativeMoveCoordinates()[0]))
 		{
-			throw new IllegalPositionException(new Position(this.getCoordX() + steps * orientation.getRelativeMoveCoordinates()[0],
-											   				this.getCoordY() + steps * orientation.getRelativeMoveCoordinates()[1]),
+			throw new IllegalPositionException(this.getCoordX() + steps * orientation.getRelativeMoveCoordinates()[0],
+											   this.getCoordY() + steps * orientation.getRelativeMoveCoordinates()[1],
 											   null);
 		}
 		// the calculated y coordinate is not a valid y coordinate
 		if(! canHaveAsYCoordinate(this.getCoordY() + steps * orientation.getRelativeMoveCoordinates()[1]))
 		{
-			throw new IllegalPositionException(new Position(this.getCoordX() + steps * orientation.getRelativeMoveCoordinates()[0],
-															this.getCoordY() + steps * orientation.getRelativeMoveCoordinates()[1]),
+			throw new IllegalPositionException(this.getCoordX() + steps * orientation.getRelativeMoveCoordinates()[0],
+											   this.getCoordY() + steps * orientation.getRelativeMoveCoordinates()[1],
 							   				   null);
 		}
 		// the calculated position, the givens steps away,  is a valid position; this position is returned.
@@ -286,6 +296,7 @@ public class Position
 			}
 			catch (IllegalPositionException exc)
 			{
+				// you have 'fallen of the board'
 				return false;
 			}
 		}
@@ -311,18 +322,20 @@ public class Position
 	@Override
 	public int hashCode()
 	{
-		return ((int) Math.round(this.getCoordX()^7 + this.getCoordY()^11))%3;
+		return ((int) Math.round(this.getCoordX()^7 + this.getCoordY()^11))%97;
 	}
 	
 	/**
 	 * Checks whether this position is equal to the given OBJECT;
 	 * 
 	 * @return	...
-	 * 			| result == 
-	 * 			|	( (other != null)
-	 * 			|	&& (this.getClass() == other.getClass())
-	 * 			|	&& (this.getCoordX() == (Position other).getCoordX())
-	 * 			|	&& (this.getCoordY() == (Position other).getCoordY())
+	 * 			| result == (other != null)
+	 * @return	...
+	 * 			| result == (this.getClass() == other.getClass())
+	 * @return	...
+	 * 			| result == (this.getCoordX() == ((Position) other).getCoordX())
+	 * @return	...
+	 * 			| result == (this.getCoordY() == ((Position) other).getCoordY())
 	 */
 	@Override
 	public boolean equals(java.lang.Object other)
@@ -337,7 +350,6 @@ public class Position
 		}
 		Position otherPosition = (Position) other;
 		return (this.getCoordX() == otherPosition.getCoordX()) && (this.getCoordY() == otherPosition.getCoordY());
-		
 	}	
 	
 	
@@ -345,7 +357,7 @@ public class Position
 	 * Returns a string representation of this position.
 	 * 
 	 * @return	...
-	 * 			| result == " x coordinate: " + getCoordX() + ";  y coordinate: " + getCoordY()
+	 * 			| result == "Position: (x,y) = (" + this.getCoordX() + "," + this.getCoordY() + ")"
 	 */
 	@Override
 	public java.lang.String toString()

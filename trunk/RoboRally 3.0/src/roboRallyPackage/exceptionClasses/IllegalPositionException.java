@@ -1,38 +1,24 @@
 package roboRallyPackage.exceptionClasses;
 import roboRallyPackage.Board;
-import roboRallyPackage.Position;
 import be.kuleuven.cs.som.annotate.*;
 
 public class IllegalPositionException extends RuntimeException
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	public IllegalPositionException(Position position, Board board)
+	// note: do not ask a position as formal argument of the constructor
+	//       for, this position may be an illegal position that cannot be made without invoking this exception
+	//		 this will lead to an endless loop of illegal positions and IllegalPositionExceptions
+	public IllegalPositionException(long coordX, long coordY, Board board)
 	{
-		if(position != null)
-		{
-			this.coordX = position.getCoordX();
-			this.coordY = position.getCoordY();
-		}
-		else
-		{
-			this.coordX = -1;
-			this.coordY = -1;
-		}
+		this.coordX = coordX;
+		this.coordY = coordY;
 		
-		if(board != null)
-		{
-			this.boardWidth = board.getWidth();
-			this.boardHeight = board.getHeight();
-		}
-		else
-		{
-			this.boardWidth = Board.getMaxWidth();
-			this.boardHeight = Board.getMaxHeight();
-		}
+		this.board = board;
+	}
+	
+	public IllegalPositionException(String toStringText)
+	{
 	}
 	
 	@Basic
@@ -50,26 +36,22 @@ public class IllegalPositionException extends RuntimeException
 	}
 	
 	private long coordY = 0;
-	
-	@Basic
-	public long getBoardWidth()
-	{
-		return this.boardWidth;
-	}
-	
-	private long boardWidth = 0;
 
 	@Basic
-	public long getBoardHeight()
+	public Board getBoard()
 	{
-		return this.boardHeight;
+		return this.board;
 	}
 
-	private long boardHeight = 0;
+	private Board board = null;
 	
 	@Override
 	public String toString()
 	{
-		return "The position with coordinates (" + this.getCoordX() + "," + this.getCoordY() + ")" + " is not a valid position.";
+		if(this.getBoard() == null)
+		{
+			return "The position with coordinates (" + this.getCoordX() + "," + this.getCoordY() + ")" + " is not a valid position.";
+		}
+		return "The position with coordinates (" + this.getCoordX() + "," + this.getCoordY() + ")" + " is not a valid position on the given board.";
 	}
 }

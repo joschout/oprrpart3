@@ -1,28 +1,46 @@
+
 TO DO:
 
-1. kijk of overal in de doc this. bijstaat
-2. System.out.println maken wanneer je de robot wil laten bewegen/draaien en je te weinig energie hebt
-3. kijken wanneer een lijst teruggeven en wanneer een clone
-4. representatie-invarianten! hb p 420
-6. Liskov
-7. IEnergyHolder verder naar EnergyAmount/-Unit uitwerken ipv enkel getters
-8. iterator van board
-9. programs
-10. element-is-in-conflict met van Item
-11. robot moven naar een plaats waar een ander Item staat
-12. IllegalSyntaxException
-13. een variabele voor de mawimale maximum energie van een robot in op te slaan, in plaats van 20000 3-4 keer te herhalen (ook in de doc!)
-14. invar enAmount: isValidEnergy
-
-// momenteel mee bezig
-10. surpriseBox
-11. Robot: energy omzetten naar EnergyAmount/-Unit
+* documentatie (zie hieronder)
+* iterator
+* programma's
+* IllegalSyntaxException
+* representatie-invarianten! hb p 420
+* testen !
+* klassenschema
+* element-is-in-conflict met van Item: robot moven naar een plaats waar een ander Item staat
+* element: setBoard() verantwoordelijkheid zou bij board moeten liggen
+* kijken wanneer een lijst teruggeven en wanneer een clone
+* togel-methodes verwijderen (oa in Surprisebox)
+* een variabele voor de mawimale maximum energie van een robot in op te slaan, in plaats van 20000 3-4 keer te herhalen (ook in de doc!)
+* invar enAmount: isValidEnergy
+* Strings meegeven aan exceptions (hoeven geen elementen enz te hebben)
+* IEnergyHolder verder naar EnergyAmount/-Unit uitwerken ipv enkel getters
 
 
+MEE BEZIG:
 
-VRAGEN:
-1. Iterator in Board; set retourneren of Iterator; hoe doe je iterator?
-    => mag condition, mag ook anders
-2. Is het nodig om in de condions een robot mee te geven?
-3. Wanneer een clone teruggeven?
-4. 
+* volgorde booleaanse vgl.
+  al gedaan:
+  	- position
+	- IEnergyHolder
+	- element
+	- item
+	- battery
+	- repair kit
+	- surprise box
+	- wall
+	- robot
+* Liskov, .this, documentatie nalezen
+  al gedaan:
+  	- position
+	- IEnergyHolder
+	- element
+	- item
+	- battery
+	- repair kit
+	- surprise box
+	- wall
+	- robot
+	
+	

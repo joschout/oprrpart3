@@ -1,40 +1,61 @@
-/**
- * 
- */
+
 package roboRallyPackage.gameElementClasses;
+import roboRallyPackage.Board;
+import roboRallyPackage.Position;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- *A class of repair kits. Extends Item.
- *
- * @invar	The current energy level of each RepairKit must be a valid energy level.
- * 			| this.canHaveAsEnergy(this.getCurrentEnergy())
+ * A class of repair kits. Extends Item.
  * 
- * @author Nele
- *
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public class RepairKit extends Item implements IEnergyHolder
 {
 	/**
-	 * Initialize this new repair kit with the given amount of energy and the given weight.
+	 * Initialize this new repair kit with the given position, board, amount of energy [Ws] and weight [g].
 	 * 
+	 * @param 	position
+	 * 			The position for this new element.
+	 * @param	board
+	 * 			The board on which this new element will be placed.
 	 * @param 	energyAmount
-	 * 			The amount of energy for this new repair kit in watt-seconds (Ws).
+	 * 			The amount of energy for this new repair kit, expressed in watt-seconds [Ws].
 	 * @param 	weight
-	 * 			The weight for this new repair kit in grams.
+	 * 			The weight for this new repair kit, expressed in grams [g].
 	 * @pre		The given initial amount of energy must be a valid amount of energy.
 	 * 			| this.canHaveAsEnergy(energyAmount)
+	 * @effect	This new repair kit is initialized as an Item with the given position, board and weight.
+	 * 			| super(position, board, weight)
 	 * @effect	...
 	 * 			| this.setEnergy(energyAmount)
 	 */
-	public RepairKit(double energyAmount, int weight)
+	public RepairKit(Position position, Board board, double energyAmount, int weight)
 	{
-		super(weight);
+		super(position, board, weight);
 		this.setEnergy(energyAmount);
 	}
 	
 	/**
-	 * Returns the variable representing the current amount if energy of this battery.
+	 * Initialize this new repair kit with the given amount of energy [Ws] and weight [g].
+	 * 
+	 * @param 	energyAmount
+	 * 			The amount of energy for this new repair kit, expressed in watt-seconds [Ws].
+	 * @param 	weight
+	 * 			The weight for this new repair kit, expressed in grams [g].
+	 * @pre		The given initial amount of energy must be a valid amount of energy.
+	 * 			| this.canHaveAsEnergy(energyAmount)
+	 * @effect	...
+	 * 			| this(null, null, energyAmount, weight)
+	 */
+	public RepairKit(double energyAmount, int weight)
+	{
+		this(null, null, energyAmount, weight);
+	}
+	
+	/**
+	 * Returns the variable representing the current amount if energy of this battery in the given energy unit.
 	 */
 	@Basic @Override
 	public double getEnergy(EnergyUnit unit)
@@ -43,16 +64,16 @@ public class RepairKit extends Item implements IEnergyHolder
 	}
 
 	/**
-	 * Sets the amount of energy of this repair kit to the given amount of energy, expressed in watt-seconds (Ws).
+	 * Sets the amount of energy of this repair kit to the given amount of energy, expressed in watt-seconds [Ws].
 	 */
 	@Override
 	public void setEnergy(double energyAmount) throws IllegalStateException
 	{
-		assert this.canHaveAsEnergy(energyAmount): "The given amount of energy is not a valid amount of energy for a repair kit.";
+		assert this.canHaveAsEnergy(energyAmount): "The given amount of energy is not a valid amount of energy for this repair kit.";
 		
 		if(this.isTerminated())
 		{
-			throw new IllegalStateException("A terminated repair kit cannot be altered.");
+			throw new IllegalStateException("The energy of a terminated repair kit cannot be altered.");
 		}
 		
 		this.energyAmount = new EnergyAmount(energyAmount, EnergyUnit.WATTSECOND);
@@ -60,22 +81,22 @@ public class RepairKit extends Item implements IEnergyHolder
 	}
 	
 	/**
-	 * Checks whether the given amount of energy (expressed in watt-seconds) is a valid amount of energy for this repair kit.
+	 * Checks whether the given amount of energy, expressed in Watt-second [Ws], is a valid amount of energy for this repair kit.
 	 */
 	@Override
 	public boolean canHaveAsEnergy(double energy)
 	{
-		return (EnergyAmount.isValidEnergyAmount(energy) && (energy <= this.getMaxEnergy()));
+		return ((energy <= this.getMaxEnergy()) && EnergyAmount.isValidEnergyAmount(energy));
 	}
 
 	/**
-	 * Variable representing the current amount if energy for this repair kit, expressed in watt-seconds (Ws).
+	 * Variable representing the current amount if energy for this repair kit, expressed in watt-seconds [Ws].
 	 */
 	private EnergyAmount energyAmount = EnergyAmount.WATTSECOND_0;
 	
 
 	/**
-	 * Returns the variable representing the maximum amount of energy this repair kit can have, expressed in watt-seconds (Ws).
+	 * Returns the variable representing the maximum amount of energy this repair kit can have, expressed in watt-seconds [Ws].
 	 */
 	@Basic @Immutable @Override
 	public final double getMaxEnergy()
@@ -84,11 +105,7 @@ public class RepairKit extends Item implements IEnergyHolder
 	}
 
 	/**
-	 * Sets the maximum energy level of this repair kit to the given maximum energy level, expressed in watt-seconds (Ws).
-	 * 
-	 * @throws	UnsupportedOperationException
-	 * 			Always throw this exception when invoked on a repair kit
-	 * 			| this instance of RepairKit
+	 * Sets the maximum energy level of this repair kit to the given maximum energy level, expressed in watt-seconds [Ws].
 	 */
 	@Override
 	public void setMaxEnergy(double maxEnergyAmount) throws IllegalStateException,
@@ -98,7 +115,7 @@ public class RepairKit extends Item implements IEnergyHolder
 	}
 
 	/**
-	 * Check whether the given maximum energy is a valid maximum energy for this repair kit.
+	 * Check whether the given maximum energy, expressed in watt-second [Ws], is a valid maximum energy for this repair kit.
 	 */
 	@Override
 	public boolean canHaveAsMaxEnergy(double maxEnergy)
@@ -107,7 +124,7 @@ public class RepairKit extends Item implements IEnergyHolder
 	}
 
 	/**
-	 * Variable representing the maximum amount of energy this repair kit can have, expressed in watt-seconds (Ws).
+	 * Variable representing the maximum amount of energy this repair kit can have, expressed in watt-seconds [Ws].
 	 */
 	private static final EnergyAmount maxEnergyAmount = EnergyAmount.WATTSECOND_DOUBLE_MAXVALUE;
 
@@ -121,7 +138,7 @@ public class RepairKit extends Item implements IEnergyHolder
 	}
 
 	/**
-	 * Recharges this repair kit with the given amount of energy, expressed in Watt-second.
+	 * Recharges this repair kit with the given amount of energy, expressed in Watt-second [Ws].
 	 */
 	@Override
 	public void recharge(double amount) throws IllegalStateException
@@ -130,13 +147,13 @@ public class RepairKit extends Item implements IEnergyHolder
 		
 		if(this.isTerminated())
 		{
-			throw new IllegalStateException("A terminated repairkit can not be altered.");
+			throw new IllegalStateException("A terminated repairkit cannot be recharged.");
 		}
 		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) + amount);
 	}
 
 	/**
-	 * Checks whether the given amount of energy  (expressed in watt-seconds (Ws)) can be added to the current energy level of this repair kit.
+	 * Checks whether the given amount of energy, expressed in watt-seconds [Ws], can be added to the current energy level of this repair kit.
 	 */
 	@Override
 	public boolean canAcceptForRecharge(double amount)
@@ -152,7 +169,7 @@ public class RepairKit extends Item implements IEnergyHolder
 	 * 			The IEnergyHolder to be given energy.
 	 * @param	amount
 	 * 			The amount of energy to be transferred, expressed Watt-second [Ws].
-	 * @pre		The amount to be transferred can not be greater than the amount of energy this repair kit has.
+	 * @pre		The amount to be transferred cannot be greater than the amount of energy this repair kit has.
 	 * 			| amount <= this.getEnergy(EnergyUnit.WATTSECOND)
 	 * @pre		The IEnergyHolder must be able to alter its maximum energy level with half of the given amount.
 	 * 			| other.canHaveAsMaxEnergy(other.getMaxEnergy() + (amount/2))
@@ -169,13 +186,9 @@ public class RepairKit extends Item implements IEnergyHolder
 		assert(amount <= this.getEnergy(EnergyUnit.WATTSECOND)):"This repair kit cannot transfer more energy than it has.";
 		assert(other.canHaveAsMaxEnergy(other.getMaxEnergy() + (amount/2))):"The other IEnergyHolder cannot increase its maximum energy level the energy to be transferred.";
 		
-		if(this.isTerminated())
+		if(this.isTerminated() || other.isTerminated())
 		{
-			throw new IllegalStateException("A terminated repair kit can not be altered.");
-		}
-		if(other.isTerminated())
-		{
-			throw new IllegalStateException("A terminated IEnergyHolder can not be altered.");
+			throw new IllegalStateException("Either this repair kit or the given IEnergyHolder is terminated. The IEnergyHolder cannot be repaired by the repair kit.");
 		}
 		
 		try
@@ -191,11 +204,7 @@ public class RepairKit extends Item implements IEnergyHolder
 	}
 	
 	/**
-	 * Energy is transferred from this robot to another IEnergyHolder.
-	 * 
-	 * @throws	UnsupportedOperationException
-	 * 			Always throw this exception when invoked on a repair kit.
-	 * 			| this instance of RepairKit
+	 * Transfers the given amount of energy, expressed in watt-seconds [Ws], from this repair kit to another IEnergyHolder.
 	 */
 	@Override
 	public void transferEnergy(IEnergyHolder other, double amount) throws IllegalStateException, UnsupportedOperationException
@@ -205,7 +214,7 @@ public class RepairKit extends Item implements IEnergyHolder
 
 	
 	/**
-	 * A robot uses this repair kit. As much energy as possible is transferred from this repair kit to the maximum energy level of the robot.
+	 * The given robot uses this repair kit. As much energy as possible is transferred from this repair kit to the maximum energy level of the robot.
 	 * 
 	 * @param	robot
 	 * 			The robot that uses this repair kit.
@@ -213,14 +222,11 @@ public class RepairKit extends Item implements IEnergyHolder
 	 * 			| if(robot.canHaveAsMaxEnergy(robot.getMaxEnergy() + (this.getEnergy(EnergyUnit.WATTSECOND)/2)))
 	 * 			|	then this.repair(robot, this.getEnergy(EnergyUnit.WATTSECOND))
 	 * 			| else this.repair(robot, robot.getMaxEnergy() - robot.getEnergy(EnergyUnit.WATTSECOND))
-	 * @throws	IllegalStateException
-	 * 			...
-	 * 			| this.isTerminated() || robot.isTerminates()
 	 */
 	@Override
-	public void use(Robot robot)
+	public void use(Robot robot) throws IllegalStateException
 	{
-		assert robot.getPossessions().contains(this): "The given robot does is not carrying this item.";
+		assert robot.getPossessions().contains(this): "The given robot is not carrying this item.";
 		
 		if(this.isTerminated())
 		{
