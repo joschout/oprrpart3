@@ -42,4 +42,13 @@ public class And extends CombinedCondition
 	{
 		return this.conditions;
 	}
+	@Override
+	public String toString(){
+		String result ="(and";
+		for(Condition condition: this.getConditions()){
+			result =result  + "\n" + "  " +condition.toString();
+		}
+		result =result + "\n" + ")";
+		return result;
+	}
 }

@@ -1,6 +1,7 @@
 
 package roboRallyPackage.guiClasses;
 
+import java.io.BufferedWriter;
 import java.io.Writer;
 import java.util.Set;
 
@@ -761,7 +762,11 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	@Override
 	public void prettyPrintProgram(Robot robot, Writer writer)
 	{
-		
+	if(robot.getProgram() == null)
+		System.out.println("This robot does not yet contain a program in its memory.");
+//	else{
+//		Writer writer = new BufferedWriter(arg0)
+//	}
 	}
 
 	/**
