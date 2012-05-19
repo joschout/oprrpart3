@@ -15,6 +15,10 @@ public class IllegalElementCombinationException extends RuntimeException
 		this.oldElement = oldElement;
 	}
 	
+	public IllegalElementCombinationException(String toStringText)
+	{
+	}
+	
 	@Basic
 	public Element getNewElement()
 	{

@@ -16,6 +16,10 @@ public class IllegalBoardException extends RuntimeException
 		this.board = board;
 	}
 	
+	public IllegalBoardException(String toStrinText)
+	{
+	}
+	
 	@Basic
 	public Element getelement()
 	{

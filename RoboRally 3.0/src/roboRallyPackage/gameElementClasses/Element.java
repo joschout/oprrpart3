@@ -6,32 +6,36 @@ import be.kuleuven.cs.som.annotate.*;
 
 /**
  * @invar	Each element must have either no position at all or exactly one valid position.
- *			(the fact that position == null is okay, it is checked in this.getBoard().isValidPositionOnBoard() and Position.isValidPosition())
- * 			| this.getBoard() != null && this.getBoard().isValidPositionOnBoard(this.getPosition())
- * 			|  || this.getBoard() == null && Position.isValidPosition(this.getPosition())
+ * 			It is possible to have a position without a board.
+ * 			But when an element has a board, its position must also be a valid position on that board.
+ * 			| (this.getBoard() == null && Position.isValidPosition(this.getPosition()))
+ * 			|  || (this.getBoard() != null && this.getBoard().isValidPositionOnBoard(this.getPosition()))
  * @invar	Each element must have either no board at all or exactly one valid board.
+ * 			If an element has a board it must have a valid position as well.
  * 			| this.getBoard() == null
- * 			|  || ! this.getBoard().isTerminated()
+ * 			|  || (!this.getBoard().isTerminated() && this.getBoard().isValidPositionOnBoard(this.getPosition()))
+ * @invar	A terminated element cannot have a board or a position
+ * 			| ! this.isTerminated()
+ * 			|  || (this.isTerminated() && this.getBoard() == null && this.getPosition() == null)
  * 
- * @version 26 april 2012
- * @author Jonas Schouterden (r0260385) & Nele Rober (r0262954)
- * 			 Bachelor Ingenieurswetenschappen, KULeuven
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  *
  */
 public abstract class Element extends Terminatable
 {
 	/**
-	 * Initialize this new element with given position and board.
+	 * Initialize this new element with the given position and board if these are valid.
 	 * 
 	 * @param 	position
 	 * 			The position for this new element.
 	 * @param	board
-	 * 			The board on which this new element is placed.
+	 * 			The board on which this new element will be placed.
 	 * @effect	The new position of this new element is equal to the given element.
 	 * 			| this.setPosition(position)
 	 * @effect	The new board of this new element is equal to the given element.
 	 * 			| this.setBoard(board)
-	 * 
 	 */
 	public Element(Position position, Board board)
 	{
@@ -93,10 +97,11 @@ public abstract class Element extends Terminatable
 	 * @post	...
 	 * 			| (new this).getPosition() == position
 	 * @throws	IllegalPositionException
-	 * 			The given position is not a valid position
+	 * 			When he given position is not a valid position
 	 * 			| ! (this.canHavePosition(position))
 	 * @throws	IllegalStateException
-	 * 			| robot.getBoard() != this || robot.isTerminated()
+	 * 			When this element is terminated.
+	 * 			| robot.isTerminated()
 	 */
 	@Model
 	public void setPosition(Position position) throws IllegalPositionException,
@@ -108,7 +113,7 @@ public abstract class Element extends Terminatable
 		}
 		else if(!this.canHavePosition(position))
 		{
-			throw new IllegalPositionException(position, this.getBoard());
+			throw new IllegalPositionException(position.getCoordX(), position.getCoordY(), this.getBoard());
 		}
 		else
 		{
@@ -122,25 +127,19 @@ public abstract class Element extends Terminatable
 	 * @param	position
 	 * 			The position to be checked.
 	 * @return	...
-	 * 			| if(this.getBoard() != null && this.getBoard().isValidPositionOnBoard(position)) then result == true
+	 * 			| if(this.getBoard() == null) then result == Position.isValidPosition(position)
 	 * @return	...
-	 * 			| if(this.getBoard() == null && Position.isValidPosition(position)) then result == true
-	 * @return	...
-	 * 			| result == false
+	 * 			| if(this.getBoard() != null) then result == this.getBoard().isValidPositionOnBoard(position)
 	 */
 	public boolean canHavePosition(Position position)
 	{
-		// the element has no board, the position must satisfy the demands a positions asks.
-		if(this.getBoard() != null && this.getBoard().isValidPositionOnBoard(position))
+		// this element has no board, the position must satisfy the demands a positions asks.
+		if(this.getBoard() == null)
 		{
-			return true;
+			return Position.isValidPosition(position);
 		}
-		// the element does have a board, the position must satisfy the demands a board asks concerning a position.
-		if(this.getBoard() == null && Position.isValidPosition(position))
-		{
-			return true;
-		}
-		return false;
+		// this element does have a board, the position must satisfy the demands a board asks concerning a position.
+		return this.getBoard().isValidPositionOnBoard(position);
 	}
 
 	/**
@@ -172,7 +171,6 @@ public abstract class Element extends Terminatable
 	
 	/**
 	 * Sets the board of this element to the given board.
-	 * This element is not allowed to be therminated. In that case nothing changes.
 	 * 
 	 * @param 	newBoard
 	 * 			The new board of this element.
@@ -184,11 +182,11 @@ public abstract class Element extends Terminatable
 	 * 			| (new this).getBoard().getElements().contains(this)
 	 * @throws	IllegalStateException
 	 * 			...
-	 * 			| this.isTerminated()
+	 * 			| this.isTerminated() || newBoard.isTerminated()
 	 */
 	@Model
 	public void setBoard(Board newBoard) throws IllegalStateException
-	{
+	{		
 		Board oldBoard = this.getBoard();
 		
 		// this element already has a board that is different from the new board.

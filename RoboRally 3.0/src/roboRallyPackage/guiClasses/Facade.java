@@ -249,12 +249,18 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	public Robot createRobot(int orientation, double initialEnergy)
 	{
 		Orientation ori = Orientation.convertIntToOrientation(orientation);
-		double falseMaxEnergy = -1;
-		Robot robot = new Robot(null, null, ori, initialEnergy, falseMaxEnergy);
 		
-		if(Robot.canHaveAsOrientation(ori) && robot.canHaveAsEnergy(initialEnergy))
+		if(Robot.canHaveAsOrientation(ori))
 		{
-			return robot;
+			Robot robot = new Robot(null, null, ori, initialEnergy, (double) 20000);
+			if(robot.canHaveAsEnergy(initialEnergy))
+			{
+				return robot;
+			}
+			else
+			{
+				return null;
+			}
 		}
 		else
 		{
