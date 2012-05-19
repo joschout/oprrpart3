@@ -3,6 +3,11 @@ package roboRallyPackage.gameElementClasses;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
+ * @invar	...
+ * 			| isValidEnergyAmount(this.getAmount())
+ * @invar	...
+ * 			| isValidEnergyUnit(this.getUnit())
+ * 
  * 
  * @author Jonas
  *
@@ -13,13 +18,14 @@ public class EnergyAmount implements Comparable<EnergyAmount> {
 	/*
 	 * 
 	 */
+	@Raw
 	public EnergyAmount(Double amount, EnergyUnit unit){
 		assert isValidEnergyAmount(amount);
 		assert isValidEnergyUnit(unit);
 		this.amount = amount;
 		this.unit = unit;
 	}
-	
+
 	public final static EnergyAmount WATTSECOND_0 =  new EnergyAmount((double)0, EnergyUnit.WATTSECOND);
 	
 	public final static EnergyAmount WATTSECOND_5000 =  new EnergyAmount((double)5000, EnergyUnit.WATTSECOND);
@@ -32,9 +38,19 @@ public class EnergyAmount implements Comparable<EnergyAmount> {
 	 * 
 	 */
 	@Override
-	public int compareTo(EnergyAmount arg0) {
-		// TODO Auto-generated method stub
+	public int compareTo(EnergyAmount otherAmount) {
+		assert otherAmount != null;
+		assert isValidEnergyAmount(otherAmount.getAmount());
+		assert isValidEnergyUnit(otherAmount.getUnit());
+		if(this.getAmountInWattSecond() < otherAmount.getAmountInWattSecond())
+			return -1;
+		if(this.getAmountInWattSecond() == otherAmount.getAmountInWattSecond())
+			return 0;
+		if(this.getAmountInWattSecond() > otherAmount.getAmountInWattSecond())
+			return 1;
+		assert false;
 		return 0;
+		
 	}
 
 	/*

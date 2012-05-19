@@ -35,4 +35,15 @@ public class Sequence extends CombinedCommand
 			command.execute();
 		}
 	}
+	@Override
+	public String toString(){
+		String result ="(seq";
+		for(Command command: this.getSeqCommands()){
+			result =result  + "\n" + "  " +command.toString();
+		}
+		result =result + "\n" + ")";
+		return result;
+
+	}
+	
 }

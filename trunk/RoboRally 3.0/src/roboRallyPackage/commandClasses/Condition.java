@@ -10,4 +10,5 @@ package roboRallyPackage.commandClasses;
 public abstract class Condition extends Program
 {
 	public abstract boolean results();
+
 }

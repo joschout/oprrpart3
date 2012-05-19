@@ -45,4 +45,10 @@ public class While extends CombinedCommand
 			this.getWhileCommand().execute();
 		}
 	}
+	@Override
+	public String toString(){
+		return "(while" + "\n" + "  " + this.getCondition().toString()
+				+ "\n" + "  " + this.getWhileCommand().toString() 
+				+ "\n" +")";
+	}
 }

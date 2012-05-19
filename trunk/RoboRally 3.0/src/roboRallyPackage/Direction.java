@@ -10,5 +10,19 @@ package roboRallyPackage;
  */
 public enum Direction
 {
-	CLOCKWISE, COUNTER_CLOCKWISE;
+	CLOCKWISE {
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return "clockwise";
+		}
+	}, COUNTER_CLOCKWISE {
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return "counterclockwise";
+		}
+	};
+	
+	public abstract String toString();
 }

@@ -21,4 +21,8 @@ public class Move extends BasicCommand
 	{
 		this.getRobot().moveOneStep();
 	}
+	@Override
+	public String toString(){
+		return "(move)";
+	}
 }
