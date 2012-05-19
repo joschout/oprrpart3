@@ -41,4 +41,13 @@ public class Or extends CombinedCondition
 	{
 		return this.conditions;
 	}
+	@Override
+	public String toString(){
+		String result ="(or";
+		for(Condition condition: this.getConditions()){
+			result =result  + "\n" + "  " +condition.toString();
+		}
+		result =result + "\n" + ")";
+		return result;
+	}
 }

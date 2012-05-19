@@ -22,4 +22,8 @@ public class True extends BasicCondition
 	{
 		return true;
 	}
+	@Override
+	public String toString(){
+		return "(true)";
+	}
 }

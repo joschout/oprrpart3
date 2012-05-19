@@ -16,13 +16,24 @@ public class EnergyAtLeast extends BasicCondition
 	public EnergyAtLeast(Robot robot, double energy)
 	{
 		super(robot);
-		this.energy = energy;
+		this.energyCondition = new EnergyAmount(energy, EnergyUnit.WATTSECOND);
+		
 	}
 	
-	private double energy;
+	private EnergyAmount energyCondition;
+	
+	public double getEnergyConditionWattSecond(){
+		return energyCondition.getAmountInWattSecond();
+	}
 
 	public boolean results() 
 	{
-		return (this.getRobot().getEnergy() >= energy);
+		return (this.getRobot().getEnergy(EnergyUnit.WATTSECOND) >= energyCondition.getAmountInWattSecond());
+	}
+	
+	@Override
+	public String toString(){
+		return"(energy-at-least " + this.getEnergyConditionWattSecond() +")";
+		
 	}
 }

@@ -30,4 +30,8 @@ public class CanHitRobot extends BasicCondition
 		}
 		return false;
 	}
+	@Override
+	public String toString(){
+		return "(can-hit-robot)";
+	}
 }

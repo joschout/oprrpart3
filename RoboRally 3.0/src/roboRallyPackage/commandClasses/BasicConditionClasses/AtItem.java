@@ -29,4 +29,9 @@ public class AtItem extends BasicCondition
 		}
 		return false;
 	}
+	@Override
+	public String toString(){
+		return "(at-item)";
+		
+	}
 }

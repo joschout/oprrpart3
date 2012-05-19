@@ -2,6 +2,7 @@
 package roboRallyPackage.gameElementClasses;
 
 import roboRallyPackage.*;
+import roboRallyPackage.commandClasses.Program;
 import roboRallyPackage.exceptionClasses.IllegalBoardException;
 import roboRallyPackage.exceptionClasses.IllegalElementCombinationException;
 import roboRallyPackage.exceptionClasses.IllegalPositionException;
@@ -1179,5 +1180,17 @@ public class Robot extends Element implements IEnergyHolder
 		other.setOrientation(otherBestOrientatedPosition.getOrientation());
 		other.setEnergy(other.getEnergy(EnergyUnit.WATTSECOND) - otherShortestPaths.distTo(otherVertices.indexOf(otherBestOrientatedPosition)));		
 	}	
+	
+	private Program program;
+
+	public Program getProgram() {
+		return program;
+	}
+
+	public void setProgram(Program program) {
+		this.program = program;
+	}
+	
+	
 }
 

@@ -34,4 +34,8 @@ public class Not extends CombinedCondition
 	{
 		return this.condition;
 	}
+	@Override
+	public String toString(){
+		return "(not " + this.getCondition().toString()+ ")";
+	}
 }
