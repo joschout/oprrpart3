@@ -171,23 +171,23 @@ public class Parser
 	{
 		if(inputProgram.equals("(move)"))
 		{ 
-			return new Move();
+			return new Move(programLevel);
 		}
 		if(inputProgram.equals("(turnclockwise)"))
 		{
-			return new Turn(Direction.CLOCKWISE);
+			return new Turn(programLevel,Direction.CLOCKWISE);
 		}
 		if(inputProgram.equals("(turncounterclockwise)"))
 		{
-			return new Turn(Direction.COUNTER_CLOCKWISE);
+			return new Turn(programLevel,Direction.COUNTER_CLOCKWISE);
 		}
 		if(inputProgram.equals("(shoot)"))
 		{
-			return new Shoot();
+			return new Shoot(programLevel);
 		}
 		if(inputProgram.equals("(pick-up-and-use)"))
 		{
-			return new PickupAndUse();
+			return new PickupAndUse(programLevel);
 		}
 		assert false;
 		return null;
@@ -218,7 +218,7 @@ public class Parser
 				}
 			}
 
-			return new Sequence( parametersSeqAsCommands);
+			return new Sequence(programLevel, parametersSeqAsCommands);
 		}
 
 		if(inputProgramString.startsWith("(while"))
@@ -240,7 +240,7 @@ public class Parser
 			if(parametersWhileAsPrograms.size() == 2 && (parametersWhileAsPrograms.get(0) instanceof Condition)
 					&& (parametersWhileAsPrograms.get(1) instanceof Command))
 			{
-				return new While( (Condition) parametersWhileAsPrograms.get(0),
+				return new While(programLevel, (Condition) parametersWhileAsPrograms.get(0),
 												  (Command) parametersWhileAsPrograms.get(1));
 			}
 			else
@@ -269,7 +269,7 @@ public class Parser
 					&& (parametersIfAsPrograms.get(1) instanceof Command)
 					&& (parametersIfAsPrograms.get(2) instanceof Command))
 			{
-				return new If( (Condition) parametersIfAsPrograms.get(0),
+				return new If(programLevel, (Condition) parametersIfAsPrograms.get(0),
 						(Command) parametersIfAsPrograms.get(1),
 						(Command) parametersIfAsPrograms.get(2));
 			}
@@ -287,7 +287,7 @@ public class Parser
 	{
 		if(inputProgram.equals("(true)"))
 		{
-			return new True();
+			return new True(programLevel);
 		}
 		if(inputProgram.startsWith("(energy-at-least"))
 		{
@@ -309,7 +309,7 @@ public class Parser
 			// check whether the energyValue is a valid energy amount; if not an exception is thrown
 			if (EnergyAmount.isValidEnergyAmount(energyValue))
 			{
-				return new EnergyAtLeast(robot, energyValue);
+				return new EnergyAtLeast(programLevel,robot, energyValue);
 			}
 			else
 			{
@@ -318,15 +318,15 @@ public class Parser
 		}
 		if(inputProgram.equals("(at-item)"))
 		{
-			return new AtItem(robot);
+			return new AtItem(programLevel,robot);
 		}
 		if(inputProgram.equals("(can-hit-robot)"))
 		{
-			return new CanHitRobot(robot);
+			return new CanHitRobot(programLevel,robot);
 		}
 		if(inputProgram.equals("(wall)"))
 		{
-			return new NextToWall(robot);
+			return new NextToWall(programLevel,robot);
 		}
 		assert false;
 		return null;
@@ -357,7 +357,7 @@ public class Parser
 				}
 			}
 
-			return new And( parametersAndAsConditions);
+			return new And(programLevel, parametersAndAsConditions);
 		}
 
 		if(inputProgramString.startsWith("(or"))
@@ -383,7 +383,7 @@ public class Parser
 				}
 			}
 
-			return new Or( parametersOrAsConditions);
+			return new Or(programLevel, parametersOrAsConditions);
 		}
 
 		if(inputProgramString.startsWith("(not"))
@@ -399,7 +399,7 @@ public class Parser
 			// check whether the given list of programs contains only 1 programs and this programs is a condition; if not throw an exception
 			if(subProgramStrings.size() == 1 && parametersNotAsProgram instanceof Condition)
 			{
-				return new Not( (Condition) parametersNotAsProgram);
+				return new Not(programLevel, (Condition) parametersNotAsProgram);
 			}
 			else
 			{
