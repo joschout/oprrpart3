@@ -60,7 +60,7 @@ public class Sequence extends CombinedCommand
 	{
 		String result ="(seq";
 		String indentation = "";
-		for(int i = 0; i <= this.getProgramLevel(); i++){
+		for(int i = 1; i <= this.getProgramLevel(); i++){
 			indentation = indentation + "  ";
 		}
 		for(Command command: this.getSeqCommands())
