@@ -23,4 +23,10 @@ public abstract class Program
 	public void executeStep()
 	{
 	}
+	
+	public int programLevel;
+	
+	public int getProgramLevel(){
+		return programLevel;
+	}
 }

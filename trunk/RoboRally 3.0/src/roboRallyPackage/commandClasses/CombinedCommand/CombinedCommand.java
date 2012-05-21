@@ -12,9 +12,9 @@ import roboRallyPackage.commandClasses.*;
 public abstract class CombinedCommand extends Command
 {
 	
-	public CombinedCommand()
+	public CombinedCommand(int programLevel)
 	{
-		
+		this.programLevel=programLevel;
 	}
 //	public CombinedCommand(Robot robot)
 //	{

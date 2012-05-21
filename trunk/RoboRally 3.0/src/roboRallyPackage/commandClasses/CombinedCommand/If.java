@@ -12,9 +12,9 @@ import roboRallyPackage.commandClasses.*;
 public class If extends CombinedCommand
 {
 	
-	public If( Condition condition, Command ifCommand, Command elseCommand)
+	public If(int programLevel,Condition condition, Command ifCommand, Command elseCommand)
 	{
-		
+		super(programLevel);
 		this.condition = condition;
 		this.ifCommand = ifCommand;
 		this.elseCommand = elseCommand;
@@ -75,9 +75,14 @@ public class If extends CombinedCommand
 	@Override
 	public String toString()
 	{
-		return "(if"+ "\n" + "  " + this.getCondition().toString()
-				+ "\n" + "  " + this.getIfCommand().toString()
-				+ "\n" + "  " + this.getElseCommand().toString()
-				+ "\n" +  ")";
+		String indentation = "";
+		for(int i = 0; i <= this.getProgramLevel(); i++){
+			indentation = indentation + "  ";
+		}
+		return "(if"
+				+ "\n" + indentation+ "  " + this.getCondition().toString()
+				+ "\n" + indentation+"  " + this.getIfCommand().toString()
+				+ "\n" + indentation+"  " + this.getElseCommand().toString()
+				+ "\n" + indentation+ ")";
 	}
 }

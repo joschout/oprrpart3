@@ -11,9 +11,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public abstract class BasicCommand extends Command
 {
-	public BasicCommand()
+	public BasicCommand(int programLevel)
 	{
-	
+	this.programLevel = programLevel;
 	}
 //	public BasicCommand(Robot robot)
 //	{

@@ -11,9 +11,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public class While extends CombinedCommand
 {
-	public While(Condition condition, Command whileCommand)
+	public While(int programLevel,Condition condition, Command whileCommand)
 	{
-	
+		super(programLevel);
 		this.condition = condition;
 		this.whileCommand = whileCommand;
 	}
@@ -58,8 +58,12 @@ public class While extends CombinedCommand
 	@Override
 	public String toString()
 	{
-		return "(while" + "\n" + "  " + this.getCondition().toString()
-				+ "\n" + "  " + this.getWhileCommand().toString() 
-				+ "\n" +")";
+		String indentation = "";
+		for(int i = 0; i <= this.getProgramLevel(); i++){
+			indentation = indentation + "  ";
+		}
+		return "(while" + "\n" + indentation+ "  " + this.getCondition().toString()
+				+ "\n" + indentation+"  " + this.getWhileCommand().toString() 
+				+ "\n" +indentation+")";
 	}
 }

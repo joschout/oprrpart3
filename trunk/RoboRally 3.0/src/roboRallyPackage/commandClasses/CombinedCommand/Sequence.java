@@ -11,9 +11,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public class Sequence extends CombinedCommand
 {
-	public Sequence( java.util.List<Command> seqCommands)
+	public Sequence(int programLevel, java.util.List<Command> seqCommands)
 	{
-		
+		super(programLevel);
 		this.seqCommands = seqCommands;
 	}
 //	public Sequence(Robot robot, java.util.List<Command> seqCommands)
@@ -59,11 +59,15 @@ public class Sequence extends CombinedCommand
 	public String toString()
 	{
 		String result ="(seq";
+		String indentation = "";
+		for(int i = 0; i <= this.getProgramLevel(); i++){
+			indentation = indentation + "  ";
+		}
 		for(Command command: this.getSeqCommands())
 		{
-			result =result  + "\n" + "  " +command.toString();
+			result =result  + "\n" + indentation+ "  " +command.toString();
 		}
-		result =result + "\n" + ")";
+		result =result + "\n" +indentation+ ")";
 		return result;
 	}
 }

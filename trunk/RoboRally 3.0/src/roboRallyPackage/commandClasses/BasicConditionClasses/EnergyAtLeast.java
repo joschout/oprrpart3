@@ -10,9 +10,9 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class EnergyAtLeast extends BasicCondition
 {
-	public EnergyAtLeast(IEnergyHolder holder, double energy)//Robot robot, double energy)
+	public EnergyAtLeast(int programLevel,IEnergyHolder holder, double energy)//Robot robot, double energy)
 	{
-		//super(robot);
+		super(programLevel);
 		this.energyCondition = new EnergyAmount(energy, EnergyUnit.WATTSECOND);
 		
 	}
