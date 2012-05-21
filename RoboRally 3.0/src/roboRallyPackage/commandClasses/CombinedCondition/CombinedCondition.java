@@ -12,9 +12,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public abstract class CombinedCondition extends Condition
 {
-	public CombinedCondition()
+	public CombinedCondition(int programLevel)
 	{
-	
+	this.programLevel = programLevel;
 	}
 //	public CombinedCondition(Robot robot)
 //	{

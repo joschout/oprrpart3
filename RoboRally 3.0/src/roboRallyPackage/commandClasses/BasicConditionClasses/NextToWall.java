@@ -11,9 +11,9 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class NextToWall extends BasicCondition
 {
-	public NextToWall(Robot robot)
+	public NextToWall(int programLevel,Robot robot)
 	{
-	//	super(robot);
+		super(programLevel);
 		this.robot = robot;
 	}
 	

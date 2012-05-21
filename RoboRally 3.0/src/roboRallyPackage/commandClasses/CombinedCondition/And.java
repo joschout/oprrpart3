@@ -11,9 +11,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public class And extends CombinedCondition
 {
-	public And( java.util.List<Condition> conditions)
+	public And(int programLevel, java.util.List<Condition> conditions)
 	{
-		//super(robot);
+		super(programLevel);
 		this.conditions = conditions;
 	}
 	
@@ -40,9 +40,13 @@ public class And extends CombinedCondition
 	public String toString()
 	{
 		String result ="(and";
+		String indentation = "";
+		for(int i = 0; i <= this.getProgramLevel(); i++){
+			indentation = indentation + "  ";
+		}
 		for(Condition condition: this.getConditions())
 		{
-			result =result  + "\n" + "  " +condition.toString();
+			result =result  + "\n" + indentation+"  " +condition.toString();
 		}
 		result =result + "\n" + ")";
 		return result;

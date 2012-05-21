@@ -10,8 +10,9 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class AtItem extends BasicCondition
 {
-	public AtItem(Robot robot)
+	public AtItem(int programLevel,Robot robot)
 	{
+		super(programLevel);
 		this.robot = robot;
 		//super(robot);
 	}

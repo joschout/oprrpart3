@@ -10,9 +10,9 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class Move extends BasicCommand
 {
-	public Move() //Robot robot)
+	public Move(int programLevel) //Robot robot)
 	{
-//		super(robot);
+		super(programLevel);
 	}
 	
 	public void execute(Robot robot)

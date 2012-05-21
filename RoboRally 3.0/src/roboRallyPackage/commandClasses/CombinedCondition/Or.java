@@ -10,9 +10,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public class Or extends CombinedCondition
 {
-	public Or( java.util.List<Condition> conditions)
+	public Or(int programLevel, java.util.List<Condition> conditions)
 	{
-	//	super(robot);
+		super(programLevel);
 		this.conditions = conditions;
 	}
 	
@@ -39,11 +39,15 @@ public class Or extends CombinedCondition
 	public String toString()
 	{
 		String result ="(or";
+		String indentation = "";
+		for(int i = 0; i <= this.getProgramLevel(); i++){
+			indentation = indentation + "  ";
+		}
 		for(Condition condition: this.getConditions())
 		{
 			result =result  + "\n" + "  " +condition.toString();
 		}
-		result =result + "\n" + ")";
+		result =result + "\n" +indentation + ")";
 		return result;
 	}
 }

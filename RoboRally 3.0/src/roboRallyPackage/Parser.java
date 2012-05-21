@@ -129,7 +129,7 @@ public class Parser
 
 
 
-	public Program parse(Robot robot, String inputProgram) throws IllegalSyntaxException
+	public Program parse(int programLevel, Robot robot, String inputProgram) throws IllegalSyntaxException
 	{
 		inputProgram = inputProgram.replaceAll(" ","").toLowerCase();
 		inputProgram = inputProgram.replaceAll("\n","").toLowerCase();
@@ -139,13 +139,13 @@ public class Parser
 				|| inputProgram.equals("(shoot)")
 				|| inputProgram.equals("(pick-up-and-use)"))
 		{
-			return this.parseBasicCommand(inputProgram);
+			return this.parseBasicCommand(programLevel, inputProgram);
 		}
 		if(inputProgram.startsWith("(seq")
 				|| inputProgram.startsWith("(while")
 				|| inputProgram.startsWith("(if"))
 		{
-			return this.parseCombinedCommand(robot,inputProgram);
+			return this.parseCombinedCommand(programLevel, robot,inputProgram);
 		}
 		if(inputProgram.equals("(true)")
 				|| inputProgram.startsWith("(energy-at-least")
@@ -153,13 +153,13 @@ public class Parser
 				|| inputProgram.equals("(can-hit-robot)")
 				|| inputProgram.equals("(wall)"))
 		{
-			return this.parseBasicCondition(robot, inputProgram);
+			return this.parseBasicCondition(programLevel,robot, inputProgram);
 		}
 		if(inputProgram.startsWith("(and")
 				|| inputProgram.startsWith("(or")
 				|| inputProgram.startsWith("(not"))
 		{
-			return this.parseCombinedCondition(robot,inputProgram);
+			return this.parseCombinedCondition(programLevel,robot,inputProgram);
 		}
 		else
 		{
@@ -167,7 +167,7 @@ public class Parser
 		}
 	}
 
-	public Program parseBasicCommand(String inputProgram)
+	public Program parseBasicCommand(int programLevel, String inputProgram)
 	{
 		if(inputProgram.equals("(move)"))
 		{ 
@@ -193,7 +193,7 @@ public class Parser
 		return null;
 	}
 
-	public Program parseCombinedCommand(Robot robot, String inputProgramString)
+	public Program parseCombinedCommand(int programLevel,Robot robot, String inputProgramString)
 	{
 		if(inputProgramString.startsWith("(seq"))
 		{
@@ -206,7 +206,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = this.parse(robot, subProgramString);
+				Program subProgram = this.parse(programLevel++,robot, subProgramString);
 				// check whether the given program is a command; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Command)
 				{
@@ -233,7 +233,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				parametersWhileAsPrograms.add(this.parse(robot, subProgramString));
+				parametersWhileAsPrograms.add(this.parse(programLevel++,robot, subProgramString));
 			}
 
 			// check whether the given list has a condition as first element and a command as second element
@@ -261,7 +261,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				parametersIfAsPrograms.add(this.parse(robot, subProgramString));
+				parametersIfAsPrograms.add(this.parse(programLevel++,robot, subProgramString));
 			}
 
 			// check whether the given list has a condition as first element and a command as second and third element
@@ -273,6 +273,7 @@ public class Parser
 						(Command) parametersIfAsPrograms.get(1),
 						(Command) parametersIfAsPrograms.get(2));
 			}
+			
 			else
 			{
 				throw new IllegalSyntaxException();
@@ -282,7 +283,7 @@ public class Parser
 		return null;
 	}
 
-	public Program parseBasicCondition(Robot robot, String inputProgram)
+	public Program parseBasicCondition(int programLevel,Robot robot, String inputProgram)
 	{
 		if(inputProgram.equals("(true)"))
 		{
@@ -331,7 +332,7 @@ public class Parser
 		return null;
 	}
 
-	public Program parseCombinedCondition(Robot robot, String inputProgramString)
+	public Program parseCombinedCondition(int programLevel,Robot robot, String inputProgramString)
 	{
 		if(inputProgramString.startsWith("(and"))
 		{
@@ -344,7 +345,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = this.parse(robot, subProgramString);
+				Program subProgram = this.parse(programLevel++,robot, subProgramString);
 				// check whether the given program is a condition; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Condition)
 				{
@@ -370,7 +371,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = this.parse(robot,subProgramString);
+				Program subProgram = this.parse(programLevel++,robot,subProgramString);
 				// check whether the given program is a condition; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Condition)
 				{
@@ -393,7 +394,7 @@ public class Parser
 
 			// make a list of commands that can be given to the sequence-object
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
-			Program parametersNotAsProgram = this.parse(robot,subProgramStrings.get(0));
+			Program parametersNotAsProgram = this.parse(programLevel++,robot,subProgramStrings.get(0));
 
 			// check whether the given list of programs contains only 1 programs and this programs is a condition; if not throw an exception
 			if(subProgramStrings.size() == 1 && parametersNotAsProgram instanceof Condition)

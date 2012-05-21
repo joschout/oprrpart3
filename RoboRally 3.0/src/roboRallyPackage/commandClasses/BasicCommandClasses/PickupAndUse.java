@@ -10,9 +10,9 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class PickupAndUse extends BasicCommand
 {
-	public PickupAndUse()
+	public PickupAndUse(int programLevel)
 	{
-//		super(robot);
+		super(programLevel);
 	}
 //	public PickupAndUse(Robot robot)
 //	{
