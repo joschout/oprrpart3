@@ -78,11 +78,11 @@ public class If extends CombinedCommand
 		String indentation = "";
 		for(int i = 1; i <= this.getProgramLevel(); i++){
 			indentation = indentation + "  ";
-		}
+		} 
 		return "(if"
 				+ "\n" + indentation+ "  " + this.getCondition().toString()
-				+ "\n" + indentation+"  " + this.getIfCommand().toString()
-				+ "\n" + indentation+"  " + this.getElseCommand().toString()
-				+ "\n" + ")";
+				+ "\n" + indentation+ "  " + this.getIfCommand().toString()
+				+ "\n" + indentation+ "  " + this.getElseCommand().toString()
+				+ "\n" + indentation+")";
 	}
 }
