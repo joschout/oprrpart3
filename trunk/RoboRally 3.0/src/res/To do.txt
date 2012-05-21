@@ -6,6 +6,7 @@ TO DO:
 * iterator
 * programma's
 * private/public/protected/package
+* seq in while: seq zal niet helemaal worden uitgevoerd!!
 * IllegalSyntaxException
 * representatie-invarianten! hb p 420
 * testen !
