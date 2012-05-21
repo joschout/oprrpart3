@@ -19,17 +19,21 @@ import roboRallyPackage.exceptionClasses.*;
  */
 public class Parser
 {
-	public Parser(Robot robot)
-	{
-		this.robot = robot;
+	
+	public Parser(){
+		
 	}
-
-	private Robot robot;
-
-	public Robot getRobot()
-	{
-		return this.robot;
-	}
+//	public Parser(Robot robot)
+//	{
+//		this.robot = robot;
+//	}
+//
+//	private Robot robot;
+//
+//	public Robot getRobot()
+//	{
+//		return this.robot;
+//	}
 
 	//	public Command parse(String fullProgram)
 	//	{
@@ -125,7 +129,7 @@ public class Parser
 
 
 
-	public Program parse(String inputProgram) throws IllegalSyntaxException
+	public Program parse(Robot robot, String inputProgram) throws IllegalSyntaxException
 	{
 		inputProgram = inputProgram.replaceAll(" ","").toLowerCase();
 		inputProgram = inputProgram.replaceAll("\n","").toLowerCase();
@@ -141,7 +145,7 @@ public class Parser
 				|| inputProgram.startsWith("(while")
 				|| inputProgram.startsWith("(if"))
 		{
-			return this.parseCombinedCommand(inputProgram);
+			return this.parseCombinedCommand(robot,inputProgram);
 		}
 		if(inputProgram.equals("(true)")
 				|| inputProgram.startsWith("(energy-at-least")
@@ -149,13 +153,13 @@ public class Parser
 				|| inputProgram.equals("(can-hit-robot)")
 				|| inputProgram.equals("(wall)"))
 		{
-			return this.parseBasicCondition(inputProgram);
+			return this.parseBasicCondition(robot, inputProgram);
 		}
 		if(inputProgram.startsWith("(and")
 				|| inputProgram.startsWith("(or")
 				|| inputProgram.startsWith("(not"))
 		{
-			return this.parseCombinedCondition(inputProgram);
+			return this.parseCombinedCondition(robot,inputProgram);
 		}
 		else
 		{
@@ -167,29 +171,29 @@ public class Parser
 	{
 		if(inputProgram.equals("(move)"))
 		{ 
-			return new Move(this.getRobot());
+			return new Move();
 		}
 		if(inputProgram.equals("(turnclockwise)"))
 		{
-			return new Turn(this.getRobot(),Direction.CLOCKWISE);
+			return new Turn(Direction.CLOCKWISE);
 		}
 		if(inputProgram.equals("(turncounterclockwise)"))
 		{
-			return new Turn(this.getRobot(),Direction.COUNTER_CLOCKWISE);
+			return new Turn(Direction.COUNTER_CLOCKWISE);
 		}
 		if(inputProgram.equals("(shoot)"))
 		{
-			return new Shoot(this.getRobot());
+			return new Shoot();
 		}
 		if(inputProgram.equals("(pick-up-and-use)"))
 		{
-			return new PickupAndUse(this.getRobot());
+			return new PickupAndUse();
 		}
 		assert false;
 		return null;
 	}
 
-	public Program parseCombinedCommand(String inputProgramString)
+	public Program parseCombinedCommand(Robot robot, String inputProgramString)
 	{
 		if(inputProgramString.startsWith("(seq"))
 		{
@@ -202,7 +206,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = this.parse(subProgramString);
+				Program subProgram = this.parse(robot, subProgramString);
 				// check whether the given program is a command; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Command)
 				{
@@ -214,7 +218,7 @@ public class Parser
 				}
 			}
 
-			return new Sequence(this.getRobot(), parametersSeqAsCommands);
+			return new Sequence( parametersSeqAsCommands);
 		}
 
 		if(inputProgramString.startsWith("(while"))
@@ -229,14 +233,14 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				parametersWhileAsPrograms.add(this.parse(subProgramString));
+				parametersWhileAsPrograms.add(this.parse(robot, subProgramString));
 			}
 
 			// check whether the given list has a condition as first element and a command as second element
 			if(parametersWhileAsPrograms.size() == 2 && (parametersWhileAsPrograms.get(0) instanceof Condition)
 					&& (parametersWhileAsPrograms.get(1) instanceof Command))
 			{
-				return new While(this.getRobot(), (Condition) parametersWhileAsPrograms.get(0),
+				return new While( (Condition) parametersWhileAsPrograms.get(0),
 												  (Command) parametersWhileAsPrograms.get(1));
 			}
 			else
@@ -257,7 +261,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				parametersIfAsPrograms.add(this.parse(subProgramString));
+				parametersIfAsPrograms.add(this.parse(robot, subProgramString));
 			}
 
 			// check whether the given list has a condition as first element and a command as second and third element
@@ -265,7 +269,7 @@ public class Parser
 					&& (parametersIfAsPrograms.get(1) instanceof Command)
 					&& (parametersIfAsPrograms.get(2) instanceof Command))
 			{
-				return new If(this.getRobot(), (Condition) parametersIfAsPrograms.get(0),
+				return new If( (Condition) parametersIfAsPrograms.get(0),
 						(Command) parametersIfAsPrograms.get(1),
 						(Command) parametersIfAsPrograms.get(2));
 			}
@@ -278,11 +282,11 @@ public class Parser
 		return null;
 	}
 
-	public Program parseBasicCondition(String inputProgram)
+	public Program parseBasicCondition(Robot robot, String inputProgram)
 	{
 		if(inputProgram.equals("(true)"))
 		{
-			return new True(this.getRobot());
+			return new True();
 		}
 		if(inputProgram.startsWith("(energy-at-least"))
 		{
@@ -304,7 +308,7 @@ public class Parser
 			// check whether the energyValue is a valid energy amount; if not an exception is thrown
 			if (EnergyAmount.isValidEnergyAmount(energyValue))
 			{
-				return new EnergyAtLeast(this.getRobot(), energyValue);
+				return new EnergyAtLeast(robot, energyValue);
 			}
 			else
 			{
@@ -313,21 +317,21 @@ public class Parser
 		}
 		if(inputProgram.equals("(at-item)"))
 		{
-			return new AtItem(this.getRobot());
+			return new AtItem(robot);
 		}
 		if(inputProgram.equals("(can-hit-robot)"))
 		{
-			return new CanHitRobot(this.getRobot());
+			return new CanHitRobot(robot);
 		}
 		if(inputProgram.equals("(wall)"))
 		{
-			return new NextToWall(this.getRobot());
+			return new NextToWall(robot);
 		}
 		assert false;
 		return null;
 	}
 
-	public Program parseCombinedCondition(String inputProgramString)
+	public Program parseCombinedCondition(Robot robot, String inputProgramString)
 	{
 		if(inputProgramString.startsWith("(and"))
 		{
@@ -340,7 +344,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = this.parse(subProgramString);
+				Program subProgram = this.parse(robot, subProgramString);
 				// check whether the given program is a condition; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Condition)
 				{
@@ -352,7 +356,7 @@ public class Parser
 				}
 			}
 
-			return new And(this.getRobot(), parametersAndAsConditions);
+			return new And( parametersAndAsConditions);
 		}
 
 		if(inputProgramString.startsWith("(or"))
@@ -366,7 +370,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = this.parse(subProgramString);
+				Program subProgram = this.parse(robot,subProgramString);
 				// check whether the given program is a condition; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Condition)
 				{
@@ -378,7 +382,7 @@ public class Parser
 				}
 			}
 
-			return new Or(this.getRobot(), parametersOrAsConditions);
+			return new Or( parametersOrAsConditions);
 		}
 
 		if(inputProgramString.startsWith("(not"))
@@ -389,12 +393,12 @@ public class Parser
 
 			// make a list of commands that can be given to the sequence-object
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
-			Program parametersNotAsProgram = this.parse(subProgramStrings.get(0));
+			Program parametersNotAsProgram = this.parse(robot,subProgramStrings.get(0));
 
 			// check whether the given list of programs contains only 1 programs and this programs is a condition; if not throw an exception
 			if(subProgramStrings.size() == 1 && parametersNotAsProgram instanceof Condition)
 			{
-				return new Not(this.getRobot(), (Condition) parametersNotAsProgram);
+				return new Not( (Condition) parametersNotAsProgram);
 			}
 			else
 			{
