@@ -1120,8 +1120,8 @@ public class Robot extends Element implements IEnergyHolder
 			return -1;
 		}
 		
-		Parser parser = new Parser(this);
-		Program program = parser.parse(inputProgram);
+		Parser parser = new Parser();
+		Program program = parser.parse(this, inputProgram);
 		this.program = program;
 		
 		if(this.getProgram() == program)
@@ -1133,9 +1133,9 @@ public class Robot extends Element implements IEnergyHolder
 	
 	public void runProgramStep(int n)
 	{
-		for(int i = 0; i <= n; i++)
+		for(int i = 1; i <= n; i++)
 		{
-			this.getProgram().executeStep();
+			this.getProgram().executeStep(this);
 		}
 	}
 

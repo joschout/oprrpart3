@@ -5,6 +5,7 @@ TO DO:
 * prettyprint
 * iterator
 * programma's
+* private/public/protected/package
 * IllegalSyntaxException
 * representatie-invarianten! hb p 420
 * testen !
