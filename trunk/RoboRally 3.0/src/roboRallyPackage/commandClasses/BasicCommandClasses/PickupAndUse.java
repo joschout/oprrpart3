@@ -10,19 +10,23 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class PickupAndUse extends BasicCommand
 {
-	public PickupAndUse(Robot robot)
+	public PickupAndUse()
 	{
-		super(robot);
+//		super(robot);
 	}
+//	public PickupAndUse(Robot robot)
+//	{
+//		super(robot);
+//	}
 	
-	public void execute()
+	public void execute(Robot robot)
 	{
-		for(Element element: this.getRobot().getBoard().getElements(this.getRobot().getPosition()))
+		for(Element element: robot.getBoard().getElements(robot.getPosition()))
 		{
 			if(element instanceof Item)
 			{
-				this.getRobot().pickUp((Item) element);
-				this.getRobot().use((Item) element);
+				robot.pickUp((Item) element);
+				robot.use((Item) element);
 				break;
 			}
 		}

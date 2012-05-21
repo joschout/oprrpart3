@@ -15,16 +15,16 @@ public abstract class BasicCondition extends Condition
 //	{
 //		super(robot);
 //	}
-	public BasicCondition(Robot robot)
-	{
-		this.robot = robot;
-	}
-	
-	protected Robot getRobot()
-	{
-		return robot;
-	}
-	
-	private Robot robot; 
+//	public BasicCondition(Robot robot)
+//	{
+//		this.robot = robot;
+//	}
+//	
+//	protected Robot getRobot()
+//	{
+//		return robot;
+//	}
+//	
+//	private Robot robot; 
 	public abstract boolean results();
 }

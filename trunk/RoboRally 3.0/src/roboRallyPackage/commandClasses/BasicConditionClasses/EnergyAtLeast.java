@@ -10,11 +10,17 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class EnergyAtLeast extends BasicCondition
 {
-	public EnergyAtLeast(Robot robot, double energy)
+	public EnergyAtLeast(IEnergyHolder holder, double energy)//Robot robot, double energy)
 	{
-		super(robot);
+		//super(robot);
 		this.energyCondition = new EnergyAmount(energy, EnergyUnit.WATTSECOND);
 		
+	}
+	public IEnergyHolder holder;
+	
+	
+	public IEnergyHolder getIEnergyHolder(){
+		return this.holder;
 	}
 	
 	private EnergyAmount energyCondition;
@@ -25,7 +31,7 @@ public class EnergyAtLeast extends BasicCondition
 
 	public boolean results() 
 	{
-		return (this.getRobot().getEnergy(EnergyUnit.WATTSECOND) >= energyCondition.getAmountInWattSecond());
+		return (this.getIEnergyHolder().getEnergy(EnergyUnit.WATTSECOND) >= energyCondition.getAmountInWattSecond());
 	}
 	
 	@Override

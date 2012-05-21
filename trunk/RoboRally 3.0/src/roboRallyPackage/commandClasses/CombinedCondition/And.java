@@ -11,9 +11,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public class And extends CombinedCondition
 {
-	public And(Robot robot, java.util.List<Condition> conditions)
+	public And( java.util.List<Condition> conditions)
 	{
-		super(robot);
+		//super(robot);
 		this.conditions = conditions;
 	}
 	

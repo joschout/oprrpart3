@@ -10,14 +10,19 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class Shoot extends BasicCommand
 {
+	
 	public Shoot(Robot robot)
 	{
-		super(robot);
+
 	}
+//	public Shoot(Robot robot)
+//	{
+//		super(robot);
+//	}
 	
-	public void execute()
+	public void execute(Robot robot)
 	{
-		this.getRobot().shoot();
+		robot.shoot();
 	}
 	@Override
 	public String toString(){

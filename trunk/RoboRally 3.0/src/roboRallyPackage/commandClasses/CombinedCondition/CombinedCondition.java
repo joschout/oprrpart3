@@ -12,10 +12,14 @@ import roboRallyPackage.commandClasses.*;
  */
 public abstract class CombinedCondition extends Condition
 {
-	public CombinedCondition(Robot robot)
+	public CombinedCondition()
 	{
-		super(robot);
+	
 	}
+//	public CombinedCondition(Robot robot)
+//	{
+//		super(robot);
+//	}
 	
 	public abstract boolean results();
 }

@@ -11,13 +11,21 @@ import roboRallyPackage.commandClasses.*;
  */
 public class If extends CombinedCommand
 {
-	public If(Robot robot, Condition condition, Command ifCommand, Command elseCommand)
+	
+	public If( Condition condition, Command ifCommand, Command elseCommand)
 	{
-		super(robot);
+		
 		this.condition = condition;
 		this.ifCommand = ifCommand;
 		this.elseCommand = elseCommand;
 	}
+//	public If(Robot robot, Condition condition, Command ifCommand, Command elseCommand)
+//	{
+//		super(robot);
+//		this.condition = condition;
+//		this.ifCommand = ifCommand;
+//		this.elseCommand = elseCommand;
+//	}
 	
 	private Condition condition;
 	
@@ -40,27 +48,27 @@ public class If extends CombinedCommand
 	private Command ifCommand;
 	private Command elseCommand;
 	
-	public void execute()
+	public void execute(Robot robot)
 	{
 		if(this.getCondition().results())
 		{
-			this.getIfCommand().execute();
+			this.getIfCommand().execute(robot);
 		}
 		else
 		{
-			this.getElseCommand().execute();
+			this.getElseCommand().execute(robot);
 		}
 	}
 	
-	public void executeStep()
+	public void executeStep(Robot robot)
 	{
 		if(this.getCondition().results())
 		{
-			this.getIfCommand().executeStep();
+			this.getIfCommand().executeStep(robot);
 		}
 		else
 		{
-			this.getElseCommand().executeStep();
+			this.getElseCommand().executeStep(robot);
 		}
 	}
 	

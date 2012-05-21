@@ -10,9 +10,9 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class True extends BasicCondition
 {
-	public True(Robot robot)
+	public True()//Robot robot)
 	{
-		super(robot);
+		
 	}
 	
 	public boolean results()

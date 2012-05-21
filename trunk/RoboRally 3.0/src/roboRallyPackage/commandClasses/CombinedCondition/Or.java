@@ -10,9 +10,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public class Or extends CombinedCondition
 {
-	public Or(Robot robot, java.util.List<Condition> conditions)
+	public Or( java.util.List<Condition> conditions)
 	{
-		super(robot);
+	//	super(robot);
 		this.conditions = conditions;
 	}
 	

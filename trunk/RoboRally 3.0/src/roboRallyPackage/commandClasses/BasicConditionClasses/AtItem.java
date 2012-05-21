@@ -12,7 +12,14 @@ public class AtItem extends BasicCondition
 {
 	public AtItem(Robot robot)
 	{
-		super(robot);
+		this.robot = robot;
+		//super(robot);
+	}
+	
+	public Robot robot;
+	
+	public Robot getRobot(){
+		return this.robot;
 	}
 	
 	public boolean results()

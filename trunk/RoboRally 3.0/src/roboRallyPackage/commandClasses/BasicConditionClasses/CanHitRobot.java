@@ -12,8 +12,16 @@ public class CanHitRobot extends BasicCondition
 {
 	public CanHitRobot(Robot robot)
 	{
-		super(robot);
+		this.robot = robot;
+	//	super(robot);
 	}
+	
+	public Robot robot;
+	
+	public Robot getRobot(){
+		return this.robot;
+	}
+	
 	
 	public boolean results()
 	{
