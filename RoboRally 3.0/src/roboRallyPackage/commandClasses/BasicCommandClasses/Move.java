@@ -10,14 +10,14 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class Move extends BasicCommand
 {
-	public Move(Robot robot)
+	public Move() //Robot robot)
 	{
-		super(robot);
+//		super(robot);
 	}
 	
-	public void execute()
+	public void execute(Robot robot)
 	{
-		this.getRobot().moveOneStep();
+		robot.moveOneStep();
 	}
 	@Override
 	public String toString(){

@@ -11,11 +11,15 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class Turn extends BasicCommand
 {
-	public Turn(Robot robot, Direction direction)
+	public Turn(Direction direction)
 	{
-		super(robot);
 		this.direction = direction;
 	}
+//	public Turn(Robot robot, Direction direction)
+//	{
+//		super(robot);
+//		this.direction = direction;
+//	}
 	
 	Direction direction;
 
@@ -28,15 +32,15 @@ public class Turn extends BasicCommand
 		return this.direction;
 	}
 	
-	public void execute()
+	public void execute(Robot robot)
 	{
 		if(direction == Direction.CLOCKWISE)
 		{
-			this.getRobot().turnClockwise();
+			robot.turnClockwise();
 		}
 		else
 		{
-			this.getRobot().turnCounterClockwise();
+			robot.turnCounterClockwise();
 		}
 	}
 	@Override

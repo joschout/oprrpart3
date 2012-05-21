@@ -13,7 +13,14 @@ public class NextToWall extends BasicCondition
 {
 	public NextToWall(Robot robot)
 	{
-		super(robot);
+	//	super(robot);
+		this.robot = robot;
+	}
+	
+	private Robot robot;
+	
+	public Robot getRobot(){
+		return this.robot;
 	}
 	
 	public boolean results()

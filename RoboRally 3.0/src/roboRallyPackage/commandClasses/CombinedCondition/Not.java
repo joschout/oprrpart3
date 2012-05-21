@@ -11,9 +11,9 @@ import roboRallyPackage.commandClasses.*;
  */
 public class Not extends CombinedCondition
 {
-	public Not(Robot robot, Condition condition)
+	public Not(Condition condition)
 	{
-		super(robot);
+		//super(robot);
 		this.condition = condition;
 	}
 	

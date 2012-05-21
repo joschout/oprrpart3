@@ -11,12 +11,18 @@ import roboRallyPackage.commandClasses.*;
  */
 public class While extends CombinedCommand
 {
-	public While(Robot robot, Condition condition, Command whileCommand)
+	public While(Condition condition, Command whileCommand)
 	{
-		super(robot);
+	
 		this.condition = condition;
 		this.whileCommand = whileCommand;
 	}
+//	public While(Robot robot, Condition condition, Command whileCommand)
+//	{
+//		super(robot);
+//		this.condition = condition;
+//		this.whileCommand = whileCommand;
+//	}
 	
 	Condition condition;
 
@@ -32,19 +38,20 @@ public class While extends CombinedCommand
 
 	Command whileCommand;
 	
-	public void execute()
+	public void execute(Robot robot)
 	{
 		while(this.getCondition().results())
 		{
-			this.getWhileCommand().execute();
+			this.getWhileCommand().execute(robot);
 		}
 	}
 	
-	public void executeStep()
+	public void executeStep(Robot robot)
 	{
-		if(this.getCondition().results())
+		if(this.getCondition().results() )
 		{
-			this.getWhileCommand().executeStep();
+			
+			this.getWhileCommand().executeStep(robot);
 		}
 	}
 	

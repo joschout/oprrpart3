@@ -11,13 +11,19 @@ import roboRallyPackage.commandClasses.*;
  */
 public class Sequence extends CombinedCommand
 {
-	public Sequence(Robot robot, java.util.List<Command> seqCommands)
+	public Sequence( java.util.List<Command> seqCommands)
 	{
-		super(robot);
+		
 		this.seqCommands = seqCommands;
 	}
+//	public Sequence(Robot robot, java.util.List<Command> seqCommands)
+//	{
+//		super(robot);
+//		this.seqCommands = seqCommands;
+//	}
 	
 	java.util.List<Command> seqCommands;
+	
 	int nextCommandToExecute = 0;
 
 	public int getNextCommandToExecute() 
@@ -35,17 +41,17 @@ public class Sequence extends CombinedCommand
 		return this.seqCommands;
 	}
 	
-	public void execute()
+	public void execute(Robot robot)
 	{
 		for(Command command: seqCommands)
 		{
-			command.execute();
+			command.execute(robot);
 		}
 	}
 	
-	public void executeStep()
+	public void executeStep(Robot robot)
 	{
-		this.getSeqCommands().get(this.getNextCommandToExecute()).executeStep();
+		this.getSeqCommands().get(this.getNextCommandToExecute()).executeStep(robot);
 		this.increaseNextCommandToExecute();
 	}
 	

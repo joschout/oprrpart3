@@ -11,15 +11,19 @@ import roboRallyPackage.commandClasses.*;
  */
 public abstract class BasicCommand extends Command
 {
-	public BasicCommand(Robot robot)
+	public BasicCommand()
 	{
-		super(robot);
+	
 	}
+//	public BasicCommand(Robot robot)
+//	{
+//		super(robot);
+//	}
 	
-	public abstract void execute();
+	public abstract void execute(Robot robot);
 	
-	public void executeStep()
+	public void executeStep(Robot robot)
 	{
-		this.execute();
+		this.execute(robot);
 	}
 }

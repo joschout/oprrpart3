@@ -11,12 +11,17 @@ import roboRallyPackage.commandClasses.*;
  */
 public abstract class CombinedCommand extends Command
 {
-	public CombinedCommand(Robot robot)
+	
+	public CombinedCommand()
 	{
-		super(robot);
+		
 	}
+//	public CombinedCommand(Robot robot)
+//	{
+//		super(robot);
+//	}
 	
-	public abstract void execute();
+	public abstract void execute(Robot robot);
 	
-	public abstract void executeStep();
+	public abstract void executeStep(Robot robot);
 }
