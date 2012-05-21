@@ -1,14 +1,13 @@
-/**
- * 
- */
+
 package roboRallyPackage.commandClasses.CombinedCommand;
 
-import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.commandClasses.*;
+
 /**
- * @author Nele
- *
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public class If extends CombinedCommand
 {
@@ -21,27 +20,20 @@ public class If extends CombinedCommand
 	}
 	
 	private Condition condition;
-	/**
-	 * @return	...
-	 *			| result == ...
-	 */
-	public Condition getCondition() {
+	
+	public Condition getCondition()
+	{
 		return this.condition;
 	}
 
-	/**
-	 * @return	...
-	 *			| result == ...
-	 */
-	public Command getIfCommand() {
+	public Command getIfCommand()
+	{
 		return this.ifCommand;
 	}
 
-	/**
-	 * @return	...
-	 *			| result == ...
-	 */
-	public Command getElseCommand() {
+	
+	public Command getElseCommand() 
+	{
 		return this.elseCommand;
 	}
 
@@ -59,12 +51,25 @@ public class If extends CombinedCommand
 			this.getElseCommand().execute();
 		}
 	}
+	
+	public void executeStep()
+	{
+		if(this.getCondition().results())
+		{
+			this.getIfCommand().executeStep();
+		}
+		else
+		{
+			this.getElseCommand().executeStep();
+		}
+	}
+	
 	@Override
-	public String toString(){
+	public String toString()
+	{
 		return "(if"+ "\n" + "  " + this.getCondition().toString()
-				+ "\n" + "  " +this.getIfCommand().toString()
-				+ "\n" + "  " +this.getElseCommand().toString()
+				+ "\n" + "  " + this.getIfCommand().toString()
+				+ "\n" + "  " + this.getElseCommand().toString()
 				+ "\n" +  ")";
-				
 	}
 }

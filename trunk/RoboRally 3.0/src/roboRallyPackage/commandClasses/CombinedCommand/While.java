@@ -1,14 +1,13 @@
-/**
- * 
- */
+
 package roboRallyPackage.commandClasses.CombinedCommand;
 
-import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.commandClasses.*;
+
 /**
- * @author Nele
- *
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public class While extends CombinedCommand
 {
@@ -20,19 +19,14 @@ public class While extends CombinedCommand
 	}
 	
 	Condition condition;
-	/**
-	 * @return	...
-	 *			| result == ...
-	 */
-	public Condition getCondition() {
+
+	public Condition getCondition()
+	{
 		return this.condition;
 	}
 
-	/**
-	 * @return	...
-	 *			| result == ...
-	 */
-	public Command getWhileCommand() {
+	public Command getWhileCommand()
+	{
 		return this.whileCommand;
 	}
 
@@ -45,8 +39,18 @@ public class While extends CombinedCommand
 			this.getWhileCommand().execute();
 		}
 	}
+	
+	public void executeStep()
+	{
+		if(this.getCondition().results())
+		{
+			this.getWhileCommand().executeStep();
+		}
+	}
+	
 	@Override
-	public String toString(){
+	public String toString()
+	{
 		return "(while" + "\n" + "  " + this.getCondition().toString()
 				+ "\n" + "  " + this.getWhileCommand().toString() 
 				+ "\n" +")";

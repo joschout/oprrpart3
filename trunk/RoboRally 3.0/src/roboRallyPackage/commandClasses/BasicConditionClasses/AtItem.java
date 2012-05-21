@@ -1,15 +1,12 @@
-/**
- * 
- */
+
 package roboRallyPackage.commandClasses.BasicConditionClasses;
 
-import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
-import roboRallyPackage.commandClasses.*;
-import roboRallyPackage.commandClasses.CombinedCondition.*;
+
 /**
- * @author Nele
- *
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public class AtItem extends BasicCondition
 {
@@ -29,8 +26,10 @@ public class AtItem extends BasicCondition
 		}
 		return false;
 	}
+	
 	@Override
-	public String toString(){
+	public String toString()
+	{
 		return "(at-item)";
 		
 	}

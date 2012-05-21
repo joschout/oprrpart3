@@ -1,15 +1,12 @@
-/**
- * 
- */
 package roboRallyPackage.commandClasses.CombinedCondition;
 
-import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.commandClasses.*;
-import roboRallyPackage.commandClasses.CombinedCondition.*;
+
 /**
- * @author Nele
- *
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public class Or extends CombinedCondition
 {
@@ -33,18 +30,17 @@ public class Or extends CombinedCondition
 	
 	private java.util.List<Condition> conditions;
 
-	/**
-	 * @return	...
-	 *			| result == ...
-	 */
 	public java.util.List<Condition> getConditions()
 	{
 		return this.conditions;
 	}
+	
 	@Override
-	public String toString(){
+	public String toString()
+	{
 		String result ="(or";
-		for(Condition condition: this.getConditions()){
+		for(Condition condition: this.getConditions())
+		{
 			result =result  + "\n" + "  " +condition.toString();
 		}
 		result =result + "\n" + ")";
