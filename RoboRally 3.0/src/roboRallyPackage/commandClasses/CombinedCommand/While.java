@@ -59,11 +59,12 @@ public class While extends CombinedCommand
 	public String toString()
 	{
 		String indentation = "";
-		for(int i = 0; i <= this.getProgramLevel(); i++){
+		for(int i = 1; i <= this.getProgramLevel(); i++){
 			indentation = indentation + "  ";
 		}
-		return "(while" + "\n" + indentation+ "  " + this.getCondition().toString()
+		return "(while" 
+				+ "\n" + indentation+ "  " + this.getCondition().toString()
 				+ "\n" + indentation+"  " + this.getWhileCommand().toString() 
-				+ "\n" +indentation+")";
+				+ "\n" +")";
 	}
 }
