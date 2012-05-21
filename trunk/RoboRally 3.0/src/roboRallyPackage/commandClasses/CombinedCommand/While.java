@@ -65,6 +65,6 @@ public class While extends CombinedCommand
 		return "(while" 
 				+ "\n" + indentation+ "  " + this.getCondition().toString()
 				+ "\n" + indentation+"  " + this.getWhileCommand().toString() 
-				+ "\n" +")";
+				+ "\n" +indentation+")";
 	}
 }
