@@ -1115,6 +1115,11 @@ public class Robot extends Element implements IEnergyHolder
 	
 	public int setProgram(String inputProgram) 
 	{
+		if(inputProgram == null)
+		{
+			return -1;
+		}
+		
 		Parser parser = new Parser(this);
 		Program program = parser.parse(inputProgram);
 		this.program = program;
