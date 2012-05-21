@@ -2,7 +2,9 @@
 package roboRallyPackage.guiClasses;
 
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.FileSystemNotFoundException;
 import java.util.Set;
 
 import roboRallyPackage.exceptionClasses.IllegalBoardException;
@@ -749,25 +751,39 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	public int loadProgramFromFile(Robot robot, String path)
 	{
 		String inputProgram = null;
+		java.io.FileReader fileReader = null;
+		StringBuffer buffer = null;
 		
 		java.io.File file = new java.io.File(path);
 		if(file.exists() && file.canRead())
 		{
-			java.io.FileReader fileReader = new java.io.FileReader(file);
-			StringBuffer buffer = new StringBuffer();
-			int len;
-			
 			try
 			{
+				fileReader = new java.io.FileReader(file);
+				buffer = new StringBuffer();
+				int len;
+				char[] chr = new char[4096];
+				// if the read()-method returns -1 the end of the string is reached
 				while ((len = fileReader.read(chr)) > 0) 
 				{
 					buffer.append(chr, 0, len);
 				}
 			} 
+				
+			catch (IOException e)
+			{
+			}
 			finally 
 			{
-				fileReader.close();
+				try
+				{
+					fileReader.close();
+				}
+				catch (IOException e)
+				{
+				}
 			}
+			
 			inputProgram = buffer.toString();
 		}
 		
@@ -791,11 +807,20 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	@Override
 	public void prettyPrintProgram(Robot robot, Writer writer)
 	{
-	if(robot.getProgram() == null)
-		System.out.println("This robot does not yet contain a program in its memory.");
-//	else{
-//		Writer writer = new BufferedWriter(arg0)
-//	}
+		if(robot.getProgram() == null)
+		{
+			System.out.println("This robot does not yet contain a program in its memory.");
+		}
+		else
+		{
+			try
+			{
+				writer.append(robot.getProgram().toString());
+			}
+			catch (IOException e)
+			{
+			}
+		}
 	}
 
 	/**

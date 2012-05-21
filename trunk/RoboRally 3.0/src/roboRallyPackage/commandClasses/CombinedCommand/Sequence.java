@@ -25,7 +25,6 @@ public class Sequence extends CombinedCommand
 		return this.nextCommandToExecute;
 	}
 
-
 	public void increaseNextCommandToExecute() 
 	{
 		this.nextCommandToExecute = (this.getNextCommandToExecute() + 1)%this.getSeqCommands().size();

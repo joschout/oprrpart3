@@ -128,6 +128,8 @@ public class Parser
 	public Program parse(String inputProgram) throws IllegalSyntaxException
 	{
 		inputProgram = inputProgram.replaceAll(" ","").toLowerCase();
+		inputProgram = inputProgram.replaceAll("\n","").toLowerCase();
+		System.out.println(inputProgram);
 		if(inputProgram.equals("(move)")
 				|| inputProgram.equals("(turnclockwise)") 
 				|| inputProgram.equals("(turncounterclockwise)")
@@ -193,8 +195,8 @@ public class Parser
 		if(inputProgramString.startsWith("(seq"))
 		{
 			// cut off the "(seq" and the last closing bracket of the string
-			inputProgramString = inputProgramString.replaceFirst("(seq", "").trim();
-			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 2);
+			inputProgramString = inputProgramString.replaceFirst("\\(seq", "").trim();
+			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 1);
 
 			// make a list of commands that can be given to the sequence-object
 			java.util.ArrayList<Command> parametersSeqAsCommands = new java.util.ArrayList<Command>();
@@ -219,9 +221,9 @@ public class Parser
 		if(inputProgramString.startsWith("(while"))
 		{
 			// cut off the "(while" and the last closing bracket of the string
-			inputProgramString = inputProgramString.replaceFirst("(while", "").trim();
-			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 2);
-
+			inputProgramString = inputProgramString.replaceFirst("\\(while", " ").trim();
+			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 1);
+			System.out.println(inputProgramString);
 
 			// make a list of programs that can be given to the while-object
 			// the first program is supposed to be a condition, the second is supposed to be a command
@@ -237,7 +239,7 @@ public class Parser
 					&& (parametersWhileAsPrograms.get(1) instanceof Command))
 			{
 				return new While(this.getRobot(), (Condition) parametersWhileAsPrograms.get(0),
-						(Command) parametersWhileAsPrograms.get(1));
+												  (Command) parametersWhileAsPrograms.get(1));
 			}
 			else
 			{
@@ -248,8 +250,8 @@ public class Parser
 		if(inputProgramString.startsWith("(if"))
 		{
 			// cut off the "(if" and the last closing bracket of the string
-			inputProgramString = inputProgramString.replaceFirst("(if", "").trim();
-			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 2);
+			inputProgramString = inputProgramString.replaceFirst("\\(if", "").trim();
+			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 1);
 
 			// make a list of programs that can be given to the if-object
 			// the first program is supposed to be a condition, the second and third are supposed to be a command
@@ -287,8 +289,8 @@ public class Parser
 		if(inputProgram.startsWith("(energy-at-least"))
 		{
 			// cut off the "(energy-at-least" and the last closing bracket of the string
-			inputProgram = inputProgram.replaceFirst("(energy-at-least", "").trim();
-			inputProgram = inputProgram.substring(0, inputProgram.length() - 2);
+			inputProgram = inputProgram.replaceFirst("\\(energy-at-least", "").trim();
+			inputProgram = inputProgram.substring(0, inputProgram.length() - 1);
 
 			// convert the remaining string to a double; if the remaining string is not a number, an exception in thrown
 			double energyValue = -1;
@@ -332,8 +334,8 @@ public class Parser
 		if(inputProgramString.startsWith("(and"))
 		{
 			// cut off the "(and" and the last closing bracket of the string
-			inputProgramString = inputProgramString.replaceFirst("(and", "").trim();
-			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 2);
+			inputProgramString = inputProgramString.replaceFirst("\\(and", "").trim();
+			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 1);
 
 			// make a list of commands that can be given to the sequence-object
 			java.util.ArrayList<Condition> parametersAndAsConditions = new java.util.ArrayList<Condition>();
@@ -358,8 +360,8 @@ public class Parser
 		if(inputProgramString.startsWith("(or"))
 		{
 			// cut off the "(or" and the last closing bracket of the string
-			inputProgramString = inputProgramString.replaceFirst("(or", "").trim();
-			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 2);
+			inputProgramString = inputProgramString.replaceFirst("\\(or", "").trim();
+			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 1);
 
 			// make a list of commands that can be given to the sequence-object
 			java.util.ArrayList<Condition> parametersOrAsConditions = new java.util.ArrayList<Condition>();
@@ -384,8 +386,8 @@ public class Parser
 		if(inputProgramString.startsWith("(not"))
 		{
 			// cut off the "(not" and the last closing bracket of the string
-			inputProgramString = inputProgramString.replaceFirst("(not", "").trim();
-			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 2);
+			inputProgramString = inputProgramString.replaceFirst("\\(not", "").trim();
+			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 1);
 
 			// make a list of commands that can be given to the sequence-object
 			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
@@ -423,10 +425,10 @@ public class Parser
 		char[] fullPrStrings = fullProgram.toCharArray();
 		java.util.ArrayList<String> subStringList = new ArrayList<String>();
 
-		for(int index=0; index <= fullPrStrings.length-1; index++)
+		for(int index = 0; index <= fullPrStrings.length - 1; index++)
 		{
 			// the first opening bracket is not yet closed by a closing bracket
-			if(closingBracketCounter < openingBracketCounter)
+			if(closingBracketCounter <= openingBracketCounter)
 			{
 				if (fullPrStrings[index] == '(')
 				{
@@ -447,7 +449,8 @@ public class Parser
 						openingBracketCounter = 0;
 						closingBracketCounter = 0;
 
-						subStringList.add(fullProgram.substring(openingBracketIndex, closingBracketIndex));
+						subStringList.add(fullProgram.substring(openingBracketIndex, closingBracketIndex + 1));
+						System.out.println(fullProgram.substring(openingBracketIndex, closingBracketIndex + 1));
 					}
 				}
 			}

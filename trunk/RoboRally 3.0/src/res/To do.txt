@@ -2,6 +2,7 @@
 TO DO:
 
 * documentatie (zie hieronder)
+* prettyprint
 * iterator
 * programma's
 * IllegalSyntaxException
