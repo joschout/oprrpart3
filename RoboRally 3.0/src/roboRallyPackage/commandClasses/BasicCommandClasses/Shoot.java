@@ -11,7 +11,7 @@ import roboRallyPackage.gameElementClasses.*;
 public class Shoot extends BasicCommand
 {
 	
-	public Shoot(Robot robot)
+	public Shoot()
 	{
 
 	}
