@@ -129,7 +129,6 @@ public class Parser
 	{
 		inputProgram = inputProgram.replaceAll(" ","").toLowerCase();
 		inputProgram = inputProgram.replaceAll("\n","").toLowerCase();
-		System.out.println(inputProgram);
 		if(inputProgram.equals("(move)")
 				|| inputProgram.equals("(turnclockwise)") 
 				|| inputProgram.equals("(turncounterclockwise)")
@@ -223,7 +222,6 @@ public class Parser
 			// cut off the "(while" and the last closing bracket of the string
 			inputProgramString = inputProgramString.replaceFirst("\\(while", " ").trim();
 			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 1);
-			System.out.println(inputProgramString);
 
 			// make a list of programs that can be given to the while-object
 			// the first program is supposed to be a condition, the second is supposed to be a command
@@ -450,7 +448,6 @@ public class Parser
 						closingBracketCounter = 0;
 
 						subStringList.add(fullProgram.substring(openingBracketIndex, closingBracketIndex + 1));
-						System.out.println(fullProgram.substring(openingBracketIndex, closingBracketIndex + 1));
 					}
 				}
 			}

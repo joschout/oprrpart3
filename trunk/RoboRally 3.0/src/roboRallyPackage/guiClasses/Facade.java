@@ -798,6 +798,18 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	@Override
 	public int saveProgramToFile(Robot robot, String path)
 	{
+		try
+		{
+			BufferedWriter out = new BufferedWriter(new java.io.FileWriter(new java.io.File(path)));
+			out.write(robot.getProgram().toString());
+			out.close();
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("The operation failed.");
+			return -1;
+		}
+		
 		return 0;
 	}
 
