@@ -20,7 +20,7 @@ public abstract class Program
 		return null;
 	}
 	
-	public void executeStep()
+	public void executeStep(Robot robot)
 	{
 	}
 	

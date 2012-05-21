@@ -18,19 +18,27 @@ public class CanHitRobot extends BasicCondition
 	
 	public Robot robot;
 	
-	public Robot getRobot(){
+	public Robot getRobot()
+	{
 		return this.robot;
 	}
 	
 	
 	public boolean results()
 	{
+		// get the first position in the line of the given robot that contains an element
 		Element testElement = this.getRobot().getBoard().getFirstElementStartingAt(this.getRobot().getPosition(), this.getRobot().getOrientation());
-		for(Element element: this.getRobot().getBoard().getElements(testElement.getPosition()))
+		
+		// if some element is found it may be possible that more elements are placed on that position
+		// if one of them is a robot, this method should return true
+		if(testElement != null)
 		{
-			if(element instanceof Robot)
+			for(Element element: this.getRobot().getBoard().getElements(testElement.getPosition()))
 			{
-				return true;
+				if(element instanceof Robot)
+				{
+					return true;
+				}
 			}
 		}
 		return false;
