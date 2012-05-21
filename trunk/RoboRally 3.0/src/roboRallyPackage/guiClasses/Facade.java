@@ -748,7 +748,30 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	@Override
 	public int loadProgramFromFile(Robot robot, String path)
 	{
-		return 0;
+		String inputProgram = null;
+		
+		java.io.File file = new java.io.File(path);
+		if(file.exists() && file.canRead())
+		{
+			java.io.FileReader fileReader = new java.io.FileReader(file);
+			StringBuffer buffer = new StringBuffer();
+			int len;
+			
+			try
+			{
+				while ((len = fileReader.read(chr)) > 0) 
+				{
+					buffer.append(chr, 0, len);
+				}
+			} 
+			finally 
+			{
+				fileReader.close();
+			}
+			inputProgram = buffer.toString();
+		}
+		
+		return robot.setProgram(inputProgram);
 	}
 
 	/**
@@ -787,7 +810,7 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	@Override
 	public void stepn(Robot robot, int n)
 	{
-		
+		robot.runProgramStep(n);
 	}
 
 }

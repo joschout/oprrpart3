@@ -19,7 +19,7 @@ import roboRallyPackage.exceptionClasses.*;
  */
 public class Parser
 {
-	Parser(Robot robot)
+	public Parser(Robot robot)
 	{
 		this.robot = robot;
 	}
