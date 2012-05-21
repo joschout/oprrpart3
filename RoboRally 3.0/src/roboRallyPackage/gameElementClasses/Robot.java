@@ -266,6 +266,15 @@ public class Robot extends Element implements IEnergyHolder
 	
 	
 	/**
+	 * Transfers the given amount of energy, expressed in watt-seconds [Ws], from this robot to another IEnergyHolder.
+	 */
+	@Override
+	public void transferEnergy(IEnergyHolder other, double amount) throws IllegalStateException, UnsupportedOperationException
+	{
+		throw new UnsupportedOperationException();
+	}
+
+	/**
 	 * Returns the minimum amount of energy, expressed in watt-second [Ws], this robot needs to move to the given position.
 	 * Returns -1 if this robot cannot reach the given position.
 	 * This would mean that either the robot has insufficient energy to reach the given position or the position is not reachable because of obstacles.
@@ -786,68 +795,6 @@ public class Robot extends Element implements IEnergyHolder
 
 
 	/**
-	 * Lets this robot shoot its laserbeam to destroy another element.
-	 * One of the elements that is standing on the first position one encounters when 'walking' in a straight line
-	 * from the position of the robot with its orientation, is terminated and removed from the board.
-	 * If no element is standing within the shooting range of this robot, it will shoot anyway, though nothing is hit.
-	 * 
-	 * @pre		The robot must be able to use its laser.
-	 * 			| this.canShoot()
-	 * @effect	The energy level of this robot is decreased with the cost of shooting one time
-	 * 			| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToShoot())
-	 * @throws	IllegatStateException
-	 * 			When this is terminated
-	 * 			| this.isTerminated()
-	 */
-	public void shoot() throws IllegalStateException
-	{
-		assert this.canShoot(): "This robot cannot shoot.";
-		if(this.isTerminated())
-		{
-			throw new IllegalStateException("A terminated robot cannot shoot.");
-		}
-		
-		// the energy of this robot is decreased with the energy it costs to shoot
-		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToShoot());
-		
-		try
-        {
-                // the element that is hit is terminated
-                Element shotElement = this.getBoard().getFirstElementStartingAt(this.getPosition(), this.getOrientation());
-                try
-                {
-                        shotElement.takeHit();
-                }
-                // no element is found within the shooting range of this robot.
-                catch(NullPointerException exc)
-                {
-                }
-        }
-        catch(NullPointerException exc)
-        {
-                throw new IllegalStateException();
-        }
-	}
-	
-
-	
-	/**
-	 * Checks whether this robot can use its laser.
-	 * 
-	 * @return	False if this robot is not standing on a board.
-	 * 			| result != (this.getBoard() == null)
-	 * @return	False if this robot does not have a position.
-	 * 			| result != (this.getPosition() == null)
-	 * @return	False the current amount of energy of this robot is less than the amount of energy it costs for this robot to shoot its laser.
-	 *			| result != (this.getEnergy(EnergyUnit.WATTSECOND) < getCostToShoot())
-	 */
-	public boolean canShoot()
-	{
-		return ((this.getBoard() != null) && (this.getPosition() != null) && (this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToShoot()));
-	}
-	
-
-	/**
 	 * Turns this robot 90 degrees in clockwise direction if the robot has sufficient energy.
 	 * Does not modify the state of the robot if it has insufficient energy.
 	 * 
@@ -945,76 +892,6 @@ public class Robot extends Element implements IEnergyHolder
 	
 
 	/**
-	 * Checks whether this robot can share a position with another element.
-	 */
-	@Override
-	public boolean canSharePositionWith(Element other)
-	{
-		return ((other == null) && !(other instanceof Wall) && !(other instanceof Robot));
-	}
-
-	/**
-	 * Transfers the given amount of energy, expressed in watt-seconds [Ws], from this robot to another IEnergyHolder.
-	 */
-	@Override
-	public void transferEnergy(IEnergyHolder other, double amount) throws IllegalStateException, UnsupportedOperationException
-	{
-		throw new UnsupportedOperationException();
-	}
-	
-	/**
-	 * When an element is hit (e.g. it is shot by a robot) some of its properties are altered.
-	 * This robots maximum energy level is decreased with 4000 Ws if possible, otherwise it is terminated.
-	 * 
-	 * @effect	The robots maximum energy level is decreased with 4000 Ws if possible, otherwise it is terminated.
-	 * 			| if(this.canHaveAsMaxEnergy(this.getMaxEnergy() - 4000))
-	 * 			|  then this.setMaxEnergy(this.getMaxEnergy() - 4000)
-	 * 			| else this.terminate()
-	 * @throws	IllegalStateException
-	 * 			When this robot is terminated.
-	 * 			| this.isTerminated()
-	 */
-	@Override
-	public void takeHit() throws IllegalStateException
-	{
-		if(this.isTerminated())
-		{
-			throw new IllegalStateException("A terminated robot cannot be hit by a laser.");
-		}
-		
-		// this robots maximum energy level can be decreased with 4000 Ws.
-		if(this.canHaveAsMaxEnergy(this.getMaxEnergy()-4000))
-		{
-			this.setMaxEnergy(this.getMaxEnergy()-4000);
-		}
-		// the robots maximum energy reaches 0 when decreasing it.
-		else
-		{
-			this.terminate();
-		}
-	}
-	
-	/**
-	 * Returns a string representation of this robot.
-	 * 
-	 * @return	A string of this robot.
-	 * 			| result == "Robot with:" + "\n"
-	 *			| 			+ super.toString() + "\n" 
-	 *			| 			+ " Energy level: " + this.getEnergy(EnergyUnit.WATTSECOND) + "(" + this.getEnergyFraction() + "%)" + ";  " + "\n"
-	 *			+ " Possessions: " + this.getPossessionsString();
-	 */
-	@Override
-	public java.lang.String toString()
-	{
-		return "Robot with:" + "\n"
-				+ super.toString() + ";  " + "\n"
-				+ " Energy level: " + this.getEnergy(EnergyUnit.WATTSECOND) + " (" + this.getEnergyFraction() + "%) " + ";  " + "\n"
-				+ " Possessions: " + this.getPossessionsString();
-	}
-
-	
-	
-	/**
 	 * Moves this robot and the given robot as close as possible to each other
 	 * consuming as little energy as possible and taking in account the current energy they have.
 	 * No inefficient moves or turns are included.
@@ -1030,11 +907,11 @@ public class Robot extends Element implements IEnergyHolder
 	 * 			|  ((new this).getPosition().getManhattanDistance((new other).getPosition()) <= position1.getManhattanDistance(position2)
 	 * 			|	  || ! this.getBoard().canElementBePutAtPosition(position1, this)
 	 * 			|	  || ! other.getBoard().canElementBePutAtPosition(position2, other))
-     *			|	  || ((new this).getPosition() == position1 && (new other).getPosition() == position2)
-     * @effect	The energy this robot is decreased with the energy it needs to reach the position where it ends up.
-     * 			| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - this.getEnergyRequiredToReach((new this).getPosititon()))
-     * @effect	The energy the given other robot is decreased with the energy it needs to reach the position where it ends up.
-     * 			| other.setEnergy(other.getEnergy(EnergyUnit.WATTSECOND) - other.getEnergyRequiredToReach((new other).getPosititon()))
+	 *			|	  || ((new this).getPosition() == position1 && (new other).getPosition() == position2)
+	 * @effect	The energy this robot is decreased with the energy it needs to reach the position where it ends up.
+	 * 			| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - this.getEnergyRequiredToReach((new this).getPosititon()))
+	 * @effect	The energy the given other robot is decreased with the energy it needs to reach the position where it ends up.
+	 * 			| other.setEnergy(other.getEnergy(EnergyUnit.WATTSECOND) - other.getEnergyRequiredToReach((new other).getPosititon()))
 	 * @throws	IllegalBoardException
 	 * 			When this robot and the given other robot are not placed on the same board or they are not standing on any board.
 	 * 			| other.getBoard() != this.getBoard() || this.getBoard() == null || other.getBoard() == null
@@ -1056,17 +933,17 @@ public class Robot extends Element implements IEnergyHolder
 		
 		DijkstraSP thisShortestPaths = new DijkstraSP(this.getBoard().createDiGraphForRobot(this), 0);
 		DijkstraSP otherShortestPaths = new DijkstraSP(this.getBoard().createDiGraphForRobot(other), 0);
-
+	
 		java.util.List<OrientatedPosition> thisVertices = this.getBoard().createListVertices(this);
 		java.util.List<OrientatedPosition> otherVertices = other.getBoard().createListVertices(other);
-
+	
 		// initialize the search-values with a maximum value
 		long manhattanDistance = Long.MAX_VALUE;
 		double bestTotalEnergy = Double.POSITIVE_INFINITY;
-
+	
 		OrientatedPosition thisBestOrientatedPosition = new OrientatedPosition(this.getOrientation(),this.getPosition());
 		OrientatedPosition otherBestOrientatedPosition = new OrientatedPosition(other.getOrientation(),other.getPosition());
-
+	
 		for(OrientatedPosition thisOrientatedPosition: thisVertices)
 		{
 			// this robot has enough energy to reach thisOrientatedPosition
@@ -1116,16 +993,163 @@ public class Robot extends Element implements IEnergyHolder
 		other.getBoard().moveElement(otherBestOrientatedPosition.getPosition(), other);
 		other.setOrientation(otherBestOrientatedPosition.getOrientation());
 		other.setEnergy(other.getEnergy(EnergyUnit.WATTSECOND) - otherShortestPaths.distTo(otherVertices.indexOf(otherBestOrientatedPosition)));		
-	}	
+	}
+
+	/**
+	 * Checks whether this robot can share a position with another element.
+	 */
+	@Override
+	public boolean canSharePositionWith(Element other)
+	{
+		return ((other == null) && !(other instanceof Wall) && !(other instanceof Robot));
+	}
+
+	/**
+	 * Lets this robot shoot its laserbeam to destroy another element.
+	 * One of the elements that is standing on the first position one encounters when 'walking' in a straight line
+	 * from the position of the robot with its orientation, is terminated and removed from the board.
+	 * If no element is standing within the shooting range of this robot, it will shoot anyway, though nothing is hit.
+	 * 
+	 * @pre		The robot must be able to use its laser.
+	 * 			| this.canShoot()
+	 * @effect	The energy level of this robot is decreased with the cost of shooting one time
+	 * 			| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToShoot())
+	 * @throws	IllegatStateException
+	 * 			When this is terminated
+	 * 			| this.isTerminated()
+	 */
+	public void shoot() throws IllegalStateException
+	{
+		assert this.canShoot(): "This robot cannot shoot.";
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated robot cannot shoot.");
+		}
+		
+		// the energy of this robot is decreased with the energy it costs to shoot
+		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToShoot());
+		
+		try
+	    {
+	            // the element that is hit is terminated
+	            Element shotElement = this.getBoard().getFirstElementStartingAt(this.getPosition(), this.getOrientation());
+	            try
+	            {
+	                    shotElement.takeHit();
+	            }
+	            // no element is found within the shooting range of this robot.
+	            catch(NullPointerException exc)
+	            {
+	            }
+	    }
+	    catch(NullPointerException exc)
+	    {
+	            throw new IllegalStateException();
+	    }
+	}
+
+	/**
+	 * Checks whether this robot can use its laser.
+	 * 
+	 * @return	False if this robot is not standing on a board.
+	 * 			| result != (this.getBoard() == null)
+	 * @return	False if this robot does not have a position.
+	 * 			| result != (this.getPosition() == null)
+	 * @return	False the current amount of energy of this robot is less than the amount of energy it costs for this robot to shoot its laser.
+	 *			| result != (this.getEnergy(EnergyUnit.WATTSECOND) < getCostToShoot())
+	 */
+	public boolean canShoot()
+	{
+		return ((this.getBoard() != null) && (this.getPosition() != null) && (this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToShoot()));
+	}
+
+	/**
+	 * When an element is hit (e.g. it is shot by a robot) some of its properties are altered.
+	 * This robots maximum energy level is decreased with 4000 Ws if possible, otherwise it is terminated.
+	 * 
+	 * @effect	The robots maximum energy level is decreased with 4000 Ws if possible, otherwise it is terminated.
+	 * 			| if(this.canHaveAsMaxEnergy(this.getMaxEnergy() - 4000))
+	 * 			|  then this.setMaxEnergy(this.getMaxEnergy() - 4000)
+	 * 			| else this.terminate()
+	 * @throws	IllegalStateException
+	 * 			When this robot is terminated.
+	 * 			| this.isTerminated()
+	 */
+	@Override
+	public void takeHit() throws IllegalStateException
+	{
+		if(this.isTerminated())
+		{
+			throw new IllegalStateException("A terminated robot cannot be hit by a laser.");
+		}
+		
+		// this robots maximum energy level can be decreased with 4000 Ws.
+		if(this.canHaveAsMaxEnergy(this.getMaxEnergy()-4000))
+		{
+			this.setMaxEnergy(this.getMaxEnergy()-4000);
+		}
+		// the robots maximum energy reaches 0 when decreasing it.
+		else
+		{
+			this.terminate();
+		}
+	}
 	
 	private Program program;
 
-	public Program getProgram() {
+	public Program getProgram()
+	{
 		return program;
 	}
 
-	public void setProgram(Program program) {
+	public int setProgram(Program program) 
+	{
 		this.program = program;
+		
+		if(this.getProgram() == program)
+		{
+			return 0;
+		}
+		return -1;
+	}
+	
+	public int setProgram(String inputProgram) 
+	{
+		Parser parser = new Parser(this);
+		Program program = parser.parse(inputProgram);
+		this.program = program;
+		
+		if(this.getProgram() == program)
+		{
+			return 0;
+		}
+		return -1;
+	}
+	
+	public void runProgramStep(int n)
+	{
+		for(int i = 0; i <= n; i++)
+		{
+			this.getProgram().executeStep();
+		}
+	}
+
+	/**
+	 * Returns a string representation of this robot.
+	 * 
+	 * @return	A string of this robot.
+	 * 			| result == "Robot with:" + "\n"
+	 *			| 			+ super.toString() + "\n" 
+	 *			| 			+ " Energy level: " + this.getEnergy(EnergyUnit.WATTSECOND) + "(" + this.getEnergyFraction() + "%)" + ";  " + "\n"
+	 *			+ " Possessions: " + this.getPossessionsString();
+	 */
+	@Override
+	public java.lang.String toString()
+	{
+		return "Robot with:" + "\n"
+				+ super.toString() + ";  " + "\n"
+				+ " Energy level: " + this.getEnergy(EnergyUnit.WATTSECOND) + " (" + this.getEnergyFraction() + "%) " + ";  " + "\n"
+				+ " Possessions: " + this.getPossessionsString();
 	}
 	
 	

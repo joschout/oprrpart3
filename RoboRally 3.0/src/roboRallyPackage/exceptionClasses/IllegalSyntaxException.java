@@ -9,4 +9,9 @@ public class IllegalSyntaxException extends RuntimeException
 		
 	}
 	
+	public IllegalSyntaxException()
+	{
+		
+	}
+	
 }
