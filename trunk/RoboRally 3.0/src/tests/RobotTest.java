@@ -72,7 +72,6 @@ public class RobotTest {
 		assertTrue(mutableRobotOne.isTerminated());
 	}
 	
-	
 	@Test
 	public void testTerminate_withElements() {
 		facade.putRobot(mutableBoardOne, 1, 1, mutableRobotOne);
