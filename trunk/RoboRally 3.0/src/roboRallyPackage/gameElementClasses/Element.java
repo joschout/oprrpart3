@@ -253,6 +253,8 @@ public abstract class Element extends Terminatable
 
 	/**
 	 * Variable representing the board of this element.
+	 * 
+	 * @invar	An element can be placed on at most one board. It is possible for an element not to be placed on a board.
 	 */
 	private Board board = null;
 	
