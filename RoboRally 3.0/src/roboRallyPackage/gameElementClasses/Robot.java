@@ -550,6 +550,7 @@ public class Robot extends Element implements IEnergyHolder
 				if (getPossessions().get(i).getWeight() >= item.getWeight())
 				{
 					getPossessions().add(i, item);
+					break;
 				}
 			}
 			// add the item to the end of the list; the given item is lighter than all the other items this robot is carrying.

@@ -28,12 +28,12 @@ public abstract class Item extends Element
 	 * @effect	This new item is initialized as an Element with the given position and the given board.
 	 * 			| super(position, board)
 	 * @post	If the given weight is a valid weight for this Item, the weight of this item is set to the given weight.
-	 * 			| if(canHaveAsWeigh(weight)) then (new this).getWeight == weight
+	 * 			| if(this.canHaveAsWeigh(weight)) then (new this).getWeight == weight
 	 */
 	public Item(Position position, Board board, int weight)
 	{
 		super(position, board);
-		if(canHaveAsWeigh(weight))
+		if(this.canHaveAsWeigh(weight))
 		{
 			this.weight = weight;
 		}
