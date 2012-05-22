@@ -22,6 +22,11 @@ public class Not extends CombinedCondition
 		return ! condition.results();
 	}
 	
+	public boolean results(Element element) throws IllegalArgumentException
+	{
+		return ! condition.results(element);
+	}
+	
 	private Condition condition;
 
 	/**

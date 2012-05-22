@@ -29,6 +29,18 @@ public class And extends CombinedCondition
 		return result;
 	}
 	
+	public boolean results(Element element) throws IllegalArgumentException
+	{
+		boolean result = true;
+		
+		for(Condition condition: this.getConditions())
+		{
+			result = result && condition.results(element);
+		}
+		
+		return result;
+	}
+	
 	private java.util.List<Condition> conditions;
 
 	public java.util.List<Condition> getConditions()

@@ -1,3 +1,4 @@
+
 package roboRallyPackage.commandClasses.CombinedCondition;
 
 import roboRallyPackage.gameElementClasses.*;
@@ -23,6 +24,18 @@ public class Or extends CombinedCondition
 		for(Condition condition: this.getConditions())
 		{
 			result = result || condition.results();
+		}
+		
+		return result;
+	}
+	
+	public boolean results(Element element) throws IllegalArgumentException
+	{
+		boolean result = true;
+		
+		for(Condition condition: this.getConditions())
+		{
+			result = result || condition.results(element);
 		}
 		
 		return result;
