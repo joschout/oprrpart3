@@ -4,23 +4,21 @@ package roboRallyPackage.commandClasses;
 import roboRallyPackage.gameElementClasses.Robot;
 
 /**
- * 
- * 
- * 
+ * Class representing a program
+ *
  * @version   24 may 2012
  * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
  * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public abstract class Program
 {	
+	
+	/**
+	 * Initializes this program with the given program level.
+	 */
 	public Program(int programLevel)
 	{
 		this.programLevel = programLevel;
-	}
-	
-	public void executeStep(Robot robot)
-	{
-		
 	}
 	
 	/**
@@ -36,24 +34,49 @@ public abstract class Program
 	 *	) 
 	 * 
 	 * In this example, '(while ...)' represents an instance of the subclass While of Program,
-	 *  '(If...) represents an instance of the subclass If and so on.
-	 *  Here, while is the most outer piece of the program, it contains the other pieces. So its program level is 0.
-	 *  The pieces representing the condition of the while loop (here 'true') 
-	 *  and the if- and else-commands are just inside the while loop. So they get program level 1.
-	 * 
+	 * '(If...) represents an instance of the subclass If and so on.
+	 * Here, while is the most outer piece of the program, it contains the other pieces. So its program level is 0.
+	 * The pieces representing the condition of the while loop (here 'true') 
+	 * and the if- and else-commands are just inside the while loop. So they get program level 1.
 	 */
-	public int programLevel;
+	private int programLevel;
 	
+	
+	/**
+	 * Returns the program level of this program.
+	 */
 	public int getProgramLevel()
 	{
 		return programLevel;
 	}
 	
+	/**
+	 * Returns whether this program is fully executed.
+	 */
 	public boolean isFullyExecuted()
 	{
 		return true;
 	}
 	
+	/**
+	 * Executes one step of this program.
+	 */
+	public void executeStep(Robot robot)
+	{
+		
+	}
+	
+	/**
+	 * Executes this full program. 
+	 */
+	public void execute(Robot robot)
+	{
+		
+	}
+
+	/**
+	 * String representation of this program, in the syntax used by the Parser.
+	 */
 	public abstract String getNotationExample();
 }
 
