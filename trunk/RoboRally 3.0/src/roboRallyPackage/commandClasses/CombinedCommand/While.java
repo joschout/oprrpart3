@@ -40,7 +40,7 @@ public class While extends CombinedCommand
 	
 	public void execute(Robot robot)
 	{
-		while(this.getCondition().results())
+		while(this.getCondition().results() || !this.getWhileCommand().isFullyExecuted())
 		{
 			this.getWhileCommand().execute(robot);
 		}
@@ -48,9 +48,8 @@ public class While extends CombinedCommand
 	
 	public void executeStep(Robot robot)
 	{
-		if(this.getCondition().results() )
+		if(this.getCondition().results() || !this.getWhileCommand().isFullyExecuted())
 		{
-			
 			this.getWhileCommand().executeStep(robot);
 		}
 	}
