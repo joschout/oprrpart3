@@ -3,13 +3,11 @@ TO DO:
 
 * documentatie (zie hieronder)
 * prettyprint
-* iterator
-* programma's
 * private/public/protected/package
-* seq in while: seq zal niet helemaal worden uitgevoerd!!
 * IllegalSyntaxException
 * representatie-invarianten! hb p 420
 * testen !
+* assertions
 * klassenschema
 * element-is-in-conflict met van Item: robot moven naar een plaats waar een ander Item staat
 * element: setBoard() verantwoordelijkheid zou bij board moeten liggen

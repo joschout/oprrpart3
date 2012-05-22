@@ -2,40 +2,93 @@
 package roboRallyPackage.commandClasses.BasicConditionClasses;
 
 import roboRallyPackage.gameElementClasses.*;
+import be.kuleuven.cs.som.annotate.*;
 
 /**
+ * Class representing an energy-at-least condition.
+ * 
  * @version   24 may 2012
  * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
  * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public class EnergyAtLeast extends BasicCondition
 {
-	public EnergyAtLeast(int programLevel,IEnergyHolder holder, double energy)//Robot robot, double energy)
+	/**
+	 * Initializes this energy-at-least condition with the given program level, IEnergyHolder and energy.
+	 * 
+	 * @param	programLevel
+	 * 			The program level of this new energy-at-least condition.
+	 * @param	holder
+	 * 			The IEnergyHolder of this new energy-at-least condition.
+	 * @param	energy
+	 * 			The energy of this new energy-at-least condition.
+	 * @effect	...
+	 * 			| super(programLevel)
+	 * @post	...
+	 * 			| (new this).getIEnergyHolder() == holder
+	 * @post	...
+	 * 			| (new this).getEnergyWattSecond() == energy
+	 */
+	public EnergyAtLeast(int programLevel, IEnergyHolder holder, double energy)
 	{
 		super(programLevel);
 		this.energy = new EnergyAmount(energy, EnergyUnit.WATTSECOND);
 		this.holder = holder;
 	}
-	public IEnergyHolder holder;
 	
-	
+	/**
+	 * Returns the IEnergyHolder of this energy-at-least condition.
+	 */
+	@Basic
 	public IEnergyHolder getIEnergyHolder()
 	{
 		return this.holder;
 	}
 	
-	private EnergyAmount energy;
-	
+	/**
+	 * Variable representing the IEnergyHolder of this energy-at-least condition. 
+	 */
+	private IEnergyHolder holder;
+
+	/**
+	 * Returns the energy of this energy-at-least condition in watt-seconds [Ws].
+	 */
+	@Basic
 	public double getEnergyWattSecond()
 	{
 		return energy.getAmountInWattSecond();
 	}
 
+	/**
+	 * Variable representing the energy of this energy-at-least condition.
+	 */
+	private EnergyAmount energy;
+
+
+	/**
+	 * Returns the result of this energy-at-least condition.
+	 * This will be true if the energy of the robot of this condition is greater that the energy level of this energy-at-least condition.
+	 * 
+	 * @return	...
+	 * 			| result == (this.getIEnergyHolder().getEnergy(EnergyUnit.WATTSECOND) >= this.getEnergyWattSecond())
+	 */
 	public boolean results() 
 	{
 		return (this.getIEnergyHolder().getEnergy(EnergyUnit.WATTSECOND) >= this.getEnergyWattSecond());
 	}
 	
+	/**
+	 * Returns the result of this energy-at-least condition, given the given element.
+	 * This will be true if the energy of the given element is greater that the energy level of this energy-at-least condition.
+	 * 
+	 * @param	element
+	 * 			The element on who the result will depend
+	 * @return	...
+	 * 			| result == (((IEnergyHolder) element).getEnergy(EnergyUnit.WATTSECOND) >= this.getEnergyWattSecond())
+	 * @throws	IllegalArgumentException
+	 * 			...
+	 * 			| !(element instanceof IEnergyHolder)
+	 */
 	public boolean results(Element element) throws IllegalArgumentException
 	{
 		if(!(element instanceof IEnergyHolder))
@@ -45,12 +98,24 @@ public class EnergyAtLeast extends BasicCondition
 		return (((IEnergyHolder) element).getEnergy(EnergyUnit.WATTSECOND) >= this.getEnergyWattSecond());
 	}
 	
+	/**
+	 * String representation of this energy-at-least condition.
+	 * 
+	 * @return	...
+	 * 			| result == "(energy-at-least " + this.getEnergyWattSecond() + ")"
+	 */
 	@Override
 	public String toString()
 	{
-		return"(energy-at-least " + this.getEnergyWattSecond() + ")";
+		return "(energy-at-least " + this.getEnergyWattSecond() + ")";
 	}
 	
+	/**
+	 * String representation of this energy-at-least condition, in the syntax used by the Parser.
+	 * 
+	 * @return	...
+	 * 			| result == "(energy-at-least 'energy-number')"
+	 */
 	@Override
 	public String getNotationExample()
 	{
