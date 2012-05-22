@@ -25,30 +25,14 @@ public class AtItem extends BasicCondition
 	
 	public boolean results()
 	{
-		for(Element element: this.getRobot().getBoard().getElements(this.getRobot().getPosition()))
-		{
-			if(element instanceof Item)
-			{
-				return true;
-			}
-		}
-		return false;
+		return this.results(this.getRobot());
 	}
 	
-
 	
-	
-	
-	@Override
-	public String toString()
-	{
-		return "(at-item)";
-		
-	}
-
 	@Override
 	public boolean results(Element element) throws IllegalArgumentException{
-	if(!(element instanceof Robot)){
+	
+		if(!(element instanceof Robot)){
 		throw new IllegalArgumentException();
 	}
 	for(Element el: element.getBoard().getElements(this.getRobot().getPosition()))
@@ -59,5 +43,12 @@ public class AtItem extends BasicCondition
 		}
 	}
 	return false;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "(at-item)";
+		
 	}
 }
