@@ -813,6 +813,11 @@ public class Robot extends Element implements IEnergyHolder
 
 	/**
 	 * Variable representing all the possessions this robot is carrying.
+	 * 
+	 * @invar	An item cannot be carried by a robot and be put on a board at the same time.
+	 * @invar	The items that this robot is carrying must be ordered by weight, starting with the most heaviest item.
+	 * @invar	A robot cannot carry a terminated item.
+	 * @invar	A terminated robot cannot carry any item.
 	 */
 	private java.util.List<Item> possessions = new java.util.ArrayList<Item>(0);
 

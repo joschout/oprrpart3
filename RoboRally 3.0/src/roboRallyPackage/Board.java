@@ -119,6 +119,8 @@ public class Board extends Terminatable
 	
 	/**
 	 * Variable representing the width of this board.
+	 * 
+	 * @invar	The width of a board cannot be modified after construction
 	 */
 	private final long width;
 
@@ -134,6 +136,8 @@ public class Board extends Terminatable
 	
 	/**
 	 * Variable representing the maximum width of a Board.
+	 * 
+	 * @invar	The maximum width of all boards must be the same.
 	 */
 	private final static long maxWidth = Long.MAX_VALUE;
 
@@ -163,6 +167,8 @@ public class Board extends Terminatable
 	
 	/**
 	 * Variable representing the height of this board.
+	 * 
+	 * @invar	The height of a board cannot be modified after construction
 	 */
 	private final long height;
 
@@ -178,6 +184,8 @@ public class Board extends Terminatable
 	
 	/**
 	 * Variable representing the maximum height of a Board.
+	 *
+	 * @invar	The maximum height of all boards must be the same.
 	 */
 	private final static long maxHeight = Long.MAX_VALUE;
 
@@ -720,6 +728,15 @@ public class Board extends Terminatable
 
 	/**
 	 * Variable representing the set of elements placed on this Board.
+	 * 
+	 * @invar	No element can be placed on the board twice.
+	 * @invar	Placing an element must take amortized constant time.
+	 * @invar	Removing an element must be linear in the number of elements.
+	 * @invar	It must be possible to lookup all items on a certain position in constant time.
+	 * @invar	The amount of memory needed to store a board should be proportional to the number of positions in use.
+	 * @invar	A terminated element cannot be placed on a board.
+	 * @invar	A terminated board cannot contain any elements.
+	 * @invar	All elements that are placed on a boad must have a valid position on this board. 
 	 */
 	private java.util.Map<Position, java.util.Set<Element>> elements = new java.util.HashMap<Position, java.util.Set<Element>>();
 	
