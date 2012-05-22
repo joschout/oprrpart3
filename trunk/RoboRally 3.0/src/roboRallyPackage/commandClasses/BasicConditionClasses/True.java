@@ -23,4 +23,10 @@ public class True extends BasicCondition
 	public String toString(){
 		return "(true)";
 	}
+
+	@Override
+	public boolean results(Element element) {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }
