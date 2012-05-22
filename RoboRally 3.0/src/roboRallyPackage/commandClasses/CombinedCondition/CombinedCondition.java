@@ -1,7 +1,6 @@
 
 package roboRallyPackage.commandClasses.CombinedCondition;
 
-import roboRallyPackage.*;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.commandClasses.*;
 
@@ -14,7 +13,7 @@ public abstract class CombinedCondition extends Condition
 {
 	public CombinedCondition(int programLevel)
 	{
-	this.programLevel = programLevel;
+		this.programLevel = programLevel;
 	}
 //	public CombinedCondition(Robot robot)
 //	{
@@ -22,4 +21,6 @@ public abstract class CombinedCondition extends Condition
 //	}
 	
 	public abstract boolean results();
+	
+	public abstract boolean results(Element element) throws IllegalArgumentException;
 }

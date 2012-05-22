@@ -36,9 +36,18 @@ public class EnergyAtLeast extends BasicCondition
 		return (this.getIEnergyHolder().getEnergy(EnergyUnit.WATTSECOND) >= this.getEnergyWattSecond());
 	}
 	
+	public boolean results(Element element) throws IllegalArgumentException
+	{
+		if(!(element instanceof IEnergyHolder))
+		{
+			throw new IllegalArgumentException("This element is not an IEnergyholder. It is not possible to ckeck its energy.");
+		}
+		return (((IEnergyHolder) element).getEnergy(EnergyUnit.WATTSECOND) >= this.getEnergyWattSecond());
+	}
+	
 	@Override
 	public String toString()
 	{
-		return"(energy-at-least " + this.getEnergyWattSecond() +")";
+		return"(energy-at-least " + this.getEnergyWattSecond() + ")";
 	}
 }

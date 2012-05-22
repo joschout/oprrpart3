@@ -982,29 +982,35 @@ public class Board extends Terminatable
 	
 }
 
-class BoardIterator implements Iterator
+class BoardIterator implements Iterator<Element>
 {
 
 	public BoardIterator(Condition condition, Board board)
 	{
 		this.condition = condition;
-		this.elementsSatisfyCondition = makeCollectionElements(board);
-		this.iterator = elementsSatisfyCondition.iterator();
+		this.elementsThatSatisfyCondition = getElementsThatSatisfyCondition(board);
+		this.iterator = elementsThatSatisfyCondition.iterator();
 	}
 	
 	private Condition condition = null;
-	private java.util.Collection<Element> elementsSatisfyCondition = null;
-	private Iterator iterator = null;
+	private java.util.Collection<Element> elementsThatSatisfyCondition = null;
+	private Iterator<Element> iterator = null;
 	
-	public java.util.Collection<Element> makeCollectionElements(Board board)
+	public java.util.Collection<Element> getElementsThatSatisfyCondition(Board board)
 	{
-		java.util.Collection<Element> elementsSatisfyCondition = null;
+		java.util.Collection<Element> elementsSatisfyCondition = new java.util.ArrayList<Element>();
 		
 		for(Element element: board.getElements(Element.class))
 		{
-			if(condition.results(iterator.next()))
+			try
 			{
-				elementsSatisfyCondition.add(element);
+				if(condition.results(element))
+				{
+					elementsSatisfyCondition.add(element);
+				}
+			}
+			catch(Exception e)
+			{
 			}
 		}
 		
