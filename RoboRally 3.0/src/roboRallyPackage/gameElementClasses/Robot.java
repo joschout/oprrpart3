@@ -1,6 +1,8 @@
 
 package roboRallyPackage.gameElementClasses;
 
+import java.util.ArrayList;
+
 import roboRallyPackage.*;
 import roboRallyPackage.commandClasses.Program;
 import roboRallyPackage.exceptionClasses.IllegalBoardException;
@@ -85,7 +87,8 @@ public class Robot extends Element implements IEnergyHolder
 	@Override
 	public void terminate()
 	{
-		for(Item item: this.getPossessions())
+		java.util.List<Item> tempList = new ArrayList<Item>(this.getPossessions());
+		for(Item item: tempList)
 		{
 			this.removeItem(item);
 			item.terminate();
