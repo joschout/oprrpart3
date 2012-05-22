@@ -19,7 +19,10 @@ public class IllegalPositionException extends RuntimeException
 	
 	public IllegalPositionException(String toStringText)
 	{
+		this.toStringText = toStringText;
 	}
+	
+	private String toStringText;
 	
 	@Basic
 	public long getCoordX()
@@ -48,6 +51,10 @@ public class IllegalPositionException extends RuntimeException
 	@Override
 	public String toString()
 	{
+		if(this.toStringText != null)
+		{
+			return this.toStringText;
+		}
 		if(this.getBoard() == null)
 		{
 			return "The position with coordinates (" + this.getCoordX() + "," + this.getCoordY() + ")" + " is not a valid position.";
