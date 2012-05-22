@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
+import roboRallyPackage.commandClasses.Condition;
+import roboRallyPackage.commandClasses.Program;
 import roboRallyPackage.exceptionClasses.*;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.pathFindingClasses.*;
@@ -978,6 +980,68 @@ public class Board extends Terminatable
 //	
 //}
 	
+}
+
+class BoardIterator implements Iterator
+{
+
+	public BoardIterator(Condition condition, Board board)
+	{
+		this.condition = condition;
+		this.elementsSatisfyCondition = makeCollectionElements(board);
+		this.iterator = elementsSatisfyCondition.iterator();
+	}
 	
+	private Condition condition = null;
+	private java.util.Collection<Element> elementsSatisfyCondition = null;
+	private Iterator iterator = null;
 	
+	public java.util.Collection<Element> makeCollectionElements(Board board)
+	{
+		java.util.Collection<Element> elementsSatisfyCondition = null;
+		
+		for(Element element: board.getElements(Element.class))
+		{
+			if(condition.results(iterator.next()))
+			{
+				elementsSatisfyCondition.add(element);
+			}
+		}
+		
+		return elementsSatisfyCondition;
+	}
+	
+	public Condition getCondition()
+	{
+		return this.condition;
+	}
+
+	@Override
+	public boolean hasNext()
+	{
+		if(iterator.hasNext())
+		{
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Object next() throws java.util.NoSuchElementException
+	{
+		if(this.hasNext())
+		{
+			return iterator.next();
+		}
+		else
+		{
+			throw new java.util.NoSuchElementException();
+		}
+	}
+
+	@Override
+	public void remove() throws UnsupportedOperationException
+	{
+		throw new UnsupportedOperationException();
+	}
 }
