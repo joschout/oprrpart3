@@ -10,6 +10,8 @@ import roboRallyPackage.pathFindingClasses.*;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
+ *A class representing robots.
+ * 
  * @invar	The orientation of each robot must be a valid orientation.
  * 			| this.canHaveAsOrientation(this.getOrientation())
  * @invar	The total weight of the items a robot can carry must not exceed the maximum weight it can carry.
