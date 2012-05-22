@@ -13,13 +13,9 @@ public abstract class CombinedCondition extends Condition
 {
 	public CombinedCondition(int programLevel)
 	{
-		this.programLevel = programLevel;
+		super(programLevel);
 	}
-//	public CombinedCondition(Robot robot)
-//	{
-//		super(robot);
-//	}
-	
+
 	public abstract boolean results();
 	
 	public abstract boolean results(Element element) throws IllegalArgumentException;

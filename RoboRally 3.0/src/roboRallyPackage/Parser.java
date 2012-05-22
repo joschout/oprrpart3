@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package roboRallyPackage;
 
 import java.util.ArrayList;
@@ -14,121 +12,12 @@ import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.exceptionClasses.*;
 
 /**
- * @author Nele
- *
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public class Parser
 {
-	
-	public Parser(){
-		
-	}
-//	public Parser(Robot robot)
-//	{
-//		this.robot = robot;
-//	}
-//
-//	private Robot robot;
-//
-//	public Robot getRobot()
-//	{
-//		return this.robot;
-//	}
-
-	//	public Command parse(String fullProgram)
-	//	{
-	//		fullProgram = fullProgram.replaceAll(" ","").toLowerCase();
-	//		
-	//		Command resultCommand  = null;
-	//		
-	//		// BasicCommands
-	//		if(fullProgram.startsWith("(move)"))
-	//		{
-	//			resultCommand = new Move(this.getRobot());
-	//		}
-	//		if(fullProgram.startsWith("(turn"))
-	//		{
-	//			String subProgram = fullProgram.substring("(turn".length()).trim();
-	//			if(subProgram.startsWith("clockwise)"))
-	//			{
-	//				resultCommand = new Turn(this.getRobot(),Direction.CLOCKWISE);
-	//			}
-	//			if(subProgram.startsWith("counterclockwise)"))
-	//			{
-	//				resultCommand = new Turn(this.getRobot(),Direction.COUNTER_CLOCKWISE);
-	//			}
-	//		}
-	//		if(fullProgram.startsWith("(shoot)"))
-	//		{
-	//			resultCommand = new Shoot(this.getRobot());
-	//		}
-	//		if(fullProgram.startsWith("(pick-up-and-use)"))
-	//		{
-	//			resultCommand = new PickupAndUse(this.getRobot());
-	//		}
-	//		
-	//		// ControleStatementCommands
-	//		if(fullProgram.startsWith("(seq"))
-	//		{
-	//			String subProgram = fullProgram.substring("(seq".length()).trim();
-	//			
-	//			java.util.List<Executable> commands = new java.util.ArrayList<Executable>();
-	//			boolean stop = false;
-	//			
-	//			while(! stop)
-	//			{
-	//				if(subProgram.startsWith(")"))
-	//				{
-	//					stop = true;
-	//				}
-	//				else
-	//				{
-	//					// get the first command of the current subProgram
-	//					commands.add((Executable) this.parse(subProgram));
-	//					// cut the command that we just found off the current subProgram-string
-	//					int index = subProgram.indexOf(")");
-	//					subProgram = subProgram.substring(index + 1).trim();
-	//				}
-	//			}
-	//				
-	//			resultCommand = new Sequence(this.getRobot(), commands);
-	//		}
-	//		if(fullProgram.startsWith("(while"))
-	//		{
-	//			String subProgram = fullProgram.substring("(while".length()).trim();
-	//
-	//			Condition condition;
-	//			Executable executable;
-	//
-	//			condition = (Condition) this.parse(subProgram);
-	//			
-	//			subProgram.substring(subProgram.indexOf("(")).trim();
-	//			if(subProgram.substring(0,subProgram.indexOf(")")).contains("("))
-	//			{
-	//				
-	//			}
-	//			subProgram.substring(subProgram.indexOf(")")).trim();
-	//			
-	//					if(this.parse(subProgram) instanceof Condition)
-	//					{
-	//						condition = this.parse(subProgram) instanceof Condition;
-	//					}
-	//				}
-	//			}
-	//
-	//			resultCommand = new While(this.getRobot(),condition,executable);
-	//		}
-	//		if(fullProgram.startsWith("(if"))
-	//		{
-	//			resultCommand = new If();
-	//		}
-	//		
-	//		return resultCommand;
-	//	}
-	//	
-
-
-
 	public static Program parse(int programLevel, Robot robot, String inputProgram) throws IllegalSyntaxException
 	{
 		inputProgram = inputProgram.replaceAll(" ","").toLowerCase();
@@ -151,7 +40,8 @@ public class Parser
 				|| inputProgram.startsWith("(energy-at-least")
 				|| inputProgram.equals("(at-item)")
 				|| inputProgram.equals("(can-hit-robot)")
-				|| inputProgram.equals("(wall)"))
+				|| inputProgram.equals("(wall)")
+				|| inputProgram.startsWith("(in-subrange"))
 		{
 			return Parser.parseBasicCondition(programLevel,robot, inputProgram);
 		}
@@ -327,6 +217,39 @@ public class Parser
 		if(inputProgram.equals("(wall)"))
 		{
 			return new NextToWall(programLevel,robot);
+		}
+		if(inputProgram.startsWith("(in-subrange"))
+		{
+			// cut off the "(in-subrange" and the last closing bracket of the string
+			inputProgram = inputProgram.replaceFirst("\\(in-subrange", "").trim();
+			inputProgram = inputProgram.substring(0, inputProgram.length() - 1);
+
+			// split the remaining string into substrings, that should all contain a number
+			String[] coordinateStrings = inputProgram.split(",");
+			long[] coordinates = new long[4];
+			
+			// convert all the string representations to longs; if the strings are no numbers, an exception is thrown
+			try
+			{
+				for(int i = 0; i < coordinates.length; i++)
+				{
+					coordinates[i] = Long.valueOf(coordinateStrings[i]).longValue();
+				}
+			}
+			catch(NumberFormatException exc)
+			{
+				throw new IllegalSyntaxException();
+			}
+
+			// check whether the number of given substrings is equal to the number of longs; if not an exception is thrown
+			if(coordinateStrings.length == coordinates.length)
+			{
+				return new InPartOfBoard(programLevel,robot,coordinates);
+			}
+			else
+			{
+				throw new IllegalSyntaxException();
+			}
 		}
 		assert false;
 		return null;

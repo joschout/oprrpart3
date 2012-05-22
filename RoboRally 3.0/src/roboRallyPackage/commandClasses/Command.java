@@ -10,21 +10,10 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public abstract class Command extends Program
 {
-	public Command()
+	public Command(int programLevel)
 	{
-		
+		super(programLevel);
 	}
-//	public Command(Robot robot)
-//	{
-//		this.robot = robot;
-//	}
-	
-//	protected Robot getRobot()
-//	{
-//		return robot;
-//	}
-	
-//	private Robot robot;
 	
 	public abstract void execute(Robot robot);
 	

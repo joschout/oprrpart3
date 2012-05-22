@@ -14,12 +14,8 @@ public abstract class CombinedCommand extends Command
 	
 	public CombinedCommand(int programLevel)
 	{
-		this.programLevel=programLevel;
+		super(programLevel);
 	}
-//	public CombinedCommand(Robot robot)
-//	{
-//		super(robot);
-//	}
 	
 	public abstract void execute(Robot robot);
 	
