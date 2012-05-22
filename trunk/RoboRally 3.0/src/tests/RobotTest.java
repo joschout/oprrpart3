@@ -73,32 +73,32 @@ public class RobotTest {
 	}
 	
 	
-//	@Test
-//	public void testTerminate_withElements() {
-//		facade.putRobot(mutableBoardOne, 1, 1, mutableRobotOne);
-//		facade.putBattery(mutableBoardOne, 1, 1, mutableBatteryOne);
-//		facade.putRepairKit(mutableBoardOne, 1, 1, mutableRepairKitOne);
-//		facade.putSurpriseBox(mutableBoardOne, 1, 1, mutableSurpriseBoxOne);
-//		
-//		
-//		facade.pickUpBattery(mutableRobotOne, mutableBatteryOne);
-//		facade.pickUpRepairKit(mutableRobotOne, mutableRepairKitOne);
-//		facade.pickUpSurpriseBox(mutableRobotOne, mutableSurpriseBoxOne);
-//		
-//		mutableRobotOne.terminate();
-//		
-//		assertFalse(mutableRobotOne.getPossessions().contains(mutableBatteryOne)
-//				|| mutableRobotOne.getPossessions().contains(mutableRepairKitOne)
-//				|| mutableRobotOne.getPossessions().contains(mutableSurpriseBoxOne));
-//		
-//		
-//		assertTrue(mutableRobotOne.isTerminated());
-//		assertTrue(mutableBatteryOne.isTerminated());
-//		assertTrue(mutableRepairKitOne.isTerminated());
-//		assertTrue(mutableSurpriseBoxOne.isTerminated());
-//		assertFalse(facade.getRobots(mutableBoardOne).contains(mutableRobotOne));
-//		
-//	}
+	@Test
+	public void testTerminate_withElements() {
+		facade.putRobot(mutableBoardOne, 1, 1, mutableRobotOne);
+		facade.putBattery(mutableBoardOne, 1, 1, mutableBatteryOne);
+		facade.putRepairKit(mutableBoardOne, 1, 1, mutableRepairKitOne);
+		facade.putSurpriseBox(mutableBoardOne, 1, 1, mutableSurpriseBoxOne);
+		
+		
+		facade.pickUpBattery(mutableRobotOne, mutableBatteryOne);
+		facade.pickUpRepairKit(mutableRobotOne, mutableRepairKitOne);
+		facade.pickUpSurpriseBox(mutableRobotOne, mutableSurpriseBoxOne);
+		
+		mutableRobotOne.terminate();
+		
+		assertFalse(mutableRobotOne.getPossessions().contains(mutableBatteryOne)
+				|| mutableRobotOne.getPossessions().contains(mutableRepairKitOne)
+				|| mutableRobotOne.getPossessions().contains(mutableSurpriseBoxOne));
+		
+		
+		assertTrue(mutableRobotOne.isTerminated());
+		assertTrue(mutableBatteryOne.isTerminated());
+		assertTrue(mutableRepairKitOne.isTerminated());
+		assertTrue(mutableSurpriseBoxOne.isTerminated());
+		assertFalse(facade.getRobots(mutableBoardOne).contains(mutableRobotOne));
+		
+	}
 	
 	
 	
@@ -485,6 +485,18 @@ public class RobotTest {
 		assertTrue(mutableRobotOne.getPosition().getCoordX() == 2);
 		assertTrue(mutableRobotOne.getPosition().getCoordY() == 1);
 		assertTrue(mutableRobotOne.getEnergy(EnergyUnit.WATTSECOND) == 18000-Robot.getCostToMove());
+	}
+	
+	public void testMoveOneStep_toIllegalPosition() {
+		
+		Robot testRobot = new Robot(new Position(0,0),mutableBoardOne,Orientation.UP, (double)15000,(double) 20000);
+		// energy of mutable robot one is 18000 Ws
+		testRobot.moveOneStep();
+		assertTrue(testRobot.getOrientation() == Orientation.UP);
+		assertTrue(testRobot.getBoard() == mutableBoardOne);
+		assertTrue(testRobot.getPosition().getCoordX() == 0);
+		assertTrue(testRobot.getPosition().getCoordY() == 0);
+		assertTrue(testRobot.getEnergy(EnergyUnit.WATTSECOND) == 15000);
 	}
 
 	/**
