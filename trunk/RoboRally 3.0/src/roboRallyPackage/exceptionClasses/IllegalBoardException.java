@@ -16,9 +16,12 @@ public class IllegalBoardException extends RuntimeException
 		this.board = board;
 	}
 	
-	public IllegalBoardException(String toStrinText)
+	public IllegalBoardException(String toStringText)
 	{
+		this.toStringText = toStringText;
 	}
+	
+	String toStringText;
 	
 	@Basic
 	public Element getelement()
@@ -39,6 +42,10 @@ public class IllegalBoardException extends RuntimeException
 	@Override
 	public String toString()
 	{
+		if(this.toStringText != null)
+		{
+			return this.toStringText;
+		}
 		return "This element cannot be placed on this board.";
 	}
 }

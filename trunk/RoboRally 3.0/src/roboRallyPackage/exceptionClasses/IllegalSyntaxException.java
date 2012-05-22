@@ -6,7 +6,7 @@ public class IllegalSyntaxException extends RuntimeException
 
 	public IllegalSyntaxException(String toStringText)
 	{
-		
+		this.toStringText = toStringText;
 	}
 	
 	public IllegalSyntaxException()
@@ -14,4 +14,15 @@ public class IllegalSyntaxException extends RuntimeException
 		
 	}
 	
+	private String toStringText;
+	
+	@Override
+	public String toString()
+	{
+		if(this.toStringText != null)
+		{
+			return this.toStringText;
+		}
+		return "IllegalSyntaxException in the program file.";
+	}
 }

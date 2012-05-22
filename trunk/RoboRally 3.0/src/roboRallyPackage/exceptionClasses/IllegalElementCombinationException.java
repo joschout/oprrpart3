@@ -17,7 +17,10 @@ public class IllegalElementCombinationException extends RuntimeException
 	
 	public IllegalElementCombinationException(String toStringText)
 	{
+		this.toStringText = toStringText;
 	}
+	
+	String toStringText;
 	
 	@Basic
 	public Element getNewElement()
@@ -38,6 +41,10 @@ public class IllegalElementCombinationException extends RuntimeException
 	@Override
 	public String toString()
 	{
+		if(this.toStringText != null)
+		{
+			return this.toStringText;
+		}
 		return "The element you are trying to place on this position is in conflict with another element that is already standing on this position.";
 	}
 }
