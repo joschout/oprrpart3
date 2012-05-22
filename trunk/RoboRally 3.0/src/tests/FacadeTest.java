@@ -12,7 +12,7 @@ import roboRallyPackage.guiClasses.*;
 
 public class FacadeTest {
 
-	private IFacade<Board, Robot, Wall, Battery> facade;
+	private Facade facade;
 	private Board board;
 	private static Robot immutableRobotOne;
 	private Robot mutableRobotOne;
