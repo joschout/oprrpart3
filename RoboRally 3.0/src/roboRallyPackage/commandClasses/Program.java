@@ -48,8 +48,14 @@ public abstract class Program
 	 */
 	public int programLevel;
 	
-	public int getProgramLevel(){
+	public int getProgramLevel()
+	{
 		return programLevel;
+	}
+	
+	public boolean isFullyExecuted()
+	{
+		return true;
 	}
 }
 

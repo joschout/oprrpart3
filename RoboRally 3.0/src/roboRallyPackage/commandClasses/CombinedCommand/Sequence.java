@@ -55,6 +55,11 @@ public class Sequence extends CombinedCommand
 		this.increaseNextCommandToExecute();
 	}
 	
+	public boolean isFullyExecuted()
+	{
+		return (this.getNextCommandToExecute() == 0);
+	}
+	
 	@Override
 	public String toString()
 	{

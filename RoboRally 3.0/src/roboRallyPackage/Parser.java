@@ -129,7 +129,7 @@ public class Parser
 
 
 
-	public Program parse(int programLevel, Robot robot, String inputProgram) throws IllegalSyntaxException
+	public static Program parse(int programLevel, Robot robot, String inputProgram) throws IllegalSyntaxException
 	{
 		inputProgram = inputProgram.replaceAll(" ","").toLowerCase();
 		inputProgram = inputProgram.replaceAll("\n","").toLowerCase();
@@ -139,13 +139,13 @@ public class Parser
 				|| inputProgram.equals("(shoot)")
 				|| inputProgram.equals("(pick-up-and-use)"))
 		{
-			return this.parseBasicCommand(programLevel, inputProgram);
+			return Parser.parseBasicCommand(programLevel, inputProgram);
 		}
 		if(inputProgram.startsWith("(seq")
 				|| inputProgram.startsWith("(while")
 				|| inputProgram.startsWith("(if"))
 		{
-			return this.parseCombinedCommand(programLevel, robot,inputProgram);
+			return Parser.parseCombinedCommand(programLevel, robot,inputProgram);
 		}
 		if(inputProgram.equals("(true)")
 				|| inputProgram.startsWith("(energy-at-least")
@@ -153,13 +153,13 @@ public class Parser
 				|| inputProgram.equals("(can-hit-robot)")
 				|| inputProgram.equals("(wall)"))
 		{
-			return this.parseBasicCondition(programLevel,robot, inputProgram);
+			return Parser.parseBasicCondition(programLevel,robot, inputProgram);
 		}
 		if(inputProgram.startsWith("(and")
 				|| inputProgram.startsWith("(or")
 				|| inputProgram.startsWith("(not"))
 		{
-			return this.parseCombinedCondition(programLevel,robot,inputProgram);
+			return Parser.parseCombinedCondition(programLevel,robot,inputProgram);
 		}
 		else
 		{
@@ -167,7 +167,7 @@ public class Parser
 		}
 	}
 
-	public Program parseBasicCommand(int programLevel, String inputProgram)
+	public static Program parseBasicCommand(int programLevel, String inputProgram)
 	{
 		if(inputProgram.equals("(move)"))
 		{ 
@@ -193,7 +193,7 @@ public class Parser
 		return null;
 	}
 
-	public Program parseCombinedCommand(int programLevel,Robot robot, String inputProgramString)
+	public static Program parseCombinedCommand(int programLevel,Robot robot, String inputProgramString)
 	{
 		if(inputProgramString.startsWith("(seq"))
 		{
@@ -203,10 +203,10 @@ public class Parser
 
 			// make a list of commands that can be given to the sequence-object
 			java.util.ArrayList<Command> parametersSeqAsCommands = new java.util.ArrayList<Command>();
-			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
+			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = this.parse(programLevel++,robot, subProgramString);
+				Program subProgram = Parser.parse(programLevel++,robot, subProgramString);
 				// check whether the given program is a command; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Command)
 				{
@@ -230,10 +230,10 @@ public class Parser
 			// make a list of programs that can be given to the while-object
 			// the first program is supposed to be a condition, the second is supposed to be a command
 			java.util.ArrayList<Program> parametersWhileAsPrograms = new java.util.ArrayList<Program>();
-			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
+			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				parametersWhileAsPrograms.add(this.parse(programLevel++,robot, subProgramString));
+				parametersWhileAsPrograms.add(Parser.parse(programLevel++,robot, subProgramString));
 			}
 
 			// check whether the given list has a condition as first element and a command as second element
@@ -258,10 +258,10 @@ public class Parser
 			// make a list of programs that can be given to the if-object
 			// the first program is supposed to be a condition, the second and third are supposed to be a command
 			java.util.ArrayList<Program> parametersIfAsPrograms = new java.util.ArrayList<Program>();
-			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
+			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				parametersIfAsPrograms.add(this.parse(programLevel++,robot, subProgramString));
+				parametersIfAsPrograms.add(Parser.parse(programLevel++,robot, subProgramString));
 			}
 
 			// check whether the given list has a condition as first element and a command as second and third element
@@ -283,7 +283,7 @@ public class Parser
 		return null;
 	}
 
-	public Program parseBasicCondition(int programLevel,Robot robot, String inputProgram)
+	public static Program parseBasicCondition(int programLevel,Robot robot, String inputProgram)
 	{
 		if(inputProgram.equals("(true)"))
 		{
@@ -332,7 +332,7 @@ public class Parser
 		return null;
 	}
 
-	public Program parseCombinedCondition(int programLevel,Robot robot, String inputProgramString)
+	public static Program parseCombinedCondition(int programLevel,Robot robot, String inputProgramString)
 	{
 		if(inputProgramString.startsWith("(and"))
 		{
@@ -342,10 +342,10 @@ public class Parser
 
 			// make a list of commands that can be given to the sequence-object
 			java.util.ArrayList<Condition> parametersAndAsConditions = new java.util.ArrayList<Condition>();
-			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
+			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = this.parse(programLevel++,robot, subProgramString);
+				Program subProgram = Parser.parse(programLevel++,robot, subProgramString);
 				// check whether the given program is a condition; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Condition)
 				{
@@ -368,10 +368,10 @@ public class Parser
 
 			// make a list of commands that can be given to the sequence-object
 			java.util.ArrayList<Condition> parametersOrAsConditions = new java.util.ArrayList<Condition>();
-			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
+			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = this.parse(programLevel++,robot,subProgramString);
+				Program subProgram = Parser.parse(programLevel++,robot,subProgramString);
 				// check whether the given program is a condition; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Condition)
 				{
@@ -393,8 +393,8 @@ public class Parser
 			inputProgramString = inputProgramString.substring(0, inputProgramString.length() - 1);
 
 			// make a list of commands that can be given to the sequence-object
-			java.util.ArrayList<String> subProgramStrings = this.getSubstringsBracketCutter(inputProgramString);
-			Program parametersNotAsProgram = this.parse(programLevel++,robot,subProgramStrings.get(0));
+			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
+			Program parametersNotAsProgram = Parser.parse(programLevel++,robot,subProgramStrings.get(0));
 
 			// check whether the given list of programs contains only 1 programs and this programs is a condition; if not throw an exception
 			if(subProgramStrings.size() == 1 && parametersNotAsProgram instanceof Condition)
@@ -411,7 +411,7 @@ public class Parser
 		return null;
 	}
 
-	public java.util.ArrayList<String> getSubstringsBracketCutter(String fullProgram)
+	public static java.util.ArrayList<String> getSubstringsBracketCutter(String fullProgram)
 	{
 		// stores the index of the first '(' in the given String
 		int openingBracketIndex = 0;
@@ -459,6 +459,23 @@ public class Parser
 
 		}
 		return subStringList;
+	}
+	
+	public static boolean isValidStringProgram(String inputProgram)
+	{
+		if(inputProgram == null)
+		{
+			return false;
+		}
+		try
+		{
+			Parser.parse(0, new Robot(), inputProgram);
+		}
+		catch(IllegalSyntaxException exc)
+		{
+			return false;
+		}
+		return true;
 	}
 
 

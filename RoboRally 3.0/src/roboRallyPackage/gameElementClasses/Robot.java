@@ -6,6 +6,7 @@ import roboRallyPackage.commandClasses.Program;
 import roboRallyPackage.exceptionClasses.IllegalBoardException;
 import roboRallyPackage.exceptionClasses.IllegalElementCombinationException;
 import roboRallyPackage.exceptionClasses.IllegalPositionException;
+import roboRallyPackage.exceptionClasses.IllegalSyntaxException;
 import roboRallyPackage.pathFindingClasses.*;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -58,6 +59,17 @@ public class Robot extends Element implements IEnergyHolder
 		this.setOrientation(orientation);
 		this.setEnergy(currentEnergy);
 		this.setMaxEnergy(maxEnergy);
+	}
+	
+	/**
+	 * Create a new robot with standard values.
+	 * 
+	 * @effect	Initialize the robot with standard values
+	 * 			| this(null,null,Orientation.RIGHT,0,20000)
+	 */
+	public Robot()
+	{	
+		this(null,null,Orientation.RIGHT,0,20000);
 	}
 
 	/**
@@ -1110,35 +1122,45 @@ public class Robot extends Element implements IEnergyHolder
 		return program;
 	}
 
-	public int setProgram(Program program) 
+	/**
+	 * Sets the program of this robot, given a program input.
+	 * 
+	 * @param	program
+	 * 			The new program of this robot
+	 * @post	The program of this robot is set to the given program
+	 * 			| (new this).getProgram() == program
+	 */
+	public void setProgram(Program program) 
 	{
 		this.program = program;
-		
-		if(this.getProgram() == program)
-		{
-			return 0;
-		}
-		return -1;
 	}
 	
-	public int setProgram(String inputProgram) 
+	/**
+	 * Sets the program of this robot, given a string input.
+	 * 
+	 * @param	inputProgram
+	 * 			A string representation of a program. The program to be set.
+	 * @effect	The program of this robot is set to the given program
+	 * 			| this.setProgram(Parser.parse(0,this,inputProgram))
+	 * @throws	IllgalSyntaxException
+	 * 			When the given string is not a valid string representation of a program
+	 * 			| !Parser.isValidStringProgram()
+	 */
+	public void setProgram(String inputProgram) throws IllegalSyntaxException
 	{
-		if(inputProgram == null)
-		{
-			return -1;
-		}
-		
-		Parser parser = new Parser();
-		Program program = parser.parse(0, this, inputProgram);
-		this.program = program;
-		
-		if(this.getProgram() == program)
-		{
-			return 0;
-		}
-		return -1;
+		Program program = Parser.parse(0, this, inputProgram);
+		this.setProgram(program);
 	}
 	
+	/**
+	 * Runs n steps of this robots program.
+	 * One step of the program means that it will run the program until a basic command (e.g. 'move')
+	 * 
+	 * @param	n
+	 * 			The number of steps to be executed
+	 * @effect	The robot will execute n steps of its program
+	 * 			| for i = 1..n: this.getProgram.executeStep(this)
+	 */
 	public void runProgramStep(int n)
 	{
 		for(int i = 1; i <= n; i++)

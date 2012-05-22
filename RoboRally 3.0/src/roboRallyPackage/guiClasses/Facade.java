@@ -4,10 +4,10 @@ package roboRallyPackage.guiClasses;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.file.FileSystemNotFoundException;
 import java.util.Set;
 
 import roboRallyPackage.exceptionClasses.IllegalBoardException;
+import roboRallyPackage.exceptionClasses.IllegalSyntaxException;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.*;
 
@@ -750,6 +750,8 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	@Override
 	public int loadProgramFromFile(Robot robot, String path)
 	{
+		
+		
 		String inputProgram = null;
 		java.io.FileReader fileReader = null;
 		StringBuffer buffer = null;
@@ -787,7 +789,24 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 			inputProgram = buffer.toString();
 		}
 		
-		return robot.setProgram(inputProgram);
+		if(inputProgram == null)
+		{
+			return -1;
+		}
+		try
+		{
+			robot.setProgram(inputProgram);
+		}
+		catch(IllegalSyntaxException exc)
+		{
+			return -1;
+		}
+		
+		if(robot.getProgram() == Parser.parse(0, robot, inputProgram))
+		{
+			return -1;
+		}
+		return 0;
 	}
 
 	/**
