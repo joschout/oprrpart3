@@ -613,6 +613,7 @@ public class Board extends Terminatable
 		// create a new List and fill it up with the existing elements at this position
 		java.util.Set<Element> elementsAtPosition;
 		
+		
 		if(elements.get(position) == null)
 		{
 			elementsAtPosition = new java.util.HashSet<Element>();
