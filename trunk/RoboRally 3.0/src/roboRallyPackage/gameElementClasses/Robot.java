@@ -1094,9 +1094,15 @@ public class Robot extends Element implements IEnergyHolder
 			this.terminate();
 		}
 	}
-	
-	private Program program;
+	/**
+	 * Variable representing a program this robot has saved in its memory.
+	 */
+	private Program program = null;
 
+	/**
+	 * Returns the program of this robot.
+	 */
+	@Basic
 	public Program getProgram()
 	{
 		return program;
