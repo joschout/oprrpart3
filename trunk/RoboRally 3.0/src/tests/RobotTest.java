@@ -126,7 +126,7 @@ public class RobotTest {
 		assertTrue(testRobot.getPosition() == null);
 		assertTrue(testRobot.getBoard() == null);
 		assertTrue(testRobot.getOrientation() == Orientation.RIGHT);
-		assertTrue(testRobot.getEnergy(EnergyUnit.WATTSECOND)==20000);
+		assertTrue(testRobot.getEnergy(EnergyUnit.WATTSECOND)==0);
 		assertTrue(testRobot.getMaxEnergy()==20000);
 	}
 

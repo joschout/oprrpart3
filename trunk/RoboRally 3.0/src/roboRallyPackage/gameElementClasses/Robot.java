@@ -65,11 +65,11 @@ public class Robot extends Element implements IEnergyHolder
 	 * Create a new robot with standard values.
 	 * 
 	 * @effect	Initialize the robot with standard values
-	 * 			| this(null,null,Orientation.RIGHT,20000,20000)
+	 * 			| this(null,null,Orientation.RIGHT,0,20000)
 	 */
 	public Robot()
 	{	
-		this(null,null,Orientation.RIGHT,20000,20000);
+		this(null,null,Orientation.RIGHT,0,20000);
 	}
 
 	/**
