@@ -10,6 +10,11 @@ import roboRallyPackage.gameElementClasses.Element;
  */
 public abstract class Condition extends Program
 {
+	public Condition(int programLevel)
+	{
+		super(programLevel);
+	}
+	
 	public abstract boolean results();
 
 	public abstract boolean results(Element element) throws IllegalArgumentException;

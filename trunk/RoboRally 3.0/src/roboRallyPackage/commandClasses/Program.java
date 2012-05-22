@@ -12,19 +12,15 @@ import roboRallyPackage.gameElementClasses.Robot;
  * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public abstract class Program
-{
-	public void run(String program, Robot robot)
+{	
+	public Program(int programLevel)
 	{
-		this.getCommand(program).execute(robot);
-	}
-	
-	public Command getCommand(String program)
-	{
-		return null;
+		this.programLevel = programLevel;
 	}
 	
 	public void executeStep(Robot robot)
 	{
+		
 	}
 	
 	/**

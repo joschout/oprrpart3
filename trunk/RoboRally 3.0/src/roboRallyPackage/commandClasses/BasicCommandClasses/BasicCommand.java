@@ -13,12 +13,8 @@ public abstract class BasicCommand extends Command
 {
 	public BasicCommand(int programLevel)
 	{
-	this.programLevel = programLevel;
+		super(programLevel);
 	}
-//	public BasicCommand(Robot robot)
-//	{
-//		super(robot);
-//	}
 	
 	public abstract void execute(Robot robot);
 	

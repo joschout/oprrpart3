@@ -10,13 +10,13 @@ import roboRallyPackage.gameElementClasses.*;
  */
 public class CanHitRobot extends BasicCondition
 {
-	public CanHitRobot(int programLevel,Robot robot)
+	public CanHitRobot(int programLevel, Robot robot)
 	{
 		super(programLevel);
 		this.robot = robot;
 	}
 	
-	public Robot robot;
+	private Robot robot;
 	
 	public Robot getRobot()
 	{

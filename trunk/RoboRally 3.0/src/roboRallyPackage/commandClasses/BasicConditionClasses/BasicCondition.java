@@ -13,12 +13,10 @@ public abstract class BasicCondition extends Condition
 {
 	public BasicCondition(int programLevel)
 	{
-		this.programLevel=programLevel;
+		super(programLevel);
 	}
-
-
-	public abstract boolean results();
 	
+	public abstract boolean results();
 	
 	public abstract boolean results(Element element);
 }
