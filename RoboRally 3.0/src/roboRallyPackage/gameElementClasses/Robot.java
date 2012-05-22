@@ -65,11 +65,11 @@ public class Robot extends Element implements IEnergyHolder
 	 * Create a new robot with standard values.
 	 * 
 	 * @effect	Initialize the robot with standard values
-	 * 			| this(null,null,Orientation.RIGHT,0,20000)
+	 * 			| this(null,null,Orientation.RIGHT,20000,20000)
 	 */
 	public Robot()
 	{	
-		this(null,null,Orientation.RIGHT,0,20000);
+		this(null,null,Orientation.RIGHT,20000,20000);
 	}
 
 	/**
@@ -861,7 +861,7 @@ public class Robot extends Element implements IEnergyHolder
 	
 	/**
 	 * Moves this robot one step in its current direction if the robot has sufficient energy.
-	 * Does not modify the state of the robot if it has insufficient energy or 
+	 * Does not modify the state of the robot if it has insufficient energy or if it has been terminated.
 	 * 
 	 * @pre		This robot has enough energy to move
 	 * 			| this.getEnergy(EnergyUnit.WATTSECOND) >= this.getTotalCostToMove()
@@ -1015,7 +1015,7 @@ public class Robot extends Element implements IEnergyHolder
 	@Override
 	public boolean canSharePositionWith(Element other)
 	{
-		return ((other == null) && !(other instanceof Wall) && !(other instanceof Robot));
+		return ( !(other instanceof Wall) && !(other instanceof Robot));
 	}
 
 	/**
@@ -1101,6 +1101,9 @@ public class Robot extends Element implements IEnergyHolder
 		if(this.canHaveAsMaxEnergy(this.getMaxEnergy()-4000))
 		{
 			this.setMaxEnergy(this.getMaxEnergy()-4000);
+
+			if(this.getMaxEnergy()<this.getEnergy(EnergyUnit.WATTSECOND))
+				this.setEnergy(this.getMaxEnergy());
 		}
 		// the robots maximum energy reaches 0 when decreasing it.
 		else
