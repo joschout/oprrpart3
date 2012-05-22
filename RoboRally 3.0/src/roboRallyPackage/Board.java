@@ -285,6 +285,136 @@ public class Board extends Terminatable
 		}
 		return getElements().get(position);
 	}
+	
+	
+	/**
+	 * Returns an iterator that can iterate over all the element on the board that satisfy the given condition.
+	 * 
+	 * @param	condition
+	 * 			The condition to be satisfied by the elements, represented by a string.
+	 * @return	...
+	 * 			| if(Parser.parse(0, null, condition) instanceof Condition)
+	 * 			|   then result == this.getElementsThatSatisfyCondition((Condition) program)
+	 * 			| else result == null
+	 */
+	public Iterator<Element> getElementsThatSatisfyCondition(String condition)
+	{
+		Program program = null;
+		
+		try
+		{
+			program = Parser.parse(0, null, condition);
+		}
+		catch(IllegalSyntaxException exc)
+		{
+			return null;
+		}
+		
+		if(program instanceof Condition)
+		{
+			return this.getElementsThatSatisfyCondition((Condition) program);
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns an iterator that can iterate over all the element on the board that satisfy the given condition.
+	 * 
+	 * @param	condition
+	 * 			The condition to be satisfied by the elements
+	 * @return	...
+	 * 			| if(result.hasNext()) then condition.resulst(result.next())
+	 */
+	public Iterator<Element> getElementsThatSatisfyCondition(Condition condition)
+	{
+		final Condition conditionFinal = condition;
+		
+		return new Iterator<Element>()
+		{
+			/**
+			 * Variable that represents the collection of all the elements on the board that satisfy the given condition
+			 */
+			private java.util.Collection<Element> elementsThatSatisfyCondition = this.getElementsThatSatisfyCondition();
+			
+			/**
+			 * Variable that represents the iterator over all the elements on the board that satisfy the given condition
+			 */
+			private Iterator<Element> iterator = elementsThatSatisfyCondition.iterator();
+			
+			/**
+			 * Returns a collection of all the element on the given board that satisfy the given condition
+			 * 
+			 * @param	board
+			 * 			The board who's arguments may be added to the returned list
+			 * @return	All element on the given board that satisfy the given condition
+			 * 			| for each element in board.getElements(Element.class):
+			 * 			|   result.contains(condition
+			 * 			| 	  || ! condition.results(element)
+			 */
+			public java.util.Collection<Element> getElementsThatSatisfyCondition()
+			{
+				java.util.Collection<Element> elementsSatisfyCondition = new java.util.ArrayList<Element>();
+				
+				// iterate over all the elements on the board
+				for(Element element: Board.this.getElements(Element.class))
+				{
+					try
+					{
+						// if the current element satisfies the given condition, the element is added to the collection
+						// if that condition cannot be checked for that sort of element (e.g. a wall and energy-at-least)
+						// an IllegalArgumentException is thrown by the condition and that element is not added to the collection
+						if(conditionFinal.results(element))
+						{
+							elementsSatisfyCondition.add(element);
+						}
+					}
+					catch(IllegalArgumentException exc)
+					{
+					}
+				}
+				
+				return elementsSatisfyCondition;
+			}
+
+			/**
+			 * Returns true if the iteration has more elements. (In other words, returns true if next would return an element rather than throwing an exception.)
+			 */
+			@Override
+			public boolean hasNext()
+			{
+				if(iterator.hasNext())
+				{
+					return true;
+				}
+				return false;
+			}
+
+			/**
+			 * Returns the next element in the iteration.
+			 */
+			@Override
+			public Element next() throws java.util.NoSuchElementException
+			{
+				if(this.hasNext())
+				{
+					return iterator.next();
+				}
+				else
+				{
+					throw new java.util.NoSuchElementException();
+				}
+			}
+
+			/**
+			 * This method is ntt supported by this iterator.
+			 */
+			@Override
+			public void remove() throws UnsupportedOperationException
+			{
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
 
 	/**
 	 * Returns an element placed on this board on the first position one encounters 
@@ -950,105 +1080,5 @@ public class Board extends Terminatable
 	{
 		return "Board: (width, height) = (" + this.getWidth() + "," + this.getHeight() + ")";
 		
-	}
-	
-//public java.util.Iterator getAllElements(Condition condition){
-//	
-//	java.util.Map<Position, java.util.Set<Element>> elements = this.getElements();
-//	return new Iterator() {
-//
-//		 java.util.Map<Position, java.util.Set<Element>> = 
-//		
-//		
-//		
-//		@Override
-//		public boolean hasNext() {
-//			// TODO Auto-generated method stub
-//			return false;
-//		}
-//
-//		@Override
-//		public Object next() throw NoSuchElementException() {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-//
-//		@Override
-//		public void remove() throws UnsupportedOperationException {
-//			throw new UnsupportedOperationException();
-//		}
-//	};
-//	
-//}
-	
-}
-
-class BoardIterator implements Iterator<Element>
-{
-
-	public BoardIterator(Condition condition, Board board)
-	{
-		this.condition = condition;
-		this.elementsThatSatisfyCondition = getElementsThatSatisfyCondition(board);
-		this.iterator = elementsThatSatisfyCondition.iterator();
-	}
-	
-	private Condition condition = null;
-	private java.util.Collection<Element> elementsThatSatisfyCondition = null;
-	private Iterator<Element> iterator = null;
-	
-	public java.util.Collection<Element> getElementsThatSatisfyCondition(Board board)
-	{
-		java.util.Collection<Element> elementsSatisfyCondition = new java.util.ArrayList<Element>();
-		
-		for(Element element: board.getElements(Element.class))
-		{
-			try
-			{
-				if(condition.results(element))
-				{
-					elementsSatisfyCondition.add(element);
-				}
-			}
-			catch(Exception e)
-			{
-			}
-		}
-		
-		return elementsSatisfyCondition;
-	}
-	
-	public Condition getCondition()
-	{
-		return this.condition;
-	}
-
-	@Override
-	public boolean hasNext()
-	{
-		if(iterator.hasNext())
-		{
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public Object next() throws java.util.NoSuchElementException
-	{
-		if(this.hasNext())
-		{
-			return iterator.next();
-		}
-		else
-		{
-			throw new java.util.NoSuchElementException();
-		}
-	}
-
-	@Override
-	public void remove() throws UnsupportedOperationException
-	{
-		throw new UnsupportedOperationException();
-	}
+	}	
 }

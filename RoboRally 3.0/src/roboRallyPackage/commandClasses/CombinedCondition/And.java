@@ -26,7 +26,7 @@ public class And extends CombinedCondition
 			result = result && condition.results();
 		}
 		
-		return result;
+		return results();
 	}
 	
 	public boolean results(Element element) throws IllegalArgumentException
