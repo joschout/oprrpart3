@@ -31,8 +31,16 @@ public class PickupAndUse extends BasicCommand
 			}
 		}
 	}
+	
 	@Override
-	public String toString(){
+	public String toString()
+	{
+		return "(pick-up-and-use)";
+	}
+	
+	@Override
+	public String getNotationExample()
+	{
 		return "(pick-up-and-use)";
 	}
 }

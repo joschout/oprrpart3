@@ -45,7 +45,14 @@ public class Turn extends BasicCommand
 		}
 	}
 	@Override
-	public String toString(){
+	public String toString()
+	{
 		return "(turn " + this.getDirection().toString() + ")";
+	}
+	
+	@Override
+	public String getRegexNotation()
+	{
+		return "(turn 'direction')";
 	}
 }

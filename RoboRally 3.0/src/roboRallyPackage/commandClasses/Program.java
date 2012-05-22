@@ -53,5 +53,7 @@ public abstract class Program
 	{
 		return true;
 	}
+	
+	public abstract String getNotationExample();
 }
 

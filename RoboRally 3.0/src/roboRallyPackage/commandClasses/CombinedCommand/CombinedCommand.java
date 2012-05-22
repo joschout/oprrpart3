@@ -17,7 +17,13 @@ public abstract class CombinedCommand extends Command
 		super(programLevel);
 	}
 	
+	@Override
 	public abstract void execute(Robot robot);
 	
+	@Override
 	public abstract void executeStep(Robot robot);
+	
+	@Override
+	public abstract String getNotationExample();
+
 }

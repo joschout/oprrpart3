@@ -49,6 +49,11 @@ public class AtItem extends BasicCondition
 	public String toString()
 	{
 		return "(at-item)";
-		
+	}
+	
+	@Override
+	public String getNotationExample()
+	{
+		return "(at-item)";
 	}
 }

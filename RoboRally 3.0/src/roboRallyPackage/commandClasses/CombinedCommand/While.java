@@ -66,4 +66,10 @@ public class While extends CombinedCommand
 				+ "\n" + indentation+"  " + this.getWhileCommand().toString() 
 				+ "\n" +indentation+")";
 	}
+	
+	@Override
+	public String getNotationExample()
+	{
+		return "(while '(condition)' '(command)')";
+	}
 }

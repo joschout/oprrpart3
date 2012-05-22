@@ -85,4 +85,10 @@ public class If extends CombinedCommand
 				+ "\n" + indentation+ "  " + this.getElseCommand().toString()
 				+ "\n" + indentation+")";
 	}
+	
+	@Override
+	public String getNotationExample()
+	{
+		return "(if '(condition)' '(if-command)' '(else-command)')";
+	}
 }

@@ -63,4 +63,10 @@ public class And extends CombinedCondition
 		result =result + "\n" + ")";
 		return result;
 	}
+	
+	@Override
+	public String getNotationExample()
+	{
+		return "(and '(condition)' '(condition)' ... '(condition))";
+	}
 }
