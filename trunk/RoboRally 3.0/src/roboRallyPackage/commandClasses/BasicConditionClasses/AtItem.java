@@ -35,10 +35,29 @@ public class AtItem extends BasicCondition
 		return false;
 	}
 	
+
+	
+	
+	
 	@Override
 	public String toString()
 	{
 		return "(at-item)";
 		
+	}
+
+	@Override
+	public boolean results(Element element) throws IllegalArgumentException{
+	if(!(element instanceof Robot)){
+		throw new IllegalArgumentException();
+	}
+	for(Element el: element.getBoard().getElements(this.getRobot().getPosition()))
+	{
+		if(el instanceof Item)
+		{
+			return true;
+		}
+	}
+	return false;
 	}
 }

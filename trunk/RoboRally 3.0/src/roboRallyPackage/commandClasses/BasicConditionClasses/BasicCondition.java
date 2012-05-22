@@ -18,4 +18,7 @@ public abstract class BasicCondition extends Condition
 
 
 	public abstract boolean results();
+	
+	
+	public abstract boolean results(Element element);
 }
