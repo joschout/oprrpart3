@@ -18,4 +18,7 @@ public abstract class Condition extends Program
 	public abstract boolean results();
 
 	public abstract boolean results(Element element) throws IllegalArgumentException;
+	
+	@Override
+	public abstract String getNotationExample();
 }

@@ -25,7 +25,14 @@ public class Shoot extends BasicCommand
 		robot.shoot();
 	}
 	@Override
-	public String toString(){
+	public String toString()
+	{
+		return "(shoot)";
+	}
+	
+	@Override
+	public String getNotationExample()
+	{
 		return "(shoot)";
 	}
 

@@ -50,4 +50,10 @@ public class EnergyAtLeast extends BasicCondition
 	{
 		return"(energy-at-least " + this.getEnergyWattSecond() + ")";
 	}
+	
+	@Override
+	public String getNotationExample()
+	{
+		return "(energy-at-least 'energy-number')";
+	}
 }

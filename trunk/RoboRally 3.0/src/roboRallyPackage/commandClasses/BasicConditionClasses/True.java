@@ -29,4 +29,10 @@ public class True extends BasicCondition
 		// TODO Auto-generated method stub
 		return true;
 	}
+	
+	@Override
+	public String getNotationExample()
+	{
+		return "(true)";
+	}
 }

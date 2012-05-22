@@ -58,4 +58,10 @@ public class CanHitRobot extends BasicCondition
 	{
 		return "(can-hit-robot)";
 	}
+	
+	@Override
+	public String getNotationExample()
+	{
+		return "(can-hit-robot)";
+	}
 }

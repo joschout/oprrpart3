@@ -63,4 +63,10 @@ public class Or extends CombinedCondition
 		result =result + "\n" +indentation + ")";
 		return result;
 	}
+	
+	@Override
+	public String getNotationExample()
+	{
+		return "(or '(condition)' '(condition)' ... '(condition))";
+	}
 }

@@ -82,4 +82,16 @@ public class InPartOfBoard extends BasicCondition
 		return false;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "(in-subrange " + this.getPosition1().getCoordX() + ", " + this.getPosition1().getCoordY() + ", "
+							   + this.getPosition2().getCoordX() + ", " + this.getPosition2().getCoordY() + ")";
+	}
+	
+	@Override
+	public String getNotationExample()
+	{
+		return "(in-subrange 'X1-number', 'Y1-number', 'X2-number', 'Y2-number')";
+	}
 }

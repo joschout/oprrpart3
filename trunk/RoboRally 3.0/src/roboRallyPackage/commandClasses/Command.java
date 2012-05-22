@@ -18,4 +18,7 @@ public abstract class Command extends Program
 	public abstract void execute(Robot robot);
 	
 	public abstract void executeStep(Robot robot);
+	
+	@Override
+	public abstract String getNotationExample();
 }

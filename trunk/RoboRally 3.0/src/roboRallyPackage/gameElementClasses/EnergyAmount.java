@@ -85,8 +85,9 @@ public class EnergyAmount implements Comparable<EnergyAmount> {
 	 * 
 	 * @return
 	 */
-	public static Boolean isValidEnergyAmount(Double amount){
-		return (amount != null)&&(amount<=Double.MAX_VALUE)&&(amount >=0);
+	public static Boolean isValidEnergyAmount(Double amount)
+	{
+		return (amount != null) && (amount <= Double.MAX_VALUE) && (amount >= 0);
 	}
 	
 	/*

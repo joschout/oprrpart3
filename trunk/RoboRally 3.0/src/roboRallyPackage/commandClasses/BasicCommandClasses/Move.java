@@ -19,8 +19,16 @@ public class Move extends BasicCommand
 	{
 		robot.moveOneStep();
 	}
+	
 	@Override
-	public String toString(){
+	public String toString()
+	{
+		return "(move)";
+	}
+	
+	@Override
+	public String getNotationExample()
+	{
 		return "(move)";
 	}
 }

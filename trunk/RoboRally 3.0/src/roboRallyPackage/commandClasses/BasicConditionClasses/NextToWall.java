@@ -65,5 +65,11 @@ public class NextToWall extends BasicCondition
 			}
 		return false;
 	}
+	
+	@Override
+	public String getNotationExample()
+	{
+		return "(wall)";
+	}
 }
 

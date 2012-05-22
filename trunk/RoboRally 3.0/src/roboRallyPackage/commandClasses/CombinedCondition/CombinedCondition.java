@@ -16,7 +16,12 @@ public abstract class CombinedCondition extends Condition
 		super(programLevel);
 	}
 
+	@Override
 	public abstract boolean results();
 	
+	@Override
 	public abstract boolean results(Element element) throws IllegalArgumentException;
+	
+	@Override
+	public abstract String getNotationExample();
 }

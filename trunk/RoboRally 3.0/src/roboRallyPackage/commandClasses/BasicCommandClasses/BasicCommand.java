@@ -16,10 +16,15 @@ public abstract class BasicCommand extends Command
 		super(programLevel);
 	}
 	
+	@Override
 	public abstract void execute(Robot robot);
 	
+	@Override
 	public void executeStep(Robot robot)
 	{
 		this.execute(robot);
 	}
+	
+	@Override
+	public abstract String getNotationExample();
 }
