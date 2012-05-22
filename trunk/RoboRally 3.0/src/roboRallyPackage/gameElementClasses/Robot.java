@@ -686,6 +686,10 @@ public class Robot extends Element implements IEnergyHolder
 	public void drop(Item item) throws IllegalStateException
 	{
 		assert this.canDrop(item): "This robot cannot drop the given item.";
+		// Following code is never reached. 
+		// All items a terminated robot possesses are also terminated.
+		// Terminated items have null as their board.
+		// For items with null as their board, the checker canDrop will be false.
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated robot cannot pick up, carry, use or drop items.");
@@ -733,7 +737,7 @@ public class Robot extends Element implements IEnergyHolder
 	public void use(Item item) throws IllegalStateException
 	{
 		assert this.canUse(item): "The given item cannot be use by this robot.";
-		
+		//The condition of following if-test is never true.
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated robot cannot pick up, carry, use or drop items.");
@@ -768,7 +772,8 @@ public class Robot extends Element implements IEnergyHolder
 	 * 
 	 * @param	other
 	 * 			The other robot that will be given the items.
-	 * @throws	When both robots are not placed next to each other
+	 * @throws	IllegalPositionException
+	 * 			When both robots are not placed next to each other
 	 * 			| !this.getPosition().getAllNeighbours().contains(other.getPosition())
 	 * @throws	IllegalBoardException
 	 * 			When both robots are not placed on the same board.
@@ -779,6 +784,11 @@ public class Robot extends Element implements IEnergyHolder
 	 */
 	public void transferItems(Robot other) throws IllegalPositionException, IllegalBoardException, IllegalStateException
 	{
+		
+		if(this.isTerminated() || other.isTerminated())
+		{
+			throw new IllegalStateException("Either this robot or the given robot is terminated. The items cannot be transferred.");
+		}
 		if(!java.util.Arrays.asList(this.getPosition().getAllNeighbours()).contains(other.getPosition()))
 		{
 			throw new IllegalPositionException("Both robots are not placed next to each other.");
@@ -787,12 +797,9 @@ public class Robot extends Element implements IEnergyHolder
 		{
 			throw new IllegalBoardException("Both robots are not placed on the same board.");
 		}
-		if(this.isTerminated() || other.isTerminated())
-		{
-			throw new IllegalStateException("Either this robot or the given robot is terminated. The items cannot be transferred.");
-		}
+		java.util.List<Item> tempList = new ArrayList<Item>(this.getPossessions());
 		
-		for(Item item: this.getPossessions())
+		for(Item item: tempList)
 		{
 			// this other robot can carry the item.
 			// the item is removed from the list of items of this robot and added to the list of the other robot.
@@ -898,10 +905,11 @@ public class Robot extends Element implements IEnergyHolder
 		{
 			System.err.println(exc.toString());
 		}
-		catch(IllegalBoardException exc)
-		{
-			System.err.println(exc.toString());
-		}
+		
+//		catch(IllegalBoardException exc)
+//		{
+//			System.err.println(exc.toString());
+//		}
 		catch(IllegalElementCombinationException exc)
 		{
 			System.err.println(exc.toString());
