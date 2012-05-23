@@ -16,6 +16,7 @@ import roboRallyPackage.exceptionClasses.IllegalBoardException;
 import roboRallyPackage.exceptionClasses.IllegalPositionException;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.guiClasses.Facade;
+import roboRallyPackage.commandClasses.CombinedCommand.*;
 
 /**
  * @author Nele
@@ -268,8 +269,8 @@ public class RobotTest {
 	@Test
 	public void testGetEnergyRequiredToReach() {
 		//the board of mutableRobot is null
-		Robot testBot = new Robot(new Position(1,1), mutableBoardOne, Orientation.RIGHT, 20000, 20000);
-		Position position = new Position(2,2);
+		Robot testBot = new Robot(new Position(2,2), mutableBoardOne, Orientation.RIGHT, 20000, 20000);
+		Position position = new Position(3,3);
 		Double energy = testBot.getEnergyRequiredToReach(position);
 		assertTrue(energy == (2*testBot.getTotalCostToMove()+Robot.getCostToTurn()));	
 	}
@@ -332,23 +333,23 @@ public class RobotTest {
 		assertTrue(mutableRobotOne.getTotalCostToMove() == 750);
 	}
 
-//	/**
-//	 * Test method for {@link roboRallyPackage.gameElementClasses.Robot#getPossessions()}.
-//	 */
-//	@Test
-//	public void testGetPossessions() {
-//		facade.putRobot(mutableBoardOne, 1, 1, mutableRobotOne);
-//		facade.putBattery(mutableBoardOne, 1, 1, mutableBatteryOne);
-//		facade.putSurpriseBox(mutableBoardOne, 1, 1, mutableSurpriseBoxOne);
-//		facade.putRepairKit(mutableBoardOne, 1, 1, mutableRepairKitOne);
-//		facade.pickUpBattery(mutableRobotOne, mutableBatteryOne);
-//		facade.pickUpSurpriseBox(mutableRobotOne, mutableSurpriseBoxOne);
-//		facade.pickUpRepairKit(mutableRobotOne, mutableRepairKitOne);
-//		assertTrue(mutableRobotOne.getPossessions().contains(mutableBatteryOne)
-//				&& mutableRobotOne.getPossessions().contains(mutableRepairKitOne)
-//				&& mutableRobotOne.getPossessions().contains(mutableSurpriseBoxOne));
-//		
-//	}
+	/**
+	 * Test method for {@link roboRallyPackage.gameElementClasses.Robot#getPossessions()}.
+	 */
+	@Test
+	public void testGetPossessions() {
+		facade.putRobot(mutableBoardOne, 1, 1, mutableRobotOne);
+		facade.putBattery(mutableBoardOne, 1, 1, mutableBatteryOne);
+		facade.putSurpriseBox(mutableBoardOne, 1, 1, mutableSurpriseBoxOne);
+		facade.putRepairKit(mutableBoardOne, 1, 1, mutableRepairKitOne);
+		facade.pickUpBattery(mutableRobotOne, mutableBatteryOne);
+		facade.pickUpSurpriseBox(mutableRobotOne, mutableSurpriseBoxOne);
+		facade.pickUpRepairKit(mutableRobotOne, mutableRepairKitOne);
+		assertTrue(mutableRobotOne.getPossessions().contains(mutableBatteryOne)
+				&& mutableRobotOne.getPossessions().contains(mutableRepairKitOne)
+				&& mutableRobotOne.getPossessions().contains(mutableSurpriseBoxOne));
+		
+	}
 
 	/**
 	 * Test method for {@link roboRallyPackage.gameElementClasses.Robot#getTotalWeightPossessions()}.
@@ -456,23 +457,16 @@ public class RobotTest {
 		facade.putBattery(mutableBoardOne, 1, 1, mutableBatteryOne);
 		facade.putRobot(mutableBoardOne, 1, 1, mutableRobotOne);
 		mutableBatteryOne.terminate();
-		assertFalse(mutableRobotOne.canCarry(mutableBatteryOne));
+		assertFalse(mutableRobotOne.canPickUp(mutableBatteryOne));
 		
 	}
 
-	@Test
-	public void testCanPickUp_positionItemNull() {
-		Battery bat= new Battery(null,mutableBoardOne, 1000, 5);
-		facade.putRobot(mutableBoardOne, 1, 1, mutableRobotOne);
-		assertFalse(mutableRobotOne.canCarry(bat));
-		
-	}
-	
+
 	@Test
 	public void testCanPickUp_itemOtherPositionThanRobot() {
 		facade.putBattery(mutableBoardOne, 1, 1, mutableBatteryOne);
 		facade.putRobot(mutableBoardOne, 2, 2, mutableRobotOne);
-		assertFalse(mutableRobotOne.canCarry(mutableBatteryOne));	
+		assertFalse(mutableRobotOne.canPickUp(mutableBatteryOne));	
 	}
 	
 	@Test
@@ -480,7 +474,7 @@ public class RobotTest {
 		Battery bat = new Battery(new Position(2, 2), null, 100, 5);
 		Robot bot = new Robot(new Position(2,2), mutableBoardOne, Orientation.RIGHT, 18000, 20000);
 		
-		assertFalse(bot.canCarry(bat));	
+		assertFalse(bot.canPickUp(bat));	
 	}
 	
 	
@@ -509,7 +503,7 @@ public class RobotTest {
 		assertFalse(mutableRobotOne.getPossessions().contains(mutableBatteryOne));
 		assertTrue(mutableBatteryOne.getPosition().getCoordX()==3 && mutableBatteryOne.getPosition().getCoordY()==1);
 	}
-	@Test(expected = AssertionError.class)
+	@Test(expected = IllegalStateException.class)
 	public void testDrop_robotTerminated() {
 		facade.putRobot(mutableBoardOne, 1, 1, mutableRobotOne);
 		facade.putBattery(mutableBoardOne, 2, 1, mutableBatteryOne);
@@ -518,7 +512,7 @@ public class RobotTest {
 		assertTrue(mutableRobotOne.getPossessions().contains(mutableBatteryOne));
 		facade.move(mutableRobotOne);
 		mutableRobotOne.terminate();
-		facade.dropBattery(mutableRobotOne, mutableBatteryOne);
+		mutableRobotOne.drop(mutableBatteryOne);
 	}
 	
 	
@@ -911,186 +905,34 @@ public class RobotTest {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	/**
-	 * Test method for {@link roboRallyPackage.gameElementClasses.Element#Element(roboRallyPackage.Position, roboRallyPackage.Board)}.
-	 */
-	@Test
-	public void testElement() {
-		fail("Not yet implemented");
-	}
 
 	/**
 	 * Test method for {@link roboRallyPackage.gameElementClasses.Element#getPosition()}.
 	 */
 	@Test
 	public void testGetPosition() {
-		fail("Not yet implemented");
+		Position position =new Position(3,4);
+		Robot tempBot = new Robot(position, mutableBoardOne, Orientation.RIGHT, 18000, 20000);
+		assertTrue(tempBot.getPosition() == position);
 	}
 
-	/**
-	 * Test method for {@link roboRallyPackage.gameElementClasses.Element#setPosition(roboRallyPackage.Position)}.
-	 */
 	@Test
-	public void testSetPosition() {
-		fail("Not yet implemented");
+	public void testTakeHit(){
+		Robot tempBot = new Robot(new Position(3,4), mutableBoardOne, Orientation.RIGHT, 18000, 20000);
+		tempBot.takeHit();
+		assertTrue(tempBot.getMaxEnergy() == 16000);
 	}
-
-	/**
-	 * Test method for {@link roboRallyPackage.gameElementClasses.Element#canHavePosition(roboRallyPackage.Position)}.
-	 */
 	@Test
-	public void testCanHavePosition() {
-		fail("Not yet implemented");
+	public void testTakeHit_robotOnLowEnergy(){
+		Robot tempBot = new Robot(new Position(3,4), mutableBoardOne, Orientation.RIGHT, 600, 2000);
+		tempBot.takeHit();
+		assertTrue(tempBot.isTerminated());
 	}
-
-	/**
-	 * Test method for {@link roboRallyPackage.gameElementClasses.Element#getBoard()}.
-	 */
+	
 	@Test
-	public void testGetBoard() {
-		fail("Not yet implemented");
+	public void testSetProgram(){
+		mutableRobotOne.setProgram("(if (not (at-item)) (move) (turn clockwise))");
+		assertFalse(mutableRobotOne.getProgram() == null);
+		assertTrue(mutableRobotOne.getProgram().getClass() == If.class);
 	}
-
-	/**
-	 * Test method for {@link roboRallyPackage.gameElementClasses.Element#setBoard(roboRallyPackage.Board)}.
-	 */
-	@Test
-	public void testSetBoard() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link roboRallyPackage.gameElementClasses.Element#toString()}.
-	 */
-	@Test
-	public void testToString1() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link roboRallyPackage.Terminatable#isTerminated()}.
-	 */
-	@Test
-	public void testIsTerminated() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#Object()}.
-	 */
-	@Test
-	public void testObject() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#getClass()}.
-	 */
-	@Test
-	public void testGetClass() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#hashCode()}.
-	 */
-	@Test
-	public void testHashCode() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#equals(java.lang.Object)}.
-	 */
-	@Test
-	public void testEquals() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#clone()}.
-	 */
-	@Test
-	public void testClone() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#toString()}.
-	 */
-	@Test
-	public void testToString2() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#notify()}.
-	 */
-	@Test
-	public void testNotify() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#notifyAll()}.
-	 */
-	@Test
-	public void testNotifyAll() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#wait(long)}.
-	 */
-	@Test
-	public void testWaitLong() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#wait(long, int)}.
-	 */
-	@Test
-	public void testWaitLongInt() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#wait()}.
-	 */
-	@Test
-	public void testWait() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link java.lang.Object#finalize()}.
-	 */
-	@Test
-	public void testFinalize() {
-		fail("Not yet implemented");
-	}
-
 }

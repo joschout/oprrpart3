@@ -445,8 +445,8 @@ public class Board extends Terminatable
 					
 					// Variable representing a new element of the class random
 					Random generator = new Random();
-					// Variable containing a random number between 0 and the number of elements on the checked position
-					int randomInt = generator.nextInt(nbOfElements+1);
+					// Variable containing a random number between 0 (inclusive) and the number of elements on the checked position (exclusive)
+					int randomInt = generator.nextInt(nbOfElements);
 					// Auxiliary integer for picking a random element
 					int j = 0;
 					// Loop resulting in picking an element on the checked position as randomly as possible
@@ -608,13 +608,17 @@ public class Board extends Terminatable
 		{
 			throw new IllegalBoardException(element, this);
 		}
-		
+		if(element.getPosition() == position){
+			// do not move the given element
+		}
+		else{
 		// this element can be placed here (otherwise an exception will be thrown by canElemenBePutAtPosition)
-		if(this.canElementBePutAtPosition(position, element))
-		{	
-			this.removeElement(element);
-			element.setPosition(position);
-			element.setBoard(this);
+			if(this.canElementBePutAtPosition(position, element))
+			{	
+				this.removeElement(element);
+				element.setPosition(position);
+				element.setBoard(this);
+			}
 		}
 	}
 	
@@ -914,7 +918,7 @@ public class Board extends Terminatable
 			for(Orientation orientation: Orientation.values())
 			{
 				try
-				{
+				{	
 					//if(lastChecked <= vertices.size())
 					Position newPosition = vertices.get(lastChecked + 1).getPosition().getNeighbour(orientation);
 					OrientatedPosition newOrientatedPosition = new OrientatedPosition(orientation, newPosition);
@@ -947,7 +951,6 @@ public class Board extends Terminatable
 			
 			if(lastChecked == Integer.MAX_VALUE )
 			{
-				System.out.println("break");
 				break;
 			}
 		}
