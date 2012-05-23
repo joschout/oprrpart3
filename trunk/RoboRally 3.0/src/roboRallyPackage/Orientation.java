@@ -4,9 +4,9 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * An enumeration introducing different orientations.
  * 
- * @version 26 april 2012
- * @author Jonas Schouterden (r0260385) & Nele Rober (r0262954)
- * 			 Bachelor Ingenieurswetenschappen, KULeuven
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 @Value
 public enum Orientation

@@ -6,7 +6,9 @@ import be.kuleuven.cs.som.annotate.*;
 public class IllegalBoardException extends RuntimeException
 {
 	/**
-	 * 
+	 * @version   24 may 2012
+	 * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+	 * 			  Bachelor Ingenieurswetenschappen, KULeuven
 	 */
 	private static final long serialVersionUID = 1L;
 

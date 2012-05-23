@@ -2,6 +2,11 @@ package roboRallyPackage.exceptionClasses;
 import roboRallyPackage.Board;
 import be.kuleuven.cs.som.annotate.*;
 
+/**
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
+ */
 public class IllegalPositionException extends RuntimeException
 {
 	private static final long serialVersionUID = 1L;
