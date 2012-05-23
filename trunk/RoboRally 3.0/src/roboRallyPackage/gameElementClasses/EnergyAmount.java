@@ -31,9 +31,7 @@ public class EnergyAmount implements Comparable<EnergyAmount> {
 	public final static EnergyAmount WATTSECOND_5000 =  new EnergyAmount((double)5000, EnergyUnit.WATTSECOND);
 	
 	public final static EnergyAmount WATTSECOND_DOUBLE_MAXVALUE =  new EnergyAmount(Double.MAX_VALUE, EnergyUnit.WATTSECOND);
-	
-	//public final static EnergyAmount WATTSECOND_ROBOT_MAXIMUM_ENERGY_LIMIT =  new EnergyAmount((double) 20000, EnergyUnit.WATTSECOND);
-	
+
 	/*
 	 * 
 	 */

@@ -60,12 +60,4 @@ public class DirectedEdge
     public String toString() {
         return v + "->" + w + " " + String.format("%5.2f", weight);
     }
-//
-//   /**
-//     * Test client.
-//     */
-//    public static void main(String[] args) {
-//        DirectedEdge e = new DirectedEdge(12, 23, 3.14);
-//        StdOut.println(e);
-//    }
 }

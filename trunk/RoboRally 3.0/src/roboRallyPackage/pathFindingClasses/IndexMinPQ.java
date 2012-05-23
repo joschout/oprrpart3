@@ -205,14 +205,6 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
     	else return keys[k];
     }
 
-//    /**
-//     * Changes the key associated with the given index k.
-//     */
-//    public void change(int k, Key key)
-//    {
-//        changeKey(k, key);
-//    }
-
     /**
      * Changes the key associated with the given index k to the given key.
      * 
