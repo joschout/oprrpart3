@@ -13,13 +13,11 @@ public enum Direction
 	CLOCKWISE {
 		@Override
 		public String toString() {
-			// TODO Auto-generated method stub
 			return "clockwise";
 		}
 	}, COUNTER_CLOCKWISE {
 		@Override
 		public String toString() {
-			// TODO Auto-generated method stub
 			return "counterclockwise";
 		}
 	};

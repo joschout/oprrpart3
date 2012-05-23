@@ -68,20 +68,6 @@ public class EdgeWeightedDigraph
         }
     }
 
-//    /**
-//     * Create an edge-weighted digraph from input stream.
-//     */
-//    public EdgeWeightedDigraph(In in) {
-//        this(in.readInt());
-//        int E = in.readInt();
-//        for (int i = 0; i < E; i++) {
-//            int v = in.readInt();
-//            int w = in.readInt();
-//            double weight = in.readDouble();
-//            addEdge(new DirectedEdge(v, w, weight));
-//        }
-//    }
-
    /**
      * Clones the given EdgeWeightedDigraph.
      */
@@ -196,14 +182,4 @@ public class EdgeWeightedDigraph
         }
         return s.toString();
     }
-
-//    /**
-//     * Test client.
-//     */
-//    public static void main(String[] args) {
-//        In in = new In(args[0]);
-//        EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
-//        StdOut.println(G);
-//    }
-
 }

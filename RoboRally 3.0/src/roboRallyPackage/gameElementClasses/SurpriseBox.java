@@ -254,33 +254,6 @@ public class SurpriseBox extends Item
 			}
 			// when no valid position is found after 25 invocations of the while-statement, the robot will not be moved.
 		}
-		
-		
-//		Teleporter tele = new Teleporter(robot);
-//			//			tele.teleport();
-//			new Terminatable(){
-//				public void teleport(){
-//					Random generator =  new Random();
-//					//long maxCoordX = board.getWidth();
-//					//long maxCoordY = board.getHeight();
-//
-//					long maxCoordX = tempRobot.getBoard().getWidth();
-//					long maxCoordY = tempRobot.getBoard().getHeight();
-//
-//
-//
-//					int randomIntCoordX = generator.nextInt(((int) maxCoordX));
-//					int randomIntCoordY = generator.nextInt(((int) maxCoordY));
-//					Position teleLocation = new Position(randomIntCoordX, randomIntCoordY);
-//					try{
-//						robot.setPosition(teleLocation);
-//					} catch(IllegalPositionException exc){
-//						robot.terminate();
-//						System.out.println("Uw robot is nu dood. Hoe jammer!");
-//					}
-//
-//				}
-//			};
 	}
 	
 	/**
