@@ -426,51 +426,7 @@ public class SurpriseBox extends Item
 	@Override
 	public java.lang.String toString()
 	{
-		return "Surprise box with:" + "\n"
-				+ super.toString() +  ";  " + "\n";
+		return "Surprise box with: " + super.toString() + ";";
 	}
 }
 
-// randomiser
-// teleporteer, ander item (bat, repair, surprise)
-// voeg dat ander item toe aan de lijst van items van de robot
-
-//class Teleporter
-//{
-//
-//	//private Board board;
-//	//private Robot robot;
-//
-//	//public Teleporter(Robot robot){
-//	//	this.robot = robot;
-//	//	this.board = robot.getBoard();
-//	//}
-//	
-//	public Teleporter(Robot robot){
-//		this.teleport(robot);
-//	}
-//
-//	public void teleport(Robot robot){
-//		Random generator =  new Random();
-//		//long maxCoordX = board.getWidth();
-//		//long maxCoordY = board.getHeight();
-//
-//		long maxCoordX = robot.getBoard().getWidth();
-//		long maxCoordY = robot.getBoard().getHeight();
-//		
-//		
-//		
-//		int randomIntCoordX = generator.nextInt(((int) maxCoordX));
-//		int randomIntCoordY = generator.nextInt(((int) maxCoordY));
-//		Position teleLocation = new Position(randomIntCoordX, randomIntCoordY);
-//		try{
-//			robot.setPosition(teleLocation);
-//		} catch(IllegalPositionException exc){
-//			robot.terminate();
-//			System.out.println("Uw robot is nu dood. Hoe jammer!");
-//		}
-//		
-//	}
-//
-//}
-//

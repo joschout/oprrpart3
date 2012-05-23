@@ -27,9 +27,9 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar	A terminated Board is not allowed to contain elements or to change its state.
  * 			| if(this.isTerminates()) then this.getElements(Elements.class) == null
  * 
- * @version 26 april 2012
- * @author Jonas Schouterden (r0260385) & Nele Rober (r0262954)
- * 			 Bachelor Ingenieurswetenschappen, KULeuven
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public class Board extends Terminatable
 {

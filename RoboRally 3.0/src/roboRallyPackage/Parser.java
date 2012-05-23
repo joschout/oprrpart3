@@ -250,7 +250,7 @@ public class Parser
 		}
 		if(inputProgram.equals("(item)"))
 		{
-			return new isItem(programLevel,robot);
+			return new isItem(programLevel);
 		}
 		else
 		{
