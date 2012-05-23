@@ -23,18 +23,19 @@ public class RepairKit extends Item implements IEnergyHolder
 	 * @param 	energyAmount
 	 * 			The amount of energy for this new repair kit, expressed in watt-seconds [Ws].
 	 * @param 	weight
-	 * 			The weight for this new repair kit, expressed in grams [g].
-	 * @pre		The given initial amount of energy must be a valid amount of energy.
-	 * 			| this.canHaveAsEnergy(energyAmount)
+	 * 			The weight for this new repair kit, expressed in grams [g]. 
 	 * @effect	This new repair kit is initialized as an Item with the given position, board and weight.
 	 * 			| super(position, board, weight)
 	 * @effect	...
-	 * 			| this.setEnergy(energyAmount)
+	 * 			| if this.canHaveAsEnergy(energyAmount) then this.setEnergy(energyAmount)
 	 */
 	public RepairKit(Position position, Board board, double energyAmount, int weight)
 	{
 		super(position, board, weight);
-		this.setEnergy(energyAmount);
+		if(this.canHaveAsEnergy(energyAmount))
+		{
+			this.setEnergy(energyAmount);
+		}
 	}
 	
 	/**

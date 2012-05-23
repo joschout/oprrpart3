@@ -301,11 +301,19 @@ public class SurpriseBox extends Item
 		Random generator = new Random();
 		int randomInt = generator.nextInt(getSurpriseItems().length - 1);
 
-		// add the new, random selected, item to the possessions of the robot.
+		// add the new, random selected, item to the possessions of the robot, if possible.
 		this.getSurpriseItems()[randomInt].setPosition(robot.getPosition());
 		this.getSurpriseItems()[randomInt].setBoard(robot.getBoard());
-		robot.pickUp(this.getSurpriseItems()[randomInt]);
-		System.out.println("A " + this.getSurpriseItems()[randomInt].getClass() + " is added to the possessions of the robot.");
+		if(robot.canPickUp(this.getSurpriseItems()[randomInt]))
+		{
+			robot.pickUp(this.getSurpriseItems()[randomInt]);
+			System.out.println("A " + this.getSurpriseItems()[randomInt].toString() + " is added to the possessions of the robot.");
+		}
+		else
+		{
+			this.getSurpriseItems()[randomInt].terminate();
+			System.out.println("The surprise box tunred out to be an " + this.getSurpriseItems()[randomInt].toString() + " but the robot was not able to pick it up, so it was terminated.");
+		}
 	}
 	
 

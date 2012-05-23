@@ -34,9 +34,9 @@ import roboRallyPackage.Board;
  *     be implemented in your class <code>Facade</code>.</li>
  * </ul> 
  * 
- * @version 26 april 2012
- * @author Jonas Schouterden (r0260385) & Nele Rober (r0262954)
- * 			 Bachelor Ingenieurswetenschappen, KULeuven
+ * @version   24 may 2012
+ * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
+ * 			  Bachelor Ingenieurswetenschappen, KULeuven
  */
 public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, SurpriseBox>
 {		
@@ -346,7 +346,14 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{
 		try
 		{
-			robot.moveOneStep();
+			if(robot.canMoveOneStep())
+			{
+				robot.moveOneStep();
+			}
+			else
+			{
+				System.out.println("This robot cannot move in its current state.");
+			}
 		}
 		catch(IllegalStateException exc)
 		{
@@ -363,7 +370,14 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{
 		try
 		{
-			robot.turnClockwise();
+			if(robot.canTurn(Direction.CLOCKWISE))
+			{
+				robot.turnClockwise();
+			}
+			else
+			{
+				System.out.println("This robot cannot turn in its current state.");
+			}
 		}
 		catch(IllegalStateException exc)
 		{
@@ -379,7 +393,14 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{	
 		try
 		{
-			robot.pickUp(battery);
+			if(robot.canPickUp(battery))
+			{
+				robot.pickUp(battery);
+			}
+			else
+			{
+				System.out.println("This battery could not be picked up by this robot.");
+			}
 		}
 		catch(IllegalStateException exc)
 		{
@@ -395,7 +416,14 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{
 		try
 		{
-			robot.use(battery);
+			if(robot.canUse(battery))
+			{
+				robot.use(battery);
+			}
+			else
+			{
+				System.out.println("This battery could not be used by this robot.");
+			}
 		}
 		catch(IllegalStateException exc)
 		{
@@ -411,7 +439,14 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{
 		try
 		{
-			robot.drop(battery);
+			if(robot.canDrop(battery))
+			{
+				robot.drop(battery);
+			}
+			else
+			{
+				System.out.println("This battery could not be dropped by this robot.");
+			}
 		}
 		catch(IllegalStateException exc)
 		{
@@ -427,7 +462,14 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{	
 		try
 		{
-			robot.pickUp(repairKit);
+			if(robot.canPickUp(repairKit))
+			{
+				robot.pickUp(repairKit);
+			}
+			else
+			{
+				System.out.println("This repair kit could not be picked up by this robot.");
+			}
 		}
 		catch(IllegalStateException exc)
 		{
@@ -443,7 +485,14 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{
 		try
 		{
-			robot.use(repairKit);
+			if(robot.canUse(repairKit))
+			{
+				robot.use(repairKit);
+			}
+			else
+			{
+				System.out.println("This repair kit could not be used by this robot.");
+			}
 		}
 		catch(IllegalStateException exc)
 		{
@@ -459,7 +508,14 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{
 		try
 		{
-			robot.drop(repairKit);
+			if(robot.canDrop(repairKit))
+			{
+				robot.drop(repairKit);
+			}
+			else
+			{
+				System.out.println("This repair kit could not be dropped by this robot.");
+			}
 		}
 		catch(IllegalStateException exc)
 		{
@@ -475,7 +531,14 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{	
 		try
 		{
-			robot.pickUp(surpriseBox);
+			if(robot.canPickUp(surpriseBox))
+			{
+				robot.pickUp(surpriseBox);
+			}
+			else
+			{
+				System.out.println("This surprise box could not be picked up by this robot.");
+			}
 		}
 		catch(IllegalStateException exc)
 		{
@@ -491,7 +554,14 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{
 		try
 		{
-			robot.use(surpriseBox);
+			if(robot.canUse(surpriseBox))
+			{
+				robot.use(surpriseBox);
+			}
+			else
+			{
+				System.out.println("This surprise box could not be used by this robot.");
+			}
 		}
 		catch(IllegalStateException exc)
 		{
@@ -507,7 +577,14 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{
 		try
 		{
-			robot.drop(surpriseBox);
+			if(robot.canDrop(surpriseBox))
+			{
+				robot.drop(surpriseBox);
+			}
+			else
+			{
+				System.out.println("This surprise box could not be dropped by this robot.");
+			}
 		}
 		catch(IllegalStateException exc)
 		{
@@ -623,7 +700,10 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 	{
 		try
 		{
-			robot.shoot();
+			if(robot.canShoot())
+			{
+				robot.shoot();
+			}
 		}
 		catch(IllegalStateException exc)
 		{

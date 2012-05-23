@@ -24,18 +24,19 @@ public class Battery extends Item implements IEnergyHolder
 	 * 			The amount of energy for this new battery in watt-seconds [Ws].
 	 * @param 	weight
 	 * 			The weight for this new battery, expressed in grams [g].
-	 * @pre		The given initial amount of energy must be a valid amount of energy.
-	 * 			| this.canHaveAsEnergy(energyAmount)
 	 * @effect	This new battery is initialized as an Item with the given position, board and weight.
 	 * 			| super(position, board, weight)
 	 * @effect	...
-	 * 			| this.setEnergy(energyAmount)
+	 * 			| if this.canHaveAsEnergy(energyAmount) then this.setEnergy(energyAmount)
 	 *
 	 */
 	public Battery(Position position, Board board, double energyAmount, int weight)
 	{
 		super(position, board, weight);
-		this.setEnergy(energyAmount);
+		if(this.canHaveAsEnergy(energyAmount))
+		{
+			this.setEnergy(energyAmount);
+		}
 	}
 	
 	/**
@@ -251,7 +252,7 @@ public class Battery extends Item implements IEnergyHolder
 			this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) + 500);
 		}
 		// the energy level of this battery is almost at maximum; it cannot store another 500 Ws extra.
-		// the energy level of this battery kit is set at its maximum.
+		// the energy level of this battery is set at its maximum.
 		else
 		{
 			this.setEnergy(this.getMaxEnergy());
