@@ -282,11 +282,7 @@ public abstract class Element extends Terminatable
 		
 		if(this.getPosition() != null)
 		{
-			resultString += " " + this.getPosition().toString() + ";  " + "\n";
-		}
-		if(this.getBoard() != null)
-		{
-			resultString +=  " " + this.getBoard().toString();
+			resultString += " " + this.getPosition().toString() + ";";
 		}
 		return resultString;
 	}

@@ -426,7 +426,7 @@ public class SurpriseBox extends Item
 	@Override
 	public java.lang.String toString()
 	{
-		return "Surprise box with: " + super.toString() + ";";
+		return "Surprise box { " + super.toString() + "}";
 	}
 }
 

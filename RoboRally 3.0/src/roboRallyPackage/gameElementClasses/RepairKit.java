@@ -297,8 +297,8 @@ public class RepairKit extends Item implements IEnergyHolder
 	@Override
 	public java.lang.String toString()
 	{
-		return "Repairkit with:" + "\n"
-				+ super.toString() +  ";  " + "\n"
-				+ "Energy level [Ws]: " + this.getEnergy(EnergyUnit.WATTSECOND) + " (" + getEnergyFraction() + "%)";
+		return "Repairkit {"
+				+ super.toString() +  ";  "
+				+ "Energy level [Ws]: " + this.getEnergy(EnergyUnit.WATTSECOND) + " (" + this.getEnergyFraction() + "%)" + "}";
 	}
 }

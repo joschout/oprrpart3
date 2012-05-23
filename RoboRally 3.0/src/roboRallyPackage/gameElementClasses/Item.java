@@ -143,7 +143,7 @@ public abstract class Item extends Element
 	@Override
 	public String toString()
 	{
-		return super.toString() + ";  " + "\n"
-				+ " Weight: " + this.getWeight() + " [g]";
+		return super.toString()
+				+ " Weight [g]: " + this.getWeight();
 	}
 }
