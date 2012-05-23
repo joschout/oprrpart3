@@ -16,7 +16,7 @@ import be.kuleuven.cs.som.annotate.*;
  *A class representing robots.
  * 
  * @invar	The orientation of each robot must be a valid orientation.
- * 			| this.canHaveAsOrientation(this.getOrientation())
+ * 			| Robot.canHaveAsOrientation(this.getOrientation())
  * @invar	The total weight of the items a robot can carry must not exceed the maximum weight it can carry.
  * 			| this.getTotalWeightToCarry() <= getMaxWeightToCarry()
  * @invar	An item that this robot is carrying cannot have a Board or a Position
@@ -373,7 +373,7 @@ public class Robot extends Element implements IEnergyHolder
 	@Basic @Immutable
 	public static final double getCostToTurn()
 	{
-		return costToTurn.getAmountInWattSecond();
+		return Robot.costToTurn.getAmountInWattSecond();
 	}
 	
 	/**
@@ -387,7 +387,7 @@ public class Robot extends Element implements IEnergyHolder
 	@Basic @Immutable
 	public static final double getCostToShoot()
 	{
-		return costToShoot.getAmountInWattSecond();
+		return Robot.costToShoot.getAmountInWattSecond();
 	}
 
 	/**
@@ -402,7 +402,7 @@ public class Robot extends Element implements IEnergyHolder
 	@Basic @Immutable
 	public static final double getCostToMove()
 	{
-		return costToMove.getAmountInWattSecond();
+		return Robot.costToMove.getAmountInWattSecond();
 	}
 	
 	/**
@@ -429,11 +429,11 @@ public class Robot extends Element implements IEnergyHolder
 	 * This method takes into account the normal cost and the additional cost per kilogram of items this robot is carrying.
 	 * 
 	 * @return	The cost to move increased with the additional cost to move times the total weight of all the possessions this robot is carrying.
-	 * 			| result == getCostToMove() + Math.round(getAdditionalCostToMove() * (this.getTotalWeightPossessions()/1000))
+	 * 			| result == Robot.getCostToMove() + Math.round(Robot.getAdditionalCostToMove() * (this.getTotalWeightPossessions()/1000))
 	 */
 	public double getTotalCostToMove()
 	{
-		return getCostToMove() + Math.round(getAdditionalCostToMove() * (this.getTotalWeightPossessions()/1000));
+		return Robot.getCostToMove() + Math.round(Robot.getAdditionalCostToMove() * (this.getTotalWeightPossessions()/1000));
 	}
 
 	/**
@@ -441,15 +441,15 @@ public class Robot extends Element implements IEnergyHolder
 	 * The moving costs is the cost to move without carrying any items.
 	 * 
 	 * @return	A list of the costs for all the possible actions of this robot.
-	 * 			| result == new List(getCostToMove(), getCostToTurn(), getCostToShoot())
+	 * 			| result == new List(Robot.getCostToMove(), Robot.getCostToTurn(), Robot.getCostToShoot())
 	 */
 	@Model
 	private java.util.List<Double> getListCosts()
 	{
 		java.util.List<Double> listCosts = new java.util.ArrayList<Double>();
-		listCosts.add(getCostToMove());
-		listCosts.add(getCostToTurn());
-		listCosts.add(getCostToShoot());
+		listCosts.add(Robot.getCostToMove());
+		listCosts.add(Robot.getCostToTurn());
+		listCosts.add(Robot.getCostToShoot());
 		
 		return listCosts;
 	}
@@ -840,7 +840,7 @@ public class Robot extends Element implements IEnergyHolder
 	 * @effect	The current orientation of this robot is changed by turning 90 degrees clockwise
 	 * 			| this.setOrientation(this.getOrientation().turn90Clockwise())
 	 * @effect	The energy level of this robot is decreased with the cost of one turn
-	 * 	     	| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToTurn())
+	 * 	     	| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - Robot.getCostToTurn())
 	 * @throws	IllegalStateException
 	 * 			When this robot is terminated.
 	 * 			| this.isTerminated()
@@ -853,7 +853,7 @@ public class Robot extends Element implements IEnergyHolder
 			throw new IllegalStateException("A terminated robot cannot turn.");
 		}
 		this.setOrientation(this.getOrientation().turn90Clockwise());
-		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToTurn());
+		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - Robot.getCostToTurn());
 	}
 
 	/**
@@ -1081,7 +1081,7 @@ public class Robot extends Element implements IEnergyHolder
 	 * @pre		The robot must be able to use its laser.
 	 * 			| this.canShoot()
 	 * @effect	The energy level of this robot is decreased with the cost of shooting one time
-	 * 			| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToShoot())
+	 * 			| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - Robot.getCostToShoot())
 	 * @throws	IllegatStateException
 	 * 			When this is terminated
 	 * 			| this.isTerminated()
@@ -1095,7 +1095,7 @@ public class Robot extends Element implements IEnergyHolder
 		}
 		
 		// the energy of this robot is decreased with the energy it costs to shoot
-		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToShoot());
+		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - Robot.getCostToShoot());
 		
 		try
 	    {
@@ -1124,11 +1124,11 @@ public class Robot extends Element implements IEnergyHolder
 	 * @return	False if this robot does not have a position.
 	 * 			| result != (this.getPosition() == null)
 	 * @return	False the current amount of energy of this robot is less than the amount of energy it costs for this robot to shoot its laser.
-	 *			| result != (this.getEnergy(EnergyUnit.WATTSECOND) < getCostToShoot())
+	 *			| result != (this.getEnergy(EnergyUnit.WATTSECOND) < Robot.getCostToShoot())
 	 */
 	public boolean canShoot()
 	{
-		return ((this.getBoard() != null) && (this.getPosition() != null) && (this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToShoot()));
+		return ((this.getBoard() != null) && (this.getPosition() != null) && (this.getEnergy(EnergyUnit.WATTSECOND) >= Robot.getCostToShoot()));
 	}
 
 	/**
