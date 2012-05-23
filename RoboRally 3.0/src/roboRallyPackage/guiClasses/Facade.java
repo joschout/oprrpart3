@@ -7,6 +7,7 @@ import java.io.Writer;
 import java.util.Set;
 
 import roboRallyPackage.exceptionClasses.IllegalBoardException;
+import roboRallyPackage.exceptionClasses.IllegalPositionException;
 import roboRallyPackage.exceptionClasses.IllegalSyntaxException;
 import roboRallyPackage.gameElementClasses.*;
 import roboRallyPackage.*;
@@ -92,6 +93,10 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		{
 			System.out.println("Either this battery or this board is terminated; the battery cannot be placed on the board.");
 		}
+		catch(IllegalPositionException exc)
+		{
+			System.out.println("This is not a valid position on the board to place an element.");
+		}
 	}
 
 	/**
@@ -150,6 +155,10 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		{
 			System.out.println("Either this repair kit or this board is terminated; the repair kit cannot be placed on the board.");
 		}
+		catch(IllegalPositionException exc)
+		{
+			System.out.println("This is not a valid position on the board to place an element.");
+		}
 	}
 
 	/**
@@ -207,6 +216,10 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		catch(IllegalStateException exc)
 		{
 			System.out.println("Either this surprise box or this board is terminated; the surprise box cannot be placed on the board.");
+		}
+		catch(IllegalPositionException exc)
+		{
+			System.out.println("This is not a valid position on the board to place an element.");
 		}
 	}
 
@@ -284,6 +297,10 @@ public class Facade implements IFacade<Board, Robot, Wall, Battery, RepairKit, S
 		catch(IllegalStateException exc)
 		{
 			System.out.println("Either this robot or this board is terminated; the robot cannot be placed on the board.");
+		}
+		catch(IllegalPositionException exc)
+		{
+			System.out.println("This is not a valid position on the board to place an element.");
 		}
 	}
 

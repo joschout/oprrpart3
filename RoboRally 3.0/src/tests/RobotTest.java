@@ -280,6 +280,13 @@ public class RobotTest {
 		//the board of mutableRobot is null
 		mutableRobotOne.getEnergyRequiredToReach(new Position(1,1));
 	}
+	
+	@Test
+	public void testGetEnergyRequiredToReach_notEnoughEnergy() {
+		//the board of mutableRobot is null
+		Robot tempBot = new Robot(new Position(4,4), mutableBoardOne, Orientation.RIGHT, 100, 20000);
+		assertTrue(tempBot.getEnergyRequiredToReach(new Position(10,10))==-1);
+	}
 
 	/**
 	 * Test method for {@link roboRallyPackage.gameElementClasses.Robot#getCostToTurn()}.
@@ -373,7 +380,6 @@ public class RobotTest {
 		facade.pickUpRepairKit(mutableRobotOne, testKit);
 		facade.pickUpBattery(mutableRobotOne, testBat);
 		assertTrue(mutableRobotOne.getIthHeaviestPossession(1) ==  testBat );
-		
 	}
 	
 	@Test(expected = IndexOutOfBoundsException.class)
@@ -471,9 +477,10 @@ public class RobotTest {
 	
 	@Test
 	public void testCanPickUp_boardItemNull() {
-		facade.putBattery(null, 1, 1, mutableBatteryOne);
-		facade.putRobot(mutableBoardOne, 2, 2, mutableRobotOne);
-		assertFalse(mutableRobotOne.canCarry(mutableBatteryOne));	
+		Battery bat = new Battery(new Position(2, 2), null, 100, 5);
+		Robot bot = new Robot(new Position(2,2), mutableBoardOne, Orientation.RIGHT, 18000, 20000);
+		
+		assertFalse(bot.canCarry(bat));	
 	}
 	
 	
@@ -668,9 +675,21 @@ public class RobotTest {
 	
 	@Test
 	public void testShoot(){
-		fail("Not yet implemented");
+		Board tempBoard = new Board(10, 10);
+		Robot tempRobotOne = new Robot(new Position(1,1), tempBoard, Orientation.RIGHT, 18000, 20000);
+		Robot tempRobotTwo = new Robot(new Position(2,1), tempBoard, Orientation.RIGHT, 18000, 20000);
+		tempRobotOne.shoot();
+		
+		assertTrue(tempRobotOne.getEnergy(EnergyUnit.WATTSECOND) == (18000-Robot.getCostToShoot()));
+		assertTrue(tempRobotTwo.getMaxEnergy() == 16000);
+		assertTrue(tempRobotTwo.getEnergy(EnergyUnit.WATTSECOND)==16000);
 	}
 	
+	@Test(expected = IllegalStateException.class)
+	public void testShoot_robotIsTerminated(){
+		mutableRobotOne.terminate();
+		mutableRobotOne.shoot();
+	}
 	
 	
 	
@@ -697,14 +716,7 @@ public class RobotTest {
 		assertFalse(tempBot.canShoot());
 	}
 
-	/**
-	 * Test method for {@link roboRallyPackage.gameElementClasses.Robot#getEnergyToShoot()}.
-	 */
-	@Test
-	public void testGetEnergyToShoot() {
-		fail("Not yet implemented");
-	}
-
+	
 	/**
 	 * Test method for {@link roboRallyPackage.gameElementClasses.Robot#turnClockwise()}.
 	 */
@@ -796,10 +808,130 @@ public class RobotTest {
 	/**
 	 * Test method for {@link roboRallyPackage.gameElementClasses.Robot#moveNextTo(roboRallyPackage.gameElementClasses.Robot)}.
 	 */
+//	@Test
+//	public void testMoveNextTo_validCase(){
+//		Board tempBoard = new Board(10, 10);
+//		Robot tempRobotOne = new Robot(new Position(1,1), tempBoard, Orientation.RIGHT, 18000, 20000);
+//		Robot tempRobotTwo = new Robot(new Position(4,4), tempBoard, Orientation.RIGHT, 18000, 20000);
+//	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@Test
-	public void testMoveNextTo() {
-		fail("Not yet implemented");
+	public void testMoveNextTo_enoughEnergy() {
+		Board tempBoard = new Board(10, 10);
+		Robot robot1 = new Robot(new Position(1,1), tempBoard, Orientation.RIGHT, 10000, 20000);
+		Robot robot2 = new Robot(new Position(3,3), tempBoard, Orientation.RIGHT, 10000, 20000);
+		robot1.moveNextTo(robot2);
+		assertTrue(robot1.getPosition().getCoordX() == 2 && robot1.getPosition().getCoordY() == 1);
+		assertTrue(robot2.getPosition().getCoordX() == 3 && robot2.getPosition().getCoordY() == 1);
 	}
+	
+	@Test
+	public void testMoveNextTo_2notEnoughEnergy() {
+		Board tempBoard = new Board(10, 10);
+		Robot robot1 = facade.createRobot(1, 600);
+		facade.putRobot(tempBoard, 1, 1, robot1);
+		Robot robot2 = facade.createRobot(1, 600);
+		facade.putRobot(tempBoard, 3, 3, robot2);
+		facade.moveNextTo(robot2, robot1);
+		assertTrue((facade.getRobotX(robot1) == 2 && facade.getRobotY(robot1) == 1 && facade.getRobotX(robot2) == 3 && facade.getRobotY(robot2) == 2));
+	}
+	
+	@Test
+	public void testMoveNextTo_1notEnoughEnergy() {
+		Board tempBoard = new Board(10, 10);
+		Robot robot1 = facade.createRobot(1, 600);
+		facade.putRobot(tempBoard, 1, 1, robot1);
+		Robot robot2 = facade.createRobot(1, 20000);
+		facade.putRobot(tempBoard, 5, 5, robot2);
+		facade.moveNextTo(robot2, robot1);
+		assertTrue((facade.getRobotX(robot1) == 1 && facade.getRobotY(robot1) == 1 && facade.getRobotX(robot2) == 2 && facade.getRobotY(robot2) == 1)
+				|| (facade.getRobotX(robot1) == 1 && facade.getRobotY(robot1) == 1 && facade.getRobotX(robot2) == 1 && facade.getRobotY(robot2) == 2)
+				|| (facade.getRobotX(robot1) == 2 && facade.getRobotY(robot1) == 1 && facade.getRobotX(robot2) == 3 && facade.getRobotY(robot2) == 1)
+				|| (facade.getRobotX(robot1) == 2 && facade.getRobotY(robot1) == 1 && facade.getRobotX(robot2) == 2 && facade.getRobotY(robot2) == 2));		  			
+	}
+	
+	@Test
+	public void testMoveNextTo_1notEnoughEnergy_part_b() {
+		Board tempBoard = new Board(10, 10);
+		Robot robot1 = facade.createRobot(1, 600);
+		facade.putRobot(tempBoard, 1, 1, robot1);
+		Robot robot2 = facade.createRobot(1, 20000);
+		facade.putRobot(tempBoard, 5, 5, robot2);
+		facade.moveNextTo(robot1, robot2);
+		assertTrue((facade.getRobotX(robot1) == 1 && facade.getRobotY(robot1) == 1 && facade.getRobotX(robot2) == 2 && facade.getRobotY(robot2) == 1)
+				|| (facade.getRobotX(robot1) == 1 && facade.getRobotY(robot1) == 1 && facade.getRobotX(robot2) == 1 && facade.getRobotY(robot2) == 2)
+				|| (facade.getRobotX(robot1) == 2 && facade.getRobotY(robot1) == 1 && facade.getRobotX(robot2) == 3 && facade.getRobotY(robot2) == 1)
+				|| (facade.getRobotX(robot1) == 2 && facade.getRobotY(robot1) == 1 && facade.getRobotX(robot2) == 2 && facade.getRobotY(robot2) == 2));		  			
+	}
+	
+	@Test
+	public void testMoveNextTo_1notEnoughEnergy_part_c() {
+		Board tempBoard = new Board(10, 10);
+		Robot robot1 = facade.createRobot(2, 600);
+		facade.putRobot(tempBoard, 1, 2, robot1);
+		Robot robot2 = facade.createRobot(3, 800);
+		facade.putRobot(tempBoard, 4, 0, robot2);
+		facade.moveNextTo(robot1, robot2);
+		assertEquals(2, facade.getRobotX(robot1));
+		assertEquals(2, facade.getRobotY(robot1));
+		assertEquals(3, facade.getRobotX(robot2));
+		assertEquals(0, facade.getRobotY(robot2));
+	}
+	
+	
+	@Test
+	public void turn_NotEnoughEnergy(){
+		Board tempBoard = new Board(10, 10);
+		Robot robot = facade.createRobot(1, 50);
+		facade.putRobot(tempBoard, 1, 1, robot);
+		facade.turn(robot);
+		assertTrue(facade.getOrientation(robot) == 1);
+	}	
+	@Test
+	public void move_OfBoard(){
+		Board tempBoard = new Board(10, 10);
+		Robot robot = facade.createRobot(3, 20000);
+		facade.putRobot(tempBoard, 0, 2, robot);
+		facade.move(robot);
+		assertTrue(facade.getRobotX(robot) == 0);
+		assertTrue(facade.getRobotY(robot) == 2);
+		assertTrue(facade.getOrientation(robot)==3);
+		assertTrue(facade.getEnergy(robot)==20000);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * Test method for {@link roboRallyPackage.gameElementClasses.Element#Element(roboRallyPackage.Position, roboRallyPackage.Board)}.
