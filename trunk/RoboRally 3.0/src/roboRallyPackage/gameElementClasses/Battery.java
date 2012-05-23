@@ -270,9 +270,9 @@ public class Battery extends Item implements IEnergyHolder
 	@Override
 	public java.lang.String toString()
 	{
-		return "Battery with:" + "\n"
-				+ super.toString() +  ";  " + "\n"
-				+ "Energy level [Ws]: " + this.getEnergy(EnergyUnit.WATTSECOND) + " (" + getEnergyFraction() + "%)";
+		return "Battery {"
+				+ super.toString() +  ";  "
+				+ "Energy level [Ws]: " + this.getEnergy(EnergyUnit.WATTSECOND) + " (" + getEnergyFraction() + "%) }";
 	}
 
 }

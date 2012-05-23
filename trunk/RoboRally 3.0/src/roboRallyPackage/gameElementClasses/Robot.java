@@ -520,7 +520,7 @@ public class Robot extends Element implements IEnergyHolder
 			// make a string that contains all the possessions of this robot
 			for(Item item: this.getPossessions())
 			{
-				possessionString = possessionString + item.getClass().getName() + ", ";
+				possessionString = possessionString + item.toString() + ", ";
 			}
 		}
 		return possessionString;
@@ -1242,10 +1242,10 @@ public class Robot extends Element implements IEnergyHolder
 	@Override
 	public java.lang.String toString()
 	{
-		return "Robot with:" + "\n"
-				+ super.toString() + ";  " + "\n"
-				+ " Energy level: " + this.getEnergy(EnergyUnit.WATTSECOND) + " (" + this.getEnergyFraction() + "%) " + ";  " + "\n"
-				+ " Possessions: " + this.getPossessionsString();
+		return "Robot {"
+				+ super.toString()
+				+ " Energy level: " + this.getEnergy(EnergyUnit.WATTSECOND) + " (" + this.getEnergyFraction() + "%) " + ";"
+				+ " Possessions: " + this.getPossessionsString() + "}";
 	}
 	
 	
