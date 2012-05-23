@@ -271,7 +271,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = Parser.parse(programLevel++,robot, subProgramString);
+				Program subProgram = Parser.parse(programLevel + 1,robot, subProgramString);
 				// check whether the given program is a condition; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Condition)
 				{
@@ -297,7 +297,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = Parser.parse(programLevel++,robot,subProgramString);
+				Program subProgram = Parser.parse(programLevel + 1,robot,subProgramString);
 				// check whether the given program is a condition; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Condition)
 				{
@@ -320,7 +320,7 @@ public class Parser
 
 			// make a list of commands that can be given to the sequence-object
 			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
-			Program parametersNotAsProgram = Parser.parse(programLevel++,robot,subProgramStrings.get(0));
+			Program parametersNotAsProgram = Parser.parse(programLevel + 1,robot,subProgramStrings.get(0));
 
 			// check whether the given list of programs contains only 1 programs and this programs is a condition; if not throw an exception
 			if(subProgramStrings.size() == 1 && parametersNotAsProgram instanceof Condition)
