@@ -2,16 +2,12 @@
 TO DO:
 
 * documentatie (zie hieronder)
-* prettyprint
 * private/public/protected/package
 * testen !
 * klassenschema
-* element-is-in-conflict met van Item: robot moven naar een plaats waar een ander Item staat
+
 * element: setBoard() verantwoordelijkheid zou bij board moeten liggen
 * kijken wanneer een lijst teruggeven en wanneer een clone
-* togel-methodes verwijderen (oa in Surprisebox)
-* een variabele voor de mawimale maximum energie van een robot in op te slaan, in plaats van 20000 3-4 keer te herhalen (ook in de doc!)
-* invar enAmount: isValidEnergy
 * Strings meegeven aan exceptions (hoeven geen elementen enz te hebben)
 * IEnergyHolder verder naar EnergyAmount/-Unit uitwerken ipv enkel getters
 
