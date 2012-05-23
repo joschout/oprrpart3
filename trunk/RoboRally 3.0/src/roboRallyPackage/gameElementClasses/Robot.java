@@ -59,8 +59,14 @@ public class Robot extends Element implements IEnergyHolder
 		super(position, board);
 
 		this.setOrientation(orientation);
-		this.setEnergy(currentEnergy);
-		this.setMaxEnergy(maxEnergy);
+		if(this.canHaveAsEnergy(currentEnergy))
+		{
+			this.setEnergy(currentEnergy);
+		}
+		if(this.canHaveAsMaxEnergy(maxEnergy))
+		{
+			this.setMaxEnergy(maxEnergy);
+		}
 	}
 	
 	/**
@@ -111,7 +117,7 @@ public class Robot extends Element implements IEnergyHolder
 	 * @param 	orientation
 	 * 			The new orientation of this robot.
 	 * @pre		The given orientation must be a valid orientation for a robot
-	 * 			| canHaveAsOrientation(orientation)
+	 * 			| Robot.canHaveAsOrientation(orientation)
 	 * @post	The old orientation is changed into the given orientation.
 	 * 			| (new this).getOrientation() == orientation
 	 * @throws	IllegalStateException
@@ -121,7 +127,7 @@ public class Robot extends Element implements IEnergyHolder
 	@Model
 	private void setOrientation(Orientation orientation) throws IllegalStateException
 	{
-		assert canHaveAsOrientation(orientation): "This is not a valid orientation for this robot.";
+		assert Robot.canHaveAsOrientation(orientation): "This is not a valid orientation for this robot.";
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated robot can not be altered.");
@@ -168,7 +174,7 @@ public class Robot extends Element implements IEnergyHolder
 	@Override
 	public void setEnergy(double currentEnergy) throws IllegalStateException
 	{
-		assert (canHaveAsEnergy(currentEnergy)): "Preconditions for setEnergy(double) must be satisfied.";
+		assert (this.canHaveAsEnergy(currentEnergy)): "Preconditions for setEnergy(double) must be satisfied.";
 		
 		if(this.isTerminated())
 		{
@@ -263,7 +269,7 @@ public class Robot extends Element implements IEnergyHolder
 	@Override
 	public void recharge(double amount) throws IllegalStateException
 	{
-		assert canAcceptForRecharge(amount): "This robot cannot accept the given amoutn of energy for reacharge.";
+		assert this.canAcceptForRecharge(amount): "This robot cannot accept the given amoutn of energy for reacharge.";
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated robot cannot recharge.");
@@ -797,8 +803,8 @@ public class Robot extends Element implements IEnergyHolder
 		{
 			throw new IllegalBoardException("Both robots are not placed on the same board.");
 		}
-		java.util.List<Item> tempList = new ArrayList<Item>(this.getPossessions());
 		
+		java.util.List<Item> tempList = new ArrayList<Item>(this.getPossessions());
 		for(Item item: tempList)
 		{
 			// this other robot can carry the item.
@@ -808,6 +814,7 @@ public class Robot extends Element implements IEnergyHolder
 				this.getPossessions().remove(item);
 				other.addItem(item);
 			}
+			// if the other robot cannot carry the current item, the item is not transferred.
 		}
 	}
 
@@ -828,8 +835,8 @@ public class Robot extends Element implements IEnergyHolder
 	 * Turns this robot 90 degrees in clockwise direction if the robot has sufficient energy.
 	 * Does not modify the state of the robot if it has insufficient energy.
 	 * 
-	 * @pre		The robot must have enough energy to turn
-	 * 			| this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn()
+	 * @pre		The robot must be able to turn
+	 * 			| this.canTurn(Direction.CLOCKWISE)
 	 * @effect	The current orientation of this robot is changed by turning 90 degrees clockwise
 	 * 			| this.setOrientation(this.getOrientation().turn90Clockwise())
 	 * @effect	The energy level of this robot is decreased with the cost of one turn
@@ -840,7 +847,7 @@ public class Robot extends Element implements IEnergyHolder
 	 */
 	public void turnClockwise() throws IllegalStateException
 	{
-		assert this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn(): "This robot has not enough enery to turn.";
+		assert this.canTurn(Direction.CLOCKWISE): "This robot has not enough enery to turn.";
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated robot cannot turn.");
@@ -853,34 +860,49 @@ public class Robot extends Element implements IEnergyHolder
 	 * Turns this robot 90 degrees in counter-clockwise direction if the robot has sufficient energy.
 	 * Does not modify the state of the robot if it has insufficient energy.
 	 * 
-	 * @pre		The robot must have enough energy to turn
-	 * 			| this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn()
+	 * @pre		The robot must be able to turn
+	 * 			| this.canTurn(Direction.COUNTER_CLOCKWISE)
 	 * @effect	The current orientation of this robot is changed by turning 90 degrees counter clockwise
 	 * 			| this.setOrientation(this.getOrientation().turn90CounterClockwise())
 	 * @effect	The energy level of this robot is decreased with the cost of one turn
-	 * 	     	| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToTurn())
+	 * 	     	| this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - Robot.getCostToTurn())
 	 * @throws	IllegalStateException
 	 * 			When this robot is terminated
 	 * 			| this.isTerminated
 	 */
 	public void turnCounterClockwise() throws IllegalStateException
 	{
-		assert this.getEnergy(EnergyUnit.WATTSECOND) >= getCostToTurn(): "This robot has not enough energy to turn.";
+		assert this.canTurn(Direction.COUNTER_CLOCKWISE): "This robot has not enough energy to turn.";
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated robot cannot turn.");
 		}
-
 		this.setOrientation(this.getOrientation().turn90CounterClockwise());
-		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - getCostToTurn());
+		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - Robot.getCostToTurn());
+	}
+	
+	/**
+	 * Checks whether this robot is able to turn.
+	 * 
+	 * @param	direction
+	 * 			The direction in which this robot may have to turn
+	 * @return	False if this robot does not have enough energy to turn
+	 * 			| result == !(this.getEnergy(EnergyUnit.WATTSECOND) >= Robot.getCostToTurn())
+	 * @return	False if the new orientation of this robot is not a valid orientation for a robot
+	 * 			| result == Robot.canHaveAsOrientation(this.getOrientation().turn90(direction)
+	 */
+	public boolean canTurn(Direction direction)
+	{
+		return this.getEnergy(EnergyUnit.WATTSECOND) >= Robot.getCostToTurn()
+				&& Robot.canHaveAsOrientation(this.getOrientation().turn90(direction));
 	}
 	
 	/**
 	 * Moves this robot one step in its current direction if the robot has sufficient energy.
 	 * Does not modify the state of the robot if it has insufficient energy or if it has been terminated.
 	 * 
-	 * @pre		This robot has enough energy to move
-	 * 			| this.getEnergy(EnergyUnit.WATTSECOND) >= this.getTotalCostToMove()
+	 * @pre		This robot must be able to move one step
+	 * 			| this.canMoveOneStep()
 	 * @effect	The current position is changed according to the current orientation of this robot.
 	 * 			For example, if this robot is facing to the right, he will move one step to the right.
 	 *			| this.setPosition(this.getPosition().getNeighbour(this.getOrientation()))
@@ -892,33 +914,48 @@ public class Robot extends Element implements IEnergyHolder
 	 */
 	public void moveOneStep() throws IllegalStateException
 	{
-		assert (this.getEnergy(EnergyUnit.WATTSECOND) >= this.getTotalCostToMove()): "This robot has not enough energy to move.";
+		assert (canMoveOneStep()): "This robot cannot move to the next posititon.";
 
 		if(this.isTerminated())
 		{
 			throw new IllegalStateException("A terminated robot cannot move.");
 		}
+		this.getBoard().moveElement((this.getPosition().getNeighbour(this.getOrientation())),this);
+		this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - this.getTotalCostToMove());
+	}
+	
+	/**
+	 * Checks whether this robot can move one step.
+	 * 
+	 * @return	False if the robot is not placed on a board
+	 * 			| result == this.getBoard() == null
+	 * @return	False if the robot cannot be put at the new position on its board
+	 * 			| result == this.getBoard().canElementBePutAtPosition(this.getPosition().getNeighbour(this.getOrientation())
+	 * @return	False if the robot does not have enough energy to move one step
+	 * 			| result == this.getEnergy(EnergyUnit.WATTSECOND) >= this.getTotalCostToMove()
+	 */
+	public boolean canMoveOneStep()
+	{
 		try
 		{
 			// check whether this robot can be placed at the next position.
 			this.getBoard().canElementBePutAtPosition(this.getPosition().getNeighbour(this.getOrientation()), this);
-			// these setters are not executes when the previous checker throws an exception
-			this.getBoard().moveElement((this.getPosition().getNeighbour(this.getOrientation())),this);
-			this.setEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - this.getTotalCostToMove());
+		}
+		catch(NullPointerException exc)
+		{
+			return false;
 		}
 		catch(IllegalPositionException exc)
 		{
-			System.err.println(exc.toString());
+			return false;
 		}
-		
-//		catch(IllegalBoardException exc)
-//		{
-//			System.err.println(exc.toString());
-//		}
+		// should not catch an IllegalBoardException
 		catch(IllegalElementCombinationException exc)
 		{
-			System.err.println(exc.toString());
+			return false;
 		}
+		
+		return (this.getEnergy(EnergyUnit.WATTSECOND) >= this.getTotalCostToMove());
 	}
 	
 
@@ -1115,12 +1152,16 @@ public class Robot extends Element implements IEnergyHolder
 		}
 		
 		// this robots maximum energy level can be decreased with 4000 Ws.
-		if(this.canHaveAsMaxEnergy(this.getMaxEnergy()-4000))
+		if(this.canHaveAsMaxEnergy(this.getMaxEnergy() - 4000))
 		{
-			this.setMaxEnergy(this.getMaxEnergy()-4000);
+			this.setMaxEnergy(this.getMaxEnergy() - 4000);
 
-			if(this.getMaxEnergy()<this.getEnergy(EnergyUnit.WATTSECOND))
+			// if the current energy level of this robot ends up to be less than the new maximum energy
+			// the current energy of this robot is set equal to its maximum energy.
+			if(this.getMaxEnergy() < this.getEnergy(EnergyUnit.WATTSECOND))
+			{
 				this.setEnergy(this.getMaxEnergy());
+			}
 		}
 		// the robots maximum energy reaches 0 when decreasing it.
 		else
