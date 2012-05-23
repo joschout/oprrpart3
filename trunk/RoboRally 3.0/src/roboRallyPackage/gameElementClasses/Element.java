@@ -210,11 +210,13 @@ public abstract class Element extends Terminatable
 			}
 			catch(IllegalPositionException exc)
 			{
+				this.setBoard(null);
 				this.terminate();
 				System.err.println("This element cannot be placed on this position on this board. It is not a valid position. It is terminated.");
 			}
 			catch(IllegalElementCombinationException exc)
 			{
+				this.setBoard(null);
 				this.terminate();
 				System.err.println("This element is in conflict with another element on this position on this board. It is terminated.");
 			}

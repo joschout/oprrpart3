@@ -1034,8 +1034,8 @@ public class Robot extends Element implements IEnergyHolder
 							// if(possibleBetterManhattanDistance > manhattanDistance) continue
 							
 							// either the manhattan distance of these positions is less than the current best positions;
-							//        the manhattan distance of these positions is equal to the current best positions, but the total energy cost is less than the current best energy cost;
-							//		  the current total energy cost is still on its initilized-value (maximum): this is the first calculated combination of orientatedPositions.
+							//        the Manhattan distance of these positions is equal to the current best positions, but the total energy cost is less than the current best energy cost;
+							//		  the current total energy cost is still on its initialized-value (maximum): this is the first calculated combination of orientatedPositions.
 							if((possibleBetterManhattanDistance < manhattanDistance)
 								|| (possibleBetterManhattanDistance == manhattanDistance && possibleBetterTotalEnergy < bestTotalEnergy)
 								|| (bestTotalEnergy == Double.POSITIVE_INFINITY))
@@ -1154,14 +1154,14 @@ public class Robot extends Element implements IEnergyHolder
 		// this robots maximum energy level can be decreased with 4000 Ws.
 		if(this.canHaveAsMaxEnergy(this.getMaxEnergy() - 4000))
 		{
-			this.setMaxEnergy(this.getMaxEnergy() - 4000);
-
 			// if the current energy level of this robot ends up to be less than the new maximum energy
 			// the current energy of this robot is set equal to its maximum energy.
-			if(this.getMaxEnergy() < this.getEnergy(EnergyUnit.WATTSECOND))
+			if((this.getMaxEnergy() - 4000) < this.getEnergy(EnergyUnit.WATTSECOND))
 			{
-				this.setEnergy(this.getMaxEnergy());
+				this.setEnergy(this.getMaxEnergy() - 4000);
 			}
+			
+			this.setMaxEnergy(this.getMaxEnergy() - 4000);
 		}
 		// the robots maximum energy reaches 0 when decreasing it.
 		else
