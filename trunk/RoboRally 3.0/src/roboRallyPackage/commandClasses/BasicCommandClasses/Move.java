@@ -40,21 +40,15 @@ public class Move extends BasicCommand
 	
 	/**
 	 * String representation of this move command.
-	 * 
-	 * @return	...
-	 * 			| result == "(move)"
 	 */
 	@Override
 	public String toString()
 	{
-		return "(move)";
+		return this.getIndentation() + "(move)";
 	}
 	
 	/**
 	 * String representation of this move command, in the syntax used by the Parser.
-	 * 
-	 * @return	...
-	 * 			| result == "(move)"
 	 */
 	@Override
 	public String getNotationExample()

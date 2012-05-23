@@ -91,34 +91,22 @@ public class And extends CombinedCondition
 	
 	/**
 	 * String representation of this and condition.
-	 * 
-	 * @return	A pretty print string of this and condition taking into account the program-level.
-	 * 			| ...
 	 */
 	@Override
 	public String toString()
 	{
-		String result ="(and";
-		String indentation = "";
-		
-		for(int i = 0; i <= this.getProgramLevel(); i++)
-		{
-			indentation = indentation + "  ";
-		}
+		String conditionString = "";
 		for(Condition condition: this.getConditions())
 		{
-			result =result  + "\n" + indentation+"  " +condition.toString();
+			conditionString = conditionString + "\n" + condition.toString();
 		}
-		
-		result =result + "\n" + ")";
-		return result;
+		return this.getIndentation() + "(and" + "\n" 
+				+ conditionString + "\n"
+				+ this.getIndentation() + ")";
 	}
 	
 	/**
 	 * String representation of this and condition, in the syntax used by the Parser.
-	 * 
-	 * @return	A syntax example, as used by the parser, of this and condition.
-	 * 			| result == "(and '(condition)' '(condition)' ... '(condition))"
 	 */
 	@Override
 	public String getNotationExample()

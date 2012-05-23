@@ -92,34 +92,22 @@ public class Or extends CombinedCondition
 
 	/**
 	 * String representation of this or condition.
-	 * 
-	 * @return	A pretty print string of this or condition taking into account the program-level.
-	 * 			| ...
 	 */
 	@Override
 	public String toString()
 	{
-		String result ="(or";
-		String indentation = "";
-		
-		for(int i = 0; i <= this.getProgramLevel(); i++)
-		{
-			indentation = indentation + "  ";
-		}
+		String conditionString = "";
 		for(Condition condition: this.getConditions())
 		{
-			result = result  + "\n" + "  " + condition.toString();
+			conditionString = conditionString + "\n" + condition.toString();
 		}
-		
-		result = result + "\n" + indentation + ")";
-		return result;
+		return this.getIndentation() + "(or" + "\n" 
+				+ conditionString + "\n"
+				+ this.getIndentation() + ")";
 	}
 	
 	/**
 	 * String representation of this or condition, in the syntax used by the Parser.
-	 * 
-	 * @return	A syntax example, as used by the parser, of this or condition.
-	 * 			| result == "(or '(condition)' '(condition)' ... '(condition))"
 	 */
 	@Override
 	public String getNotationExample()

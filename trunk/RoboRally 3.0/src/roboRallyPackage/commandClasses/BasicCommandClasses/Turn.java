@@ -67,21 +67,15 @@ public class Turn extends BasicCommand
 	
 	/**
 	 * String representation of this turn command.
-	 * 
-	 * @return	...
-	 * 			| result == "(turn " + this.getDirection().toString() + ")"
 	 */
 	@Override
 	public String toString()
 	{
-		return "(turn " + this.getDirection().toString() + ")";
+		return this.getIndentation() + "(turn " + this.getDirection().toString() + ")";
 	}
 	
 	/**
 	 * String representation of this turn command, in the syntax used by the Parser.
-	 * 
-	 * @return	...
-	 * 			| result == "(turn 'direction')"
 	 */
 	@Override
 	public String getNotationExample()

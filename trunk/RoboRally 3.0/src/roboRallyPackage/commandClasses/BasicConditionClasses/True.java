@@ -53,14 +53,11 @@ public class True extends BasicCondition
 
 	/**
 	 * String representation of this true condition.
-	 * 
-	 * @return	...
-	 * 			| result == "(true)"
 	 */
 	@Override
 	public String toString()
 	{
-		return "(true)";
+		return this.getIndentation() + "(true)";
 	}
 
 	/**

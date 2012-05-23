@@ -101,21 +101,15 @@ public class CanHitRobot extends BasicCondition
 
 	/**
 	 * String representation of this can-hit-robot condition.
-	 * 
-	 * @return	...
-	 * 			| result == "(can-hit-robot)"
 	 */
 	@Override
 	public String toString()
 	{
-		return "(can-hit-robot)";
+		return this.getIndentation() + "(can-hit-robot)";
 	}
 	
 	/**
 	 * String representation of this can-hit-robot condition, in the syntax used by the Parser.
-	 * 
-	 * @return	...
-	 * 			| result == "(can-hit-robot)"
 	 */
 	@Override
 	public String getNotationExample()

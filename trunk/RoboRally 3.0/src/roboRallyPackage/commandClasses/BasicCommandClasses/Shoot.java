@@ -40,21 +40,15 @@ public class Shoot extends BasicCommand
 	
 	/**
 	 * String representation of this shoot command.
-	 * 
-	 * @return	...
-	 * 			| result == "(shoot)"
 	 */
 	@Override
 	public String toString()
 	{
-		return "(shoot)";
+		return this.getIndentation() + "(shoot)";
 	}
 	
 	/**
 	 * String representation of this shoot command, in the syntax used by the Parser.
-	 * 
-	 * @return	...
-	 * 			| result == "(shoot)"
 	 */
 	@Override
 	public String getNotationExample()

@@ -55,14 +55,11 @@ public class isItem extends BasicCondition
 	
 	/**
 	 * String representation of this is-item condition.
-	 * 
-	 * @return	...
-	 * 			| result == "(true)"
 	 */
 	@Override
 	public String toString()
 	{
-		return "(item)";
+		return this.getIndentation() + "(item)";
 	}
 
 	/**

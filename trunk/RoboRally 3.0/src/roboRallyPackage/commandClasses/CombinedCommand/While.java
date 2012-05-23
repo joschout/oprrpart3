@@ -92,29 +92,18 @@ public class While extends CombinedCommand
 	
 	/**
 	 * String representation of this while command.
-	 * 
-	 * @return	A pretty print string of this while command taking into account the program-level.
-	 * 			| ...
 	 */
 	@Override
 	public String toString()
 	{
-		String indentation = "";
-		for(int i = 1; i <= this.getProgramLevel(); i++)
-		{
-			indentation = indentation + "  ";
-		}
-		return "(while" 
-				+ "\n" + indentation+ "  " + this.getCondition().toString()
-				+ "\n" + indentation+"  " + this.getWhileCommand().toString() 
-				+ "\n" +indentation+")";
+		return this.getIndentation() + "(while" + "\n" 
+				+ this.getCondition().toString() + "\n"
+				+ this.getWhileCommand().toString() + "\n"
+				+ this.getIndentation() + ")";
 	}
 	
 	/**
 	 * String representation of this while command, in the syntax used by the Parser.
-	 * 
-	 * @return	A syntax example, as used by the parser, of this while command.
-	 * 			| result == "(while '(condition)' '(command)')"
 	 */
 	@Override
 	public String getNotationExample()

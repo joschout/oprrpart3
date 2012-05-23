@@ -102,32 +102,22 @@ public class Sequence extends CombinedCommand
 	
 	/**
 	 * String representation of this sequence command.
-	 * 
-	 * @return	A pretty print string of this sequence command taking into account the program-level.
-	 * 			| ...
 	 */
 	@Override
 	public String toString()
 	{
-		String result ="(seq";
-		String indentation = "";
-		for(int i = 1; i <= this.getProgramLevel(); i++)
-		{
-			indentation = indentation + "  ";
-		}
+		String commandString = "";
 		for(Command command: this.getSeqCommands())
 		{
-			result = result  + "\n" + indentation+ "  " + command.toString();
+			commandString = commandString + "\n" + command.toString();
 		}
-		result = result + "\n" + indentation + ")";
-		return result;
+		return this.getIndentation() + "(seq"
+				+ commandString + "\n"
+				+ this.getIndentation() + ")";
 	}
 	
 	/**
 	 * String representation of this sequence command, in the syntax used by the Parser.
-	 * 
-	 * @return	A syntax example, as used by the parser, of this sequence command.
-	 * 			| result == "(seq '(command)' '(command)' ... '(command)')"
 	 */
 	@Override
 	public String getNotationExample()

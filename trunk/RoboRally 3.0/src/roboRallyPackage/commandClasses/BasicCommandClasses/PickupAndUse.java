@@ -52,21 +52,15 @@ public class PickupAndUse extends BasicCommand
 	
 	/**
 	 * String representation of this pick-up-and-use command.
-	 * 
-	 * @return	...
-	 * 			| result == "(pick-up-and-use)"
 	 */
 	@Override
 	public String toString()
 	{
-		return "(pick-up-and-use)";
+		return this.getIndentation() + "(pick-up-and-use)";
 	}
 	
 	/**
 	 * String representation of this pick-up-and-use command, in the syntax used by the Parser.
-	 * 
-	 * @return	...
-	 * 			| result == "(pick-up-and-use)"
 	 */
 	@Override
 	public String getNotationExample()
