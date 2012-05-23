@@ -491,7 +491,7 @@ public class Robot extends Element implements IEnergyHolder
 	 * 			| result == this.getPossessions().get(index - 1)
 	 * @throws	IndexOutOfBoundsException 
 	 * 			When the given index is not a valid index
-	 * 			| index <= 0 || index > this.getPossessions().size()
+	 * 			| index <= 1 || index > this.getPossessions().size()
 	 */
 	public Item getIthHeaviestPossession(int index) throws IndexOutOfBoundsException 
 	{
@@ -553,7 +553,7 @@ public class Robot extends Element implements IEnergyHolder
 			try
 			{
 				// if the item at position i is lighter than the given item, than put the given item before it.
-				if (getPossessions().get(i).getWeight() >= item.getWeight())
+				if (getPossessions().get(i).getWeight() <= item.getWeight())
 				{
 					getPossessions().add(i, item);
 					break;
