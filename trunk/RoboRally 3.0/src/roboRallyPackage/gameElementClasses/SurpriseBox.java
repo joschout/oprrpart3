@@ -243,7 +243,8 @@ public class SurpriseBox extends Item
 				// this is valid random position for the robot; move the robot to the position.
 				if(robot.getBoard().canElementBePutAtPosition(new Position(randomX, randomY), robot))
 				{
-					robot.getBoard().putElement(new Position(randomX, randomY), robot);
+					robot.getBoard().moveElement(new Position(randomX, randomY), robot);
+					System.out.println("This robot is teleported to the position: (" + randomX + "," + randomY + ")");
 					stop = true;
 				}
 				// the while-loop will be re-invoked till either a valid random position is found or more than 25 random position are checked.

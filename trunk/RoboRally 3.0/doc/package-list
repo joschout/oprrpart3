@@ -1,1 +1,11 @@
-roborally
+roboRallyPackage
+roboRallyPackage.commandClasses
+roboRallyPackage.commandClasses.BasicCommandClasses
+roboRallyPackage.commandClasses.BasicConditionClasses
+roboRallyPackage.commandClasses.CombinedCommand
+roboRallyPackage.commandClasses.CombinedCondition
+roboRallyPackage.exceptionClasses
+roboRallyPackage.gameElementClasses
+roboRallyPackage.guiClasses
+roboRallyPackage.pathFindingClasses
+tests

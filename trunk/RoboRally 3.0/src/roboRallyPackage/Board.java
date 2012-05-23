@@ -569,13 +569,14 @@ public class Board extends Terminatable
 	
 	/**
 	 * Moves a given element from one place on this board to another place on this board if possible.
+	 * When the element is already standing on that position, nothing happens.
 	 * 
 	 * @param	position
 	 * 			The position where this element has to be placed.
 	 * @param	element
 	 * 			The element that has to be moved
 	 * @effect	...
-	 * 			| if(canElementBePutAtPosition(position, element)) then this.removeElement(element) && this.putElement(element)
+	 * 			| if(this.canElementBePutAtPosition(position, element) && element.getPosition() != position) then this.removeElement(element) && this.putElement(element)
 	 * @throws	NullPointerException
 	 * 			...
 	 * 			| element == null
