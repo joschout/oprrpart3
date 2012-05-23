@@ -8,6 +8,8 @@ import roboRallyPackage.commandClasses.*;
 /**
  * Class representing a sequence command.
  * 
+ * @invar	The sequence command must at least have one command
+ * 
  * @version   24 may 2012
  * @author	  Jonas Schouterden (r0260385) & Nele Rober (r0262954)
  * 			  Bachelor Ingenieurswetenschappen, KULeuven
