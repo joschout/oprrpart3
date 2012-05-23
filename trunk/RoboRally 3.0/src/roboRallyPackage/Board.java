@@ -708,7 +708,8 @@ public class Board extends Terminatable
 	 * @invar	No element can be placed on the board twice.
 	 * @invar	Placing an element must take amortized constant time.
 	 * @invar	Removing an element must be linear in the number of elements.
-	 * @invar	It must be possible to lookup all items on a certain position in constant time.
+	 * @invar	It must be possible to lookup all items on a certain position in constant ti
+	 * me.
 	 * @invar	The amount of memory needed to store a board should be proportional to the number of positions in use.
 	 * @invar	A terminated element cannot be placed on a board.
 	 * @invar	A terminated board cannot contain any elements.
