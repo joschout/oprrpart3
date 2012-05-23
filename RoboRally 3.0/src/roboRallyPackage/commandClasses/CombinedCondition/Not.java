@@ -77,21 +77,16 @@ public class Not extends CombinedCondition
 
 	/**
 	 * String representation of this not condition.
-	 * 
-	 * @return	A pretty print string of this not condition taking into account the program-level.
-	 * 			| ...
 	 */
 	@Override
 	public String toString()
 	{
-		return "(not " + this.getCondition().toString() + ")";
+		return this.getIndentation() + "(not " + "/n"
+				+ this.getCondition().toString() + ")";
 	}
 	
 	/**
 	 * String representation of this not condition, in the syntax used by the Parser.
-	 * 
-	 * @return	A syntax example, as used by the parser, of this not condition.
-	 * 			| result == "(not '(condition)')"
 	 */
 	@Override
 	public String getNotationExample()

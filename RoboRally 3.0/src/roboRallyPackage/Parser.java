@@ -97,7 +97,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				Program subProgram = Parser.parse(programLevel++,robot, subProgramString);
+				Program subProgram = Parser.parse(programLevel + 1,robot, subProgramString);
 				// check whether the given program is a command; if so add it to the list of commands, if not throw an exception
 				if(subProgram instanceof Command)
 				{
@@ -124,7 +124,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				parametersWhileAsPrograms.add(Parser.parse(programLevel++,robot, subProgramString));
+				parametersWhileAsPrograms.add(Parser.parse(programLevel + 1,robot, subProgramString));
 			}
 
 			// check whether the given list has a condition as first element and a command as second element
@@ -152,7 +152,7 @@ public class Parser
 			java.util.ArrayList<String> subProgramStrings = Parser.getSubstringsBracketCutter(inputProgramString);
 			for(String subProgramString: subProgramStrings)
 			{
-				parametersIfAsPrograms.add(Parser.parse(programLevel++,robot, subProgramString));
+				parametersIfAsPrograms.add(Parser.parse(programLevel + 1,robot, subProgramString));
 			}
 
 			// check whether the given list has a condition as first element and a command as second and third element

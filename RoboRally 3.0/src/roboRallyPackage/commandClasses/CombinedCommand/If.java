@@ -118,29 +118,19 @@ public class If extends CombinedCommand
 	
 	/**
 	 * String representation of this if command.
-	 * 
-	 * @return	A pretty print string of this if command taking into account the program-level.
-	 * 			| ...
 	 */
 	@Override
 	public String toString()
-	{
-		String indentation = "";
-		for(int i = 1; i <= this.getProgramLevel(); i++){
-			indentation = indentation + "  ";
-		} 
-		return "(if"
-				+ "\n" + indentation+ "  " + this.getCondition().toString()
-				+ "\n" + indentation+ "  " + this.getIfCommand().toString()
-				+ "\n" + indentation+ "  " + this.getElseCommand().toString()
-				+ "\n" + indentation+")";
+	{ 
+		return this.getIndentation() + "(if" + "\n"
+				 + this.getCondition().toString() + "\n"
+				 + this.getIfCommand().toString() + "\n"
+				 + this.getElseCommand().toString() + "\n"
+				 + this.getIndentation() +")";
 	}
 	
 	/**
 	 * String representation of this if command, in the syntax used by the Parser.
-	 * 
-	 * @return	A syntax example, as used by the parser, of this if command.
-	 * 			| result == "(if '(condition)' '(if-command)' '(else-command)')"
 	 */
 	@Override
 	public String getNotationExample()

@@ -100,21 +100,15 @@ public class EnergyAtLeast extends BasicCondition
 	
 	/**
 	 * String representation of this energy-at-least condition.
-	 * 
-	 * @return	...
-	 * 			| result == "(energy-at-least " + this.getEnergyWattSecond() + ")"
 	 */
 	@Override
 	public String toString()
 	{
-		return "(energy-at-least " + this.getEnergyWattSecond() + ")";
+		return this.getIndentation() + "(energy-at-least " + this.getEnergyWattSecond() + ")";
 	}
 	
 	/**
 	 * String representation of this energy-at-least condition, in the syntax used by the Parser.
-	 * 
-	 * @return	...
-	 * 			| result == "(energy-at-least 'energy-number')"
 	 */
 	@Override
 	public String getNotationExample()

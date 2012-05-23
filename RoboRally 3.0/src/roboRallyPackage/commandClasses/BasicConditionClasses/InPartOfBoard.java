@@ -150,16 +150,12 @@ public class InPartOfBoard extends BasicCondition
 
 	/**
 	 * String representation of this in-subrange condition.
-	 * 
-	 * @return	...
-	 * 			| result == "(in-subrange " + this.getPosition1().getCoordX() + ", " + this.getPosition1().getCoordY() + ", "
-							   + this.getPosition2().getCoordX() + ", " + this.getPosition2().getCoordY() + ")"
 	 */
 	@Override
 	public String toString()
 	{
-		return "(in-subrange " + this.getPosition1().getCoordX() + ", " + this.getPosition1().getCoordY() + ", "
-							   + this.getPosition2().getCoordX() + ", " + this.getPosition2().getCoordY() + ")";
+		return this.getIndentation() + "(in-subrange " + this.getPosition1().getCoordX() + ", " + this.getPosition1().getCoordY() + ", "
+													   + this.getPosition2().getCoordX() + ", " + this.getPosition2().getCoordY() + ")";
 	}
 	
 	/**

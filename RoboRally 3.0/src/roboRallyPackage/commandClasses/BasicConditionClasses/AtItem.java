@@ -83,21 +83,15 @@ public class AtItem extends BasicCondition
 
 	/**
 	 * String representation of this at-item condition.
-	 * 
-	 * @return	...
-	 * 			| result == "(true)"
 	 */
 	@Override
 	public String toString()
 	{
-		return "(at-item)";
+		return this.getIndentation() + "(at-item)";
 	}
 	
 	/**
 	 * String representation of this at-item condition, in the syntax used by the Parser.
-	 * 
-	 * @return	...
-	 * 			| result == "(at-item)"
 	 */
 	@Override
 	public String getNotationExample()

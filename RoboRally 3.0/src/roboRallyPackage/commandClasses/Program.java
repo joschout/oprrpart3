@@ -41,11 +41,23 @@ public abstract class Program
 	 */
 	private int programLevel;
 	
+	/**
+	 * Returns a spatial string that determines the indentation of the toString, taking in account the program level.
+	 */
+	protected String getIndentation()
+	{
+		String indentation = "";
+		for(int i = 1; i <= this.getProgramLevel(); i++)
+		{
+			indentation = indentation + "  ";
+		}
+		return indentation;
+	}
 	
 	/**
 	 * Returns the program level of this program.
 	 */
-	public int getProgramLevel()
+	protected int getProgramLevel()
 	{
 		return programLevel;
 	}

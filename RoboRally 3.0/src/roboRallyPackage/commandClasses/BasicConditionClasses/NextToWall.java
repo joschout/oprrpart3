@@ -100,14 +100,11 @@ public class NextToWall extends BasicCondition
 	
 	/**
 	 * String representation of this next-to-wall condition.
-	 * 
-	 * @return	...
-	 * 			| result == "(wall)"
 	 */
 	@Override
 	public String toString()
 	{
-		return "(wall)";
+		return this.getIndentation() + "(wall)";
 	}
 
 	/**
