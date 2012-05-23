@@ -354,7 +354,7 @@ public class Robot extends Element implements IEnergyHolder
 			}
 		}
 		// this robot had not enough energy to reach the given position
-		if(energy < this.getEnergy(EnergyUnit.WATTSECOND))
+		if(energy > this.getEnergy(EnergyUnit.WATTSECOND))
 		{
 			return -1;
 		}
@@ -1015,12 +1015,12 @@ public class Robot extends Element implements IEnergyHolder
 		for(OrientatedPosition thisOrientatedPosition: thisVertices)
 		{
 			// this robot has enough energy to reach thisOrientatedPosition
-			if(thisShortestPaths.distTo(thisVertices.indexOf(thisOrientatedPosition)) <= this.getEnergy(EnergyUnit.WATTSECOND))
+			if(this.canHaveAsEnergy(this.getEnergy(EnergyUnit.WATTSECOND) - thisShortestPaths.distTo(thisVertices.indexOf(thisOrientatedPosition))))
 			{
 				for(OrientatedPosition otherOrientatedPosition: otherVertices)
 				{
 					// the other robot has enough energy to reach the otherOrientatedPosition
-					if(otherShortestPaths.distTo(otherVertices.indexOf(otherOrientatedPosition)) <= other.getEnergy(EnergyUnit.WATTSECOND))
+					if(other.canHaveAsEnergy(other.getEnergy(EnergyUnit.WATTSECOND) - otherShortestPaths.distTo(otherVertices.indexOf(otherOrientatedPosition))))
 					{
 						// calculate the manhattan distance between thisOrientatedPosition and otherOrientatedPosition
 						// and the total energy for this robot to reach thisOrientatedPosition and for the other robot to reach otherOrientatedPosition
